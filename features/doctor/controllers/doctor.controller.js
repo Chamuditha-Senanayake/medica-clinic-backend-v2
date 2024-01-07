@@ -2,7 +2,7 @@ const { validationResult } = require("express-validator");
 const { Doctor: ResponseMessage } = require("../../../config/messages");
 
 const DoctorController = {
-  async index(request, response, next) {
+  async getDoctor(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({

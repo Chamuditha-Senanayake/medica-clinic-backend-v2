@@ -1,6 +1,6 @@
-const express = require("express");
-const DoctorController = require("../controllers/doctor.controller");
-const { check } = require("express-validator");
+import express from "express";
+import { check } from "express-validator";
+import DoctorController from "../controllers/doctor.controller.js";
 const router = express.Router();
 
 router.get("/DoctorGet", [], DoctorController.getDoctor);
@@ -45,4 +45,4 @@ router.post(
   DoctorController.saveDoctorSpecialization
 );
 
-module.exports = router;
+export default router;

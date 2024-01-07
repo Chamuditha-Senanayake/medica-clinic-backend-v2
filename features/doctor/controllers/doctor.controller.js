@@ -1,5 +1,7 @@
-const { validationResult } = require("express-validator");
-const { Doctor: ResponseMessage } = require("../../../config/messages");
+import { validationResult } from "express-validator";
+import ResponseMessage from "../../../config/messages.js";
+import handleError from "../../../utils/handleError.js";
+import { EntityId } from "../../../utils/type-def.js";
 
 const DoctorController = {
   async getDoctor(request, response, next) {
@@ -7,14 +9,14 @@ const DoctorController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.VALIDATION_ERROR,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
-      let connection = req.app.locals.db;
-      const { Id, DoctorUserId, UserId } = req.body;
+      let connection = request.app.locals.db;
+      const { Id, DoctorUserId, UserId } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -33,7 +35,7 @@ const DoctorController = {
 
       //handle no data
       // if (doctorGetResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
+      //   handleResponse(response, 200, "success", "No data found", {});
       //   return;
       // }
       // const appointment = doctorGetResult[0][0];
@@ -45,14 +47,20 @@ const DoctorController = {
       // };
 
       handleResponse(
-        res,
+        response,
         200,
         "success",
         "Bill data retrived successfully",
         doctorGetResult
       );
     } catch (error) {
-      handleError(res, 500, "error", error.message, "Something went wrong");
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
       next(error);
     }
   },
@@ -62,13 +70,13 @@ const DoctorController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.VALIDATION_ERROR,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
-      let connection = req.app.locals.db;
+      let connection = request.app.locals.db;
       const {
         Id,
         FirstName,
@@ -85,7 +93,7 @@ const DoctorController = {
         ZoomEmail,
         ZoomPassword,
         Chargers,
-      } = req.body;
+      } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -122,7 +130,7 @@ const DoctorController = {
 
       //handle no data
       // if (doctorSaveResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
+      //   handleResponse(response, 200, "success", "No data found", {});
       //   return;
       // }
       // const appointment = doctorSaveResult[0][0];
@@ -134,14 +142,20 @@ const DoctorController = {
       // };
 
       handleResponse(
-        res,
+        response,
         200,
         "success",
         "Bill data retrieved successfully",
         doctorSaveResult
       );
     } catch (error) {
-      handleError(res, 500, "error", error.message, "Something went wrong");
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
       next(error);
     }
   },
@@ -151,14 +165,14 @@ const DoctorController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.VALIDATION_ERROR,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
-      let connection = req.app.locals.db;
-      const { DoctorId, Id } = req.body;
+      let connection = request.app.locals.db;
+      const { DoctorId, Id } = request.body;
 
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
@@ -182,7 +196,7 @@ const DoctorController = {
 
       //handle no data
       // if (doctorSpecializationsGetResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
+      //   handleResponse(response, 200, "success", "No data found", {});
       //   return;
       // }
       // const appointment = doctorSpecializationsGetResult[0][0];
@@ -194,14 +208,20 @@ const DoctorController = {
       // };
 
       handleResponse(
-        res,
+        response,
         200,
         "success",
         "Bill data retrived successfully",
         doctorSpecializationsGetResult
       );
     } catch (error) {
-      handleError(res, 500, "error", error.message, "Something went wrong");
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
       next(error);
     }
   },
@@ -211,14 +231,15 @@ const DoctorController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.VALIDATION_ERROR,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
-      let connection = req.app.locals.db;
-      const { DoctorId, SpecializationId, Status, UserSaved, Id } = req.body;
+      let connection = request.app.locals.db;
+      const { DoctorId, SpecializationId, Status, UserSaved, Id } =
+        request.body;
 
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
@@ -243,7 +264,7 @@ const DoctorController = {
 
       //handle no data
       // if (doctorSpecializationsSaveResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
+      //   handleResponse(response, 200, "success", "No data found", {});
       //   return;
       // }
       // const appointment = doctorSpecializationsSaveResult[0][0];
@@ -255,17 +276,23 @@ const DoctorController = {
       // };
 
       handleResponse(
-        res,
+        response,
         200,
         "success",
         "Bill data retrived successfully",
         doctorSpecializationsSaveResult
       );
     } catch (error) {
-      handleError(res, 500, "error", error.message, "Something went wrong");
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
       next(error);
     }
   },
 };
 
-module.exports = DoctorController;
+export default DoctorController;

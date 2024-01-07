@@ -1,11 +1,13 @@
-const Logger = require('../config/logger')
+import { info } from "../config/logger.js";
 
-function loggerMiddleware(request, response, next) {
-    Logger.info(`Start processing the request(loggerMiddleware)`);
-    const newObj = {};
-    Logger.info(`Request Method: ${request.method} | Request Path: ${request.path} | Request Data: ${JSON.stringify(newObj)}`);
+export default function loggerMiddleware(request, response, next) {
+  info(`Start processing the request(loggerMiddleware)`);
+  const newObj = {};
+  info(
+    `Request Method: ${request.method} | Request Path: ${
+      request.path
+    } | Request Data: ${JSON.stringify(newObj)}`
+  );
 
-    return next();
+  return next();
 }
-
-module.exports = loggerMiddleware;

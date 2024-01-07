@@ -1,9 +1,24 @@
 import { validationResult } from "express-validator";
 import ResponseMessage from "../../../config/messages.js";
+import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
-import { EntityId } from "../../../utils/type-def.js";
+import handleResponse from "../../../utils/handleResponse.js";
+import {
+  EntityId,
+  StringValue,
+  SignedInteger,
+} from "../../../utils/type-def.js";
 
 const DoctorController = {
+  /**
+   *
+   * get doctor by [Id, DoctorUserId, UserId]
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
   async getDoctor(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -30,27 +45,13 @@ const DoctorController = {
         connection,
       });
 
-      console.log(doctorGetResult.recordsets);
       doctorGetResult = doctorGetResult.recordsets;
-
-      //handle no data
-      // if (doctorGetResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorGetResult[0][0];
-      // const billData = doctorGetResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
 
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrived successfully",
+        "Doctor data retrived successfully",
         doctorGetResult
       );
     } catch (error) {
@@ -65,6 +66,15 @@ const DoctorController = {
     }
   },
 
+  /**
+   *
+   * save a doctor
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
   async saveDoctor(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

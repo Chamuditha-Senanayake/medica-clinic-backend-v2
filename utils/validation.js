@@ -26,6 +26,11 @@ class Validation {
   static entityId({ name, value }) {
     this.unsignedIntNumber({ name, value });
   }
+
+  static stringValue = ({ name, value }) => {
+    this.fieldName({ name });
+    if (typeof value !== "string") throw new Error(`${name} must be a string`);
+  };
 }
 
 export default Validation;

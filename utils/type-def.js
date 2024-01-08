@@ -54,3 +54,17 @@ export const SignedInteger = ({ fieldName, value }) => {
     value,
   };
 };
+
+/**
+ * Generates a parameter object for string field.
+ * @returns {object} - parameter object
+ */
+export const StringValue = ({ fieldName, value }) => {
+  Validation.fieldName({ name: fieldName });
+  Validation.stringValue({ name: fieldName, value });
+  return {
+    name: fieldName,
+    type: NVarChar,
+    value,
+  };
+};

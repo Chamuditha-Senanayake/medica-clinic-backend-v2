@@ -1,70 +1,70 @@
-import handleError from "./utils/handle-error.js";
-import handleResponse from "./utils/handle-response.js";
-import { EntityId, SignedInteger, StringValue, UnsignedInteger, } from "./utils/type-def.js";
-const { Nurse: ResponseMessage } = require('../../../config/messages');
-const { validationResult } = require("express-validator");
+import { validationResult } from "express-validator";
+import ResponseMessage from "../../../config/messages.js";
+import executeSp from "../../../utils/exeSp.js";
+import handleError from "../../../utils/handleError.js";
+import handleResponse from "../../../utils/handleResponse.js";
+import {
+  EntityId,
+  StringValue,
+  SignedInteger,
+} from "../../../utils/type-def.js";
 
 const NurseController = {
-    async index(request, response, next) {
-        const errors = validationResult(request);
-        if (!errors.isEmpty()) {
-            return response.status(422).json({
-                error: true,
-                message: ResponseMessage.VALIDATION_ERROR,
-                data: errors,
-            });
-        }
+  /**
+   *
+   * get nurse by [Id, NurseUserId, UserId]
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getNurse(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Nurse.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
 
-        try {
-            let connection = req.app.locals.db;
-            const {
-                Id,
-                NurseUserId,
-                UserId,
+    try {
+      let connection = request.app.locals.db;
+      const { Id, NurseUserId, UserId } = request.body;
 
-            } = req.body;
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "NurseUserId", value: NurseUserId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
 
-            var params = [
-                EntityId({ fieldName: "Id", value: Id }),
-                EntityId({ fieldName: "NurseUserId", value: NurseUserId }),
-                EntityId({ fieldName: "UserId", value: UserId }),
+      let nurseGetResult = await executeSp({
+        spName: `NurseGet`,
+        params: params,
+        connection,
+      });
 
-            ];
+      nurseGetResult = nurseGetResult.recordsets;
 
-            let nurseGetResult = await executeSp({
-                spName: `NurseGet`,
-                params: params,
-                connection,
-            });
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Nurse data retrived successfully",
+        nurseGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+};
 
-            console.log(nurseGetResult.recordsets);
-            nurseGetResult = nurseGetResult.recordsets;
-
-            //handle no data
-            // if (nurseGetResult[0].length == 0) {
-            //   handleResponse(res, 200, "success", "No data found", {});
-            //   return;
-            // }
-            // const appointment = nurseGetResult[0][0];
-            // const billData = nurseGetResult[1];
-
-            // const data = {
-            //   ...appointment,
-            //   BillData: billData,
-            // };
-
-            handleResponse(
-                res,
-                200,
-                "success",
-                "Bill data retrived successfully",
-                nurseGetResult
-            );
-        } catch (error) {
-            handleError(res, 500, "error", error.message, "Something went wrong");
-            next(error);
-        }
-    },
-}
-
-module.exports = NurseController;
+export default NurseController;

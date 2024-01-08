@@ -10,7 +10,8 @@ import loggerMiddleware from "./middleware/logger.middleware.js";
 
 // Import Routes
 import doctorRouter from "./features/doctor/routes/doctor.route.js";
-//
+import nurseRouter from "./features/nurse/routes/nurse.route.js";
+
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(`/api/v1`, doctorRouter);
+app.use(`/api/v1`, nurseRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

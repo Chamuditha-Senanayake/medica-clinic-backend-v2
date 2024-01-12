@@ -1,3 +1,4 @@
+import { StandardValidation } from "express-validator/src/context-items/standard-validation.js";
 import Validation from "./validation.js";
 import sql from "mssql";
 const {
@@ -11,6 +12,7 @@ const {
   Date,
   DateTime,
   Binary,
+  TVP,
 } = sql;
 
 /**
@@ -66,5 +68,89 @@ export const StringValue = ({ fieldName, value }) => {
     name: fieldName,
     type: NVarChar,
     value,
+  };
+};
+
+export const DateString = ({ fieldName, value }) => {
+  Validation.fieldName({ name: fieldName });
+  Validation.stringValue({ name: fieldName, value });
+  return {
+    name: fieldName,
+    type: DateTime,
+    value,
+  };
+};
+
+/**
+ *
+ * @param {tableName} string
+ * @param {columns} array of objects [ { columnName, type, options } ]
+ * @returns
+ */
+export const TableValueParameters = ({ tableName, columns, values }) => {
+  // note that the mssql package does not currently support retrieving User Defined Types directly.
+  // create the new table
+  // this will not create a table in mssql database, it will create a instance in the memory instead
+  let table = new sql.Table(tableName);
+
+  // adding columns
+  columns.forEach(({ columnName, type, options }) => {
+    if (options) {
+      table.columns.add(columnName, type, options);
+    } else {
+      table.columns.add(columnName, type);
+    }
+  });
+
+  /**
+   * [
+   *  { fieldName, value, type, options },
+   *  { fieldName, value, type, options },
+   *  { fieldName, value, type, options },
+   *  ] = ContacNumbers
+   */
+
+  /**
+   * [45666, '076610850', 0]
+   */
+
+  /**
+   * [
+    {
+      "Id": null,
+      "Number": "0766364303",
+      "Status": 0
+    },
+     {
+      "Id": null,
+      "Number": "0766364303",
+      "Status": 0
+    },
+     {
+      "Id": null,
+      "Number": "0766364303",
+      "Status": 0
+    }
+  ]
+   */
+
+  /**
+   * [
+   *  [null, "0766364303", 0],
+   *  [null, "0766364303", 0],
+   *  [null, "0766364303", 0],
+   * ]
+   */
+
+  const rowValues = values.map((value) => {
+    return Object.values(value);
+  });
+
+  table.rows.add(rowValues);
+
+  return {
+    name: tableName,
+    type: sql.TVP(table),
+    value: table,
   };
 };

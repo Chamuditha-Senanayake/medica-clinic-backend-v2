@@ -16,7 +16,7 @@ router.post(
 router.post(
   "/NurseSave",
   [
-    check("Id").not().isEmpty(),
+    check("Id").isInt(),
     check("FirstName").not().isEmpty(),
     check("MiddleName").not().isEmpty(),
     check("LastName").not().isEmpty(),
@@ -27,6 +27,18 @@ router.post(
     check("UserSaved").not().isEmpty(),
   ],
   NurseController.saveNurse
+);
+
+router.post(
+  "/NurseBranchSave",
+  [
+    check("Id").not().isEmpty(),
+    check("InstituteBranchId").not().isEmpty(),
+    check("NurseId").not().isEmpty(),
+    check("Status").not().isEmpty(),
+    check("UserSaved").not().isEmpty(),
+  ],
+  NurseController.SaveNurseBranch
 );
 
 export default router;

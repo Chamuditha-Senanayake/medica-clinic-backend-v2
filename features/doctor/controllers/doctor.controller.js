@@ -228,7 +228,6 @@ const DoctorController = {
     try {
       let connection = request.app.locals.db;
       const { DoctorId, Id } = request.body;
-
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "Id", value: Id }),

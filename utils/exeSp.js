@@ -3,7 +3,6 @@ import sql from "mssql";
 export default async function executeSp({ spName, params, connection }) {
   return new Promise(async (resolve, reject) => {
     try {
-      
       var request = new sql.Request(connection);
       try {
         if (params != undefined) {
@@ -17,15 +16,18 @@ export default async function executeSp({ spName, params, connection }) {
             resolve(err);
           })
           .catch(function (err) {
+            console.log(err);
             reject(err);
           });
         //
       } catch (error) {
+        console.log("Inner");
         console.log(error);
         // connection.close();
         reject(error);
       }
     } catch (error) {
+      console.log("outer");
       console.log(error);
       reject(error);
     }

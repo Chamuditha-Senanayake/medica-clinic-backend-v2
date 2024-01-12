@@ -16,7 +16,7 @@ router.post(
 router.post(
   "/NurseSave",
   [
-    check("Id").not().isEmpty(),
+    check("Id").isInt(),
     check("FirstName").not().isEmpty(),
     check("MiddleName").not().isEmpty(),
     check("LastName").not().isEmpty(),

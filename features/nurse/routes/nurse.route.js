@@ -29,4 +29,16 @@ router.post(
   NurseController.saveNurse
 );
 
+router.post(
+  "/NurseBranchSave",
+  [
+    check("Id").not().isEmpty(),
+    check("InstituteBranchId").not().isEmpty(),
+    check("NurseId").not().isEmpty(),
+    check("Status").not().isEmpty(),
+    check("UserSaved").not().isEmpty(),
+  ],
+  NurseController.SaveNurseBranch
+);
+
 export default router;

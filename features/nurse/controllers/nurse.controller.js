@@ -127,7 +127,7 @@ const NurseController = {
         response,
         200,
         "success",
-        "Bill data retrieved successfully",
+        "Nurse data retrieved successfully",
         nurseSaveResult
       );
     } catch (error) {
@@ -180,13 +180,13 @@ const NurseController = {
       });
 
       console.log(nurseBranchSaveResult.recordsets);
-      nurseSaveResult = nurseBranchSaveResult.recordsets;
+      nurseBranchSaveResult = nurseBranchSaveResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrieved successfully",
+        "Data retrieved successfully",
         nurseBranchSaveResult
       );
     } catch (error) {

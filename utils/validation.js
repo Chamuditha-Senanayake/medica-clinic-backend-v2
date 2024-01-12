@@ -1,5 +1,4 @@
 import all from "mssql";
-const { Int } = all;
 
 class Validation {
   static number({ name, value }) {

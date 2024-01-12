@@ -7,7 +7,23 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
+  TableValueParameters,
+  DateString,
 } from "../../../utils/type-def.js";
+import sql from "mssql";
+const {
+  Int,
+  NVarChar,
+  VarChar,
+  TinyInt,
+  Bit,
+  Float,
+  Decimal,
+  Date,
+  DateTime,
+  Binary,
+  TVP,
+} = sql;
 
 const DoctorController = {
   /**
@@ -33,12 +49,14 @@ const DoctorController = {
       let connection = request.app.locals.db;
       const { Id, DoctorUserId, UserId } = request.body;
 
+      // convert the request body value into a type
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "DoctorUserId", value: DoctorUserId }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
+      // executes the given stored procedure
       let doctorGetResult = await executeSp({
         spName: `DoctorGet`,
         params: params,
@@ -117,7 +135,29 @@ const DoctorController = {
           value: Status,
         }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        StringValue({ fieldName: "ContactNumbers", value: ContactNumbers }),
+        // TODO: Contact numbers is an array of objects
+        // StringValue({ fieldName: "ContactNumbers", value: ContactNumbers }),
+        TableValueParameters({
+          tableName: "ContactNumbers",
+          columns: [
+            {
+              columnName: "Id",
+              type: Int,
+              options: { nullable: true },
+            },
+            {
+              columnName: "Number",
+              type: NVarChar,
+              options: null,
+            },
+            {
+              columnName: "Status",
+              type: TinyInt,
+              options: null,
+            },
+          ],
+          values: ContactNumbers,
+        }),
         StringValue({
           fieldName: "RegistrationNumber",
           value: RegistrationNumber,
@@ -125,7 +165,12 @@ const DoctorController = {
         DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
         StringValue({ fieldName: "Title", value: Title }),
         StringValue({ fieldName: "ZoomEmail", value: ZoomEmail }),
-        StringValue({ fieldName: "ZoomPassword", value: ZoomPassword }),
+        ZoomPassword
+          ? StringValue({
+              fieldName: "ZoomPassword",
+              value: ZoomPassword,
+            })
+          : null,
         StringValue({ fieldName: "Chargers", value: Chargers }),
       ];
 

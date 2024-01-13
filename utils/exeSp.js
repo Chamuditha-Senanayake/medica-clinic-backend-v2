@@ -16,18 +16,15 @@ export default async function executeSp({ spName, params, connection }) {
             resolve(err);
           })
           .catch(function (err) {
-            console.log(err);
             reject(err);
           });
         //
       } catch (error) {
-        console.log("Inner");
         console.log(error);
         // connection.close();
         reject(error);
       }
     } catch (error) {
-      console.log("outer");
       console.log(error);
       reject(error);
     }

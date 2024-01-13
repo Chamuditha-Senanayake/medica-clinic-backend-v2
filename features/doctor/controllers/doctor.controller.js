@@ -230,8 +230,8 @@ const DoctorController = {
       const { DoctorId, Id } = request.body;
 
       var params = [
-        DoctorId ? EntityId({ fieldName: "DoctorId", value: DoctorId }) : null,
-        Id ? EntityId({ fieldName: "Id", value: Id }) : null,
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        EntityId({ fieldName: "Id", value: Id }),
       ];
 
       let doctorSpecializationsGetResult = await executeSp({
@@ -286,7 +286,7 @@ const DoctorController = {
           value: Status,
         }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        Id ? EntityId({ fieldName: "Id", value: Id }) : null,
+        EntityId({ fieldName: "Id", value: Id }),
       ];
 
       let doctorSpecializationsSaveResult = await executeSp({

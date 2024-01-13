@@ -6,11 +6,9 @@ export default async function executeSp({ spName, params, connection }) {
       var request = new sql.Request(connection);
       try {
         if (params != undefined) {
-          params
-            .filter((value) => value !== null)
-            .map((param) => {
-              request.input(param.name, param.type, param.value);
-            });
+          params.map((param) => {
+            request.input(param.name, param.type, param.value);
+          });
         }
         request
           .execute(spName)

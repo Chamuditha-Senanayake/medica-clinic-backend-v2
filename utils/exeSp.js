@@ -6,9 +6,11 @@ export default async function executeSp({ spName, params, connection }) {
       var request = new sql.Request(connection);
       try {
         if (params != undefined) {
-          params.map((param) => {
-            request.input(param.name, param.type, param.value);
-          });
+          params
+            .filter((value) => value !== null)
+            .map((param) => {
+              request.input(param.name, param.type, param.value);
+            });
         }
         request
           .execute(spName)
@@ -16,18 +18,15 @@ export default async function executeSp({ spName, params, connection }) {
             resolve(err);
           })
           .catch(function (err) {
-            console.log(err);
             reject(err);
           });
         //
       } catch (error) {
-        console.log("Inner");
         console.log(error);
         // connection.close();
         reject(error);
       }
     } catch (error) {
-      console.log("outer");
       console.log(error);
       reject(error);
     }

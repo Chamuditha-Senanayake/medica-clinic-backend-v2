@@ -201,6 +201,65 @@ const NurseController = {
     }
   },
 
+  async SaveDoctorNurse(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Nurse.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        DoctorId,
+        NurseId,
+        Status,
+        UserSaved,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        EntityId({ fieldName: "NurseId", value: NurseId }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
+
+      let doctorNurseSaveResult = await executeSp({
+        spName: `DoctorNurseSave`,
+        params: params,
+        connection,
+      });
+
+      console.log(doctorNurseSaveResult.recordsets);
+      doctorNurseSaveResult = doctorNurseSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        doctorNurseSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
 };
 
 export default NurseController;

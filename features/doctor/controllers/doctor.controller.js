@@ -231,11 +231,6 @@ const DoctorController = {
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        StringValue({
-          fieldName: "AppointmentNumber",
-          value: AppointmentNumber,
-        }),
       ];
 
       let doctorSpecializationsGetResult = await executeSp({
@@ -247,19 +242,6 @@ const DoctorController = {
       console.log(doctorSpecializationsGetResult.recordsets);
       doctorSpecializationsGetResult =
         doctorSpecializationsGetResult.recordsets;
-
-      //handle no data
-      // if (doctorSpecializationsGetResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorSpecializationsGetResult[0][0];
-      // const billData = doctorSpecializationsGetResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
 
       handleResponse(
         response,

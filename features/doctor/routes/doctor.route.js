@@ -98,18 +98,21 @@ router.post(
 
 router.post(
   "/DoctorSpecializationsGet",
-  [check("DoctorId").not().isEmpty(), check("Id").not().isEmpty()],
+  [
+    check("DoctorId").optional({ values: "null" }).isInt(),
+    check("Id").optional({ values: "null" }).isInt(),
+  ],
   DoctorController.getDoctorSpecializations
 );
 
 router.post(
   "/DoctorSpecializationsSave",
   [
-    check("DoctorId").not().isEmpty(),
-    check("SpecializationId").not().isEmpty(),
-    check("Status").not().isEmpty(),
-    check("UserSaved").not().isEmpty(),
-    check("Id").not().isEmpty(),
+    check("DoctorId").not().isEmpty().isInt(),
+    check("SpecializationId").not().isEmpty().isInt(),
+    check("Status").not().isEmpty().isInt(),
+    check("UserSaved").not().isEmpty().isInt(),
+    check("Id").optional({ values: "null" }).isInt(),
   ],
   DoctorController.saveDoctorSpecialization
 );

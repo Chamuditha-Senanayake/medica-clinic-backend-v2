@@ -51,6 +51,19 @@ const ResponseMessages = {
     DELETE: "Doctor deleted!",
     DELETE_FAILED: "Failed to delete doctor!",
   },
+  Prescription: {
+    VALIDATION_ERROR: "Validation errors",
+    LIST_RETRIEVE: "Prescription list retrieved!",
+    LIST_RETRIEVE_FAILED: "Failed to fetch prescription list!",
+    RETRIEVE: "Prescription retrieved!",
+    RETRIEVE_FAILED: "Failed to fetch prescription!",
+    CREATE: "Prescription created!",
+    CREATE_FAILED: "Failed to create prescription!",
+    UPDATE: "Prescription updated!",
+    UPDATE_FAILED: "Failed to update prescription!",
+    DELETE: "Prescription deleted!",
+    DELETE_FAILED: "Failed to delete prescription!",
+  },
 };
 
 export default ResponseMessages;

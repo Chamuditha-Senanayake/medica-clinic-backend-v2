@@ -117,4 +117,30 @@ router.post(
   DoctorController.saveDoctorSpecialization
 );
 
+router.post(
+  "/DoctorChannelingStatusGet",
+  [
+    check("UserId").optional({ values: "null" }).isInt(),
+    check("Id").optional({ values: "null" }).isInt(),
+    check("AppointmentId").optional({ values: "null" }).isInt(),
+    check("SessionId").optional({ values: "null" }).isInt(),
+    check("PatientId").optional({ values: "null" }).isInt(),
+  ],
+  DoctorController.DoctorChannelingStatusGet
+);
+
+router.post(
+  "/DoctorChannelingStatusSave",
+  [
+    check("SessionId").isInt(),
+    check("PatientId").isInt(),
+    check("AppointmentId").isInt(),
+    check("UserSaved").isInt(),
+    check("Id").optional({ values: "null" }).isInt(),
+    check("DoctorStatus").optional({ values: "null" }).isString(),
+    check("ChanalingStatus").optional({ values: "null" }).isString(),
+  ],
+  DoctorController.DoctorChannelingStatusSave
+);
+
 export default router;

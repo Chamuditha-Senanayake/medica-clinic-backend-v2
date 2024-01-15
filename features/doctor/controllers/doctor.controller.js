@@ -113,7 +113,7 @@ const DoctorController = {
         Email,
         NIC,
         Status,
-        UserSaved,
+        UserSaved = 0,
         ContactNumbers,
         RegistrationNumber,
         DateOfBirth,
@@ -215,6 +215,15 @@ const DoctorController = {
     }
   },
 
+  /**
+   *
+   * get the doctor's specializations
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
   async getDoctorSpecializations(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -227,7 +236,7 @@ const DoctorController = {
 
     try {
       let connection = request.app.locals.db;
-      const { DoctorId, Id } = request.body;
+      const { DoctorId = 0, Id = 0 } = request.body;
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "Id", value: Id }),
@@ -262,6 +271,15 @@ const DoctorController = {
     }
   },
 
+  /**
+   *
+   * save a specialization for a doctor
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
   async saveDoctorSpecialization(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -274,8 +292,13 @@ const DoctorController = {
 
     try {
       let connection = request.app.locals.db;
-      const { DoctorId, SpecializationId, Status, UserSaved, Id } =
-        request.body;
+      const {
+        DoctorId,
+        SpecializationId,
+        Status,
+        UserSaved,
+        Id = 0,
+      } = request.body;
 
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
@@ -317,6 +340,157 @@ const DoctorController = {
         "success",
         "Bill data retrived successfully",
         doctorSpecializationsSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get the channeling status of a doctor
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   */
+  async DoctorChannelingStatusGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        UserId = 0,
+        Id = 0,
+        AppointmentId = 0,
+        SessionId = 0,
+        PatientId = 0,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+      ];
+
+      let doctorChannelingStatusGetResult = await executeSp({
+        spName: `DoctorChannelingStatusGet`,
+        params: params,
+        connection,
+      });
+
+      doctorChannelingStatusGetResult =
+        doctorChannelingStatusGetResult.recordsets;
+
+      //handle no data
+      // if (doctorChannelingStatusGetResult[0].length == 0) {
+      //   handleResponse(res, 200, "success", "No data found", {});
+      //   return;
+      // }
+      // const appointment = doctorChannelingStatusGetResult[0][0];
+      // const billData = doctorChannelingStatusGetResult[1];
+
+      // const data = {
+      //   ...appointment,
+      //   BillData: billData,
+      // };
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Channeling data retrieved successfully",
+        doctorChannelingStatusGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async DoctorChannelingStatusSave(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        SessionId,
+        PatientId,
+        AppointmentId,
+        UserSaved,
+        Id = 0,
+        DoctorStatus = "",
+        ChanalingStatus = "",
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "DoctorStatus", value: DoctorStatus }),
+        StringValue({ fieldName: "ChanalingStatus", value: ChanalingStatus }),
+      ];
+
+      let doctorChannelingStatusSaveResult = await executeSp({
+        spName: `DoctorChannelingStatusSave`,
+        params: params,
+        connection,
+      });
+
+      console.log(doctorChannelingStatusSaveResult.recordsets);
+      doctorChannelingStatusSaveResult =
+        doctorChannelingStatusSaveResult.recordsets;
+
+      //handle no data
+      // if (doctorChannelingStatusSaveResult[0].length == 0) {
+      //   handleResponse(res, 200, "success", "No data found", {});
+      //   return;
+      // }
+      // const appointment = doctorChannelingStatusSaveResult[0][0];
+      // const billData = doctorChannelingStatusSaveResult[1];
+
+      // const data = {
+      //   ...appointment,
+      //   BillData: billData,
+      // };
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Channeling status created successfully",
+        doctorChannelingStatusSaveResult
       );
     } catch (error) {
       handleError(

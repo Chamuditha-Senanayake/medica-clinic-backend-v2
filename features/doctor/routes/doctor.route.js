@@ -143,4 +143,15 @@ router.post(
   DoctorController.DoctorChannelingStatusSave
 );
 
+router.post(
+  "/DoctorContactNumberGet",
+  [
+    check("Id").optional({ values: "null" }).isInt(),
+    check("DoctorId").optional({ values: "null" }).isInt(),
+    check("ContactNumber").optional({ values: "null" }).isString(),
+    check("UserId").isInt(),
+  ],
+  DoctorController.DoctorContactNumberGet
+);
+
 export default router;

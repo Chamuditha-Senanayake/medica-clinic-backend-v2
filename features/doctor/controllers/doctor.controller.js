@@ -430,6 +430,15 @@ const DoctorController = {
     }
   },
 
+  /**
+   *
+   * save/update channeling status
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
   async DoctorChannelingStatusSave(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -468,7 +477,6 @@ const DoctorController = {
         connection,
       });
 
-      console.log(doctorChannelingStatusSaveResult.recordsets);
       doctorChannelingStatusSaveResult =
         doctorChannelingStatusSaveResult.recordsets;
 
@@ -491,6 +499,76 @@ const DoctorController = {
         "success",
         "Channeling status created successfully",
         doctorChannelingStatusSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get the contact numbers of doctors
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async DoctorContactNumberGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id = 0, DoctorId = 0, ContactNumber = "", UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        StringValue({ fieldName: "ContactNumber", value: ContactNumber }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let doctorContactNumberGetResult = await executeSp({
+        spName: `DoctorContactNumberGet`,
+        params: params,
+        connection,
+      });
+
+      doctorContactNumberGetResult = doctorContactNumberGetResult.recordsets;
+
+      //handle no data
+      // if (doctorContactNumberGetResult[0].length == 0) {
+      //   handleResponse(res, 200, "success", "No data found", {});
+      //   return;
+      // }
+      // const appointment = doctorContactNumberGetResult[0][0];
+      // const billData = doctorContactNumberGetResult[1];
+
+      // const data = {
+      //   ...appointment,
+      //   BillData: billData,
+      // };
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Contact numbers retrieved successfully",
+        doctorContactNumberGetResult
       );
     } catch (error) {
       handleError(

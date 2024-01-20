@@ -130,6 +130,7 @@ const DiseaseController = {
       next(error);
     }
   },
+  
 
 };
 

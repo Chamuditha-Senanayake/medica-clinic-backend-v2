@@ -15,6 +15,7 @@ import prescriptionRouter from "./features/prescription/routes/prescription.rout
 import diseaseRouter from "./features/disease/routes/disease.route.js";
 import patientRouter from "./features/patient/routes/patient.route.js";
 import noteRouter from "./features/note/routes/note.route.js";
+import drugRouter from "./features/drug/routes/drug.route.js";
 
 
 dotenv.config();
@@ -48,6 +49,7 @@ app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, diseaseRouter);
 app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, noteRouter);
+app.use(`/api/v1`, drugRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

@@ -51,7 +51,7 @@ const NoteController = {
         response,
         200,
         "success",
-        "Note retrived successfully",
+        "Notes retrived successfully",
         noteGetResult
       );
     } catch (error) {

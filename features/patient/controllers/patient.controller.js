@@ -40,7 +40,7 @@ const PatientController = {
       ];
 
       let patientDiagnosisDocumentGetResult = await executeSp({
-        spName: `billGPatientDiagnosisDocumentGetetResult`,
+        spName: `PatientDiagnosisDocumentGet`,
         params: params,
         connection,
       });
@@ -52,7 +52,7 @@ const PatientController = {
         200,
         "success",
         "Patient data retrived successfully",
-        diseaseGetResult
+        patientDiagnosisDocumentGetResult
       );
     } catch (error) {
       handleError(

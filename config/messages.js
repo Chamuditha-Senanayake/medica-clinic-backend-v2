@@ -99,6 +99,19 @@ const ResponseMessages = {
     CREATE: "Note created!",
     CREATE_FAILED: "Failed to create note!",
   },
+  Drug: {
+    VALIDATION_ERROR: "Validation errors",
+    LIST_RETRIEVE: "Drug list retrieved!",
+    LIST_RETRIEVE_FAILED: "Failed to fetch drug list!",
+    RETRIEVE: "Drug retrieved!",
+    RETRIEVE_FAILED: "Failed to fetch drug!",
+    CREATE: "Drug created!",
+    CREATE_FAILED: "Failed to create drug!",
+    UPDATE: "Drug updated!",
+    UPDATE_FAILED: "Failed to update drug!",
+    DELETE: "Drug deleted!",
+    DELETE_FAILED: "Failed to delete drug!",
+  },
 };
 
 export default ResponseMessages;

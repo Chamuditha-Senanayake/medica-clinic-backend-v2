@@ -90,6 +90,15 @@ const ResponseMessages = {
     DELETE: "Patient deleted!",
     DELETE_FAILED: "Failed to delete patient!",
   },
+  Note: {
+    VALIDATION_ERROR: "Validation errors",
+    LIST_RETRIEVE: "Note list retrieved!",
+    LIST_RETRIEVE_FAILED: "Failed to fetch note list!",
+    RETRIEVE: "Note retrieved!",
+    RETRIEVE_FAILED: "Failed to fetch note!",
+    CREATE: "Note created!",
+    CREATE_FAILED: "Failed to create note!",
+  },
 };
 
 export default ResponseMessages;

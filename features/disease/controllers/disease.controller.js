@@ -131,6 +131,127 @@ const DiseaseController = {
     }
   },
 
+  /**
+   *
+   * get allergy by [Id, UserId]
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getFoodAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Disease.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let foodAllergyGet = await executeSp({
+        spName: `FoodAllergyGet`,
+        params: params,
+        connection,
+      });
+
+      foodAllergyGet = foodAllergyGet.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Allergy data retrived successfully",
+        foodAllergyGet
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * save a allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async saveFoodAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Disease.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        Name,
+        Status,
+        UserSaved,
+      } = request.body;
+
+    var params = [
+      EntityId({ fieldName: "Id", value: Id }),
+      StringValue({ fieldName: "Name", value: Name }),
+      SignedInteger({
+        fieldName: "Status",
+        value: Status,
+      }),
+      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+    ];
+
+      let foodAllergySaveResult = await executeSp({
+        spName: `FoodAllergySave`,
+        params: params,
+        connection,
+      });
+
+      console.log(foodAllergySaveResult.recordsets);
+      foodAllergySaveResult = foodAllergySaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Allergy data retrieved successfully",
+        foodAllergySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
 };
 
 export default DiseaseController;

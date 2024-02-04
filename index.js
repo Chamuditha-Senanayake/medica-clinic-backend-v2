@@ -11,6 +11,7 @@ import loggerMiddleware from "./middleware/logger.middleware.js";
 // Import Routes
 import doctorRouter from "./features/doctor/routes/doctor.route.js";
 import nurseRouter from "./features/nurse/routes/nurse.route.js";
+import employeeRouter from "./features/employee/routes/employee.route.js";
 import prescriptionRouter from "./features/prescription/routes/prescription.route.js";
 import diseaseRouter from "./features/disease/routes/disease.route.js";
 import patientRouter from "./features/patient/routes/patient.route.js";
@@ -50,6 +51,7 @@ app.use(`/api/v1`, diseaseRouter);
 app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, noteRouter);
 app.use(`/api/v1`, drugRouter);
+app.use(`/api/v1`, employeeRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

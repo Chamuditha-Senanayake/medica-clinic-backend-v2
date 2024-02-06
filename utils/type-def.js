@@ -81,6 +81,16 @@ export const DateString = ({ fieldName, value }) => {
   };
 };
 
+export const FloatValue = ({ fieldName, value }) => {
+  Validation.fieldName({ name: fieldName });
+  Validation.floatValue({ name: fieldName, value });
+  return {
+    name: fieldName,
+    type: Float,
+    value,
+  };
+};
+
 /**
  *
  * @param {tableName} string

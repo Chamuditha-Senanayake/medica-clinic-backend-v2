@@ -31,6 +31,11 @@ class Validation {
     this.fieldName({ name });
     if (typeof value !== "string") throw new Error(`${name} must be a string`);
   };
+
+  static floatValue = ({ name, value }) => {
+    this.fieldName({ name });
+    if (typeof value !== "number") throw new Error(`${name} must be a float`);
+  };
 }
 
 export default Validation;

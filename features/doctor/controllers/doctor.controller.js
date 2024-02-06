@@ -705,7 +705,6 @@ const DoctorController = {
         connection,
       });
 
-      console.log(doctorDispositionReminderSaveResult.recordsets);
       doctorDispositionReminderSaveResult =
         doctorDispositionReminderSaveResult.recordsets;
 

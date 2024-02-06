@@ -581,6 +581,165 @@ const DoctorController = {
       next(error);
     }
   },
+
+  /**
+   *
+   * Get doctor disposition reminder
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async DoctorDispositionReminderGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, PatientId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+      ];
+
+      let doctorDispositionReminderGetResult = await executeSp({
+        spName: `DoctorDispositionReminderGet`,
+        params: params,
+        connection,
+      });
+
+      console.log(doctorDispositionReminderGetResult.recordsets);
+      doctorDispositionReminderGetResult =
+        doctorDispositionReminderGetResult.recordsets;
+
+      //handle no data
+      // if (doctorDispositionReminderGetResult[0].length == 0) {
+      //   handleResponse(res, 200, "success", "No data found", {});
+      //   return;
+      // }
+      // const appointment = doctorDispositionReminderGetResult[0][0];
+      // const billData = doctorDispositionReminderGetResult[1];
+
+      // const data = {
+      //   ...appointment,
+      //   BillData: billData,
+      // };
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        doctorDispositionReminderGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async DoctorDispositionReminderSave(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id = 0,
+        PrescriptionRecordId = 0,
+        AppointmentId = 0,
+        PatientId = 0,
+        RemindOn = 0,
+        RemindFromDate = "",
+        RemindType = "",
+        Message = "",
+        Status = 0,
+        UserSaved = 0,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({
+          fieldName: "PrescriptionRecordId",
+          value: PrescriptionRecordId,
+        }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        SignedInteger({
+          fieldName: "RemindOn",
+          value: RemindOn,
+        }),
+        DateString({ fieldName: "RemindFromDate", value: RemindFromDate }),
+        StringValue({ fieldName: "RemindType", value: RemindType }),
+        StringValue({ fieldName: "Message", value: Message }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+      ];
+
+      let doctorDispositionReminderSaveResult = await executeSp({
+        spName: `DoctorDispositionReminderSave`,
+        params: params,
+        connection,
+      });
+
+      console.log(doctorDispositionReminderSaveResult.recordsets);
+      doctorDispositionReminderSaveResult =
+        doctorDispositionReminderSaveResult.recordsets;
+
+      //handle no data
+      // if (doctorDispositionReminderSaveResult[0].length == 0) {
+      //   handleResponse(res, 200, "success", "No data found", {});
+      //   return;
+      // }
+      // const appointment = doctorDispositionReminderSaveResult[0][0];
+      // const billData = doctorDispositionReminderSaveResult[1];
+
+      // const data = {
+      //   ...appointment,
+      //   BillData: billData,
+      // };
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Reminder saved successfully",
+        doctorDispositionReminderSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 };
 
 export default DoctorController;

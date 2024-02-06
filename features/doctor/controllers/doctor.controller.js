@@ -90,7 +90,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async saveDoctor(request, response, next) {
@@ -221,7 +221,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async getDoctorSpecializations(request, response, next) {
@@ -277,7 +277,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async saveDoctorSpecialization(request, response, next) {
@@ -321,19 +321,6 @@ const DoctorController = {
       doctorSpecializationsSaveResult =
         doctorSpecializationsSaveResult.recordsets;
 
-      //handle no data
-      // if (doctorSpecializationsSaveResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorSpecializationsSaveResult[0][0];
-      // const billData = doctorSpecializationsSaveResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
-
       handleResponse(
         response,
         200,
@@ -359,7 +346,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    */
   async DoctorChannelingStatusGet(request, response, next) {
     const errors = validationResult(request);
@@ -436,7 +423,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async DoctorChannelingStatusSave(request, response, next) {
@@ -480,19 +467,6 @@ const DoctorController = {
       doctorChannelingStatusSaveResult =
         doctorChannelingStatusSaveResult.recordsets;
 
-      //handle no data
-      // if (doctorChannelingStatusSaveResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorChannelingStatusSaveResult[0][0];
-      // const billData = doctorChannelingStatusSaveResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
-
       handleResponse(
         response,
         200,
@@ -518,7 +492,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async DoctorContactNumberGet(request, response, next) {
@@ -588,7 +562,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async DoctorDispositionReminderGet(request, response, next) {
@@ -616,22 +590,8 @@ const DoctorController = {
         connection,
       });
 
-      console.log(doctorDispositionReminderGetResult.recordsets);
       doctorDispositionReminderGetResult =
         doctorDispositionReminderGetResult.recordsets;
-
-      //handle no data
-      // if (doctorDispositionReminderGetResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorDispositionReminderGetResult[0][0];
-      // const billData = doctorDispositionReminderGetResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
 
       handleResponse(
         response,
@@ -651,6 +611,16 @@ const DoctorController = {
       next(error);
     }
   },
+
+  /**
+   *
+   * Save doctor disposition reminder
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
 
   async DoctorDispositionReminderSave(request, response, next) {
     const errors = validationResult(request);
@@ -707,19 +677,6 @@ const DoctorController = {
 
       doctorDispositionReminderSaveResult =
         doctorDispositionReminderSaveResult.recordsets;
-
-      //handle no data
-      // if (doctorDispositionReminderSaveResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorDispositionReminderSaveResult[0][0];
-      // const billData = doctorDispositionReminderSaveResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
 
       handleResponse(
         response,

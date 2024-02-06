@@ -129,7 +129,7 @@ const ResponseMessages = {
     VALIDATION_ERROR: "Validation errors",
     LIST_RETRIEVE: "Appointments list retrieved!",
     LIST_RETRIEVE_FAILED: "Failed to fetch appointments list!",
-    RETRIEVE: "appointment retrieved!",
+    RETRIEVE: "Appointment retrieved!",
     RETRIEVE_FAILED: "Failed to fetch appointment!",
     CREATE: "Appointment created!",
     CREATE_FAILED: "Failed to create appointment!",
@@ -137,6 +137,19 @@ const ResponseMessages = {
     UPDATE_FAILED: "Failed to update appointment!",
     DELETE: "Appointment deleted!",
     DELETE_FAILED: "Failed to delete appointment!",
+  },
+  Institute: {
+    VALIDATION_ERROR: "Validation errors",
+    LIST_RETRIEVE: "Institute list retrieved!",
+    LIST_RETRIEVE_FAILED: "Failed to fetch institute list!",
+    RETRIEVE: "Institute retrieved!",
+    RETRIEVE_FAILED: "Failed to fetch institute!",
+    CREATE: "Institute created!",
+    CREATE_FAILED: "Failed to create institute!",
+    UPDATE: "Institute updated!",
+    UPDATE_FAILED: "Failed to update institute!",
+    DELETE: "Institute deleted!",
+    DELETE_FAILED: "Failed to delete institute!",
   },
 };
 

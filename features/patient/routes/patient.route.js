@@ -81,5 +81,46 @@ router.post(
   PatientController.getPatientDrugAllergy
 );
 
+router.post(
+  "/GynoObstetricsHistoryGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getGynoObstetricsHistory
+);
+
+router.post(
+  "/GynoObstetricsHistorySave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt(),
+    check("GynoObstetricsHistory").not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").not().isEmpty(),
+  ],
+  PatientController.saveGynoObstetricsHistory
+);
+
+router.post(
+  "/PatientDiagnosisDocumentDelete",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.deletePatientDiagnosisDocument
+);
+
+router.post(
+  "/PatientNewFoodAllergyGet",
+  [
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("Id").not().isEmpty(),
+  ],
+  PatientController.getPatientNewFoodAllergy
+);
+
 
 export default router;

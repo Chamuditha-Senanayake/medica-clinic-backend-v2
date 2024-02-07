@@ -354,6 +354,238 @@ const PatientController = {
     }
   },
 
+  /**
+   *
+   * get Gyno Obstetrics History
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getGynoObstetricsHistory(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, PatientId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let gynoObstetricsHistoryGetResult = await executeSp({
+        spName: `GynoObstetricsHistoryGet`,
+        params: params,
+        connection,
+      });
+
+      gynoObstetricsHistoryGetResult = gynoObstetricsHistoryGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data data retrived successfully",
+        gynoObstetricsHistoryGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * save Gyno Obstetrics History
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async saveGynoObstetricsHistory(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        PatientId,
+        GynoObstetricsHistory,
+        Status,
+        UserSaved,
+      } = request.body;
+
+    var params = [
+      EntityId({ fieldName: "Id", value: Id }),
+      EntityId({ fieldName: "PatientId", value: PatientId }),
+      StringValue({ fieldName: "GynoObstetricsHistory", value: GynoObstetricsHistory }),
+      EntityId({ fieldName: "Status", value: Status }),
+      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+    ];
+
+      let gynoObstetricsHistorySaveResult = await executeSp({
+        spName: `GynoObstetricsHistorySave`,
+        params: params,
+        connection,
+      });
+
+      console.log(gynoObstetricsHistorySaveResult.recordsets);
+      gynoObstetricsHistorySaveResult = gynoObstetricsHistorySaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data data retrieved successfully",
+        gynoObstetricsHistorySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Delete Patient Diagnosis Document
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async deletePatientDiagnosisDocument(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let patientDiagnosisDocumentDeleteResult = await executeSp({
+        spName: `PatientDiagnosisDocumentDelete`,
+        params: params,
+        connection,
+      });
+
+      patientDiagnosisDocumentDeleteResult = patientDiagnosisDocumentDeleteResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Deleted successfully",
+        patientDiagnosisDocumentDeleteResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get Patient Diagnosis Document
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientNewFoodAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, PatientId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let patientNewFoodAllergyGetResult = await executeSp({
+        spName: `PatientNewFoodAllergyGet`,
+        params: params,
+        connection,
+      });
+
+      patientNewFoodAllergyGetResult = patientNewFoodAllergyGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Food allergy data retrived successfully",
+        patientNewFoodAllergyGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
 };
 
 export default PatientController;

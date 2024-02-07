@@ -45,7 +45,7 @@ const AppointmentController = {
     }
 
     try {
-      let connection = req.app.locals.db;
+      let connection = request.app.locals.db;
       const {
         UserId,
         Id = 0,
@@ -53,7 +53,7 @@ const AppointmentController = {
         SessionId = 0,
         PatientId = 0,
         PatientMobile = "",
-      } = req.body;
+      } = request.body;
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
@@ -73,7 +73,7 @@ const AppointmentController = {
       appointmentGetResult = appointmentGetResult.recordsets;
 
       handleResponse(
-        res,
+        response,
         200,
         "success",
         "Appointment data retrieved successfully",
@@ -81,6 +81,187 @@ const AppointmentController = {
       );
     } catch (error) {
       handleError(res, 500, "error", error.message, "Something went wrong");
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * save appointment
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+
+  async saveAppointment(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Appointment.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Number,
+        SessionId,
+        PatientId,
+        Status,
+        UserSaved,
+        Id = 0,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Number", value: Number }),
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({
+          fieldName: "UserSaved",
+          value: UserSaved,
+        }),
+        EntityId({
+          fieldName: "Id",
+          value: Id,
+        }),
+      ];
+
+      let AppointmentSaveResult = await executeSp({
+        spName: `AppointmentSave`,
+        params: params,
+        connection,
+      });
+
+      AppointmentSaveResult = AppointmentSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Appointment saved successfully",
+        AppointmentSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get next appointments
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+
+  async appointmentGetNext(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Appointment.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, SessionId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+      ];
+
+      let AppointmentGetNextResult = await executeSp({
+        spName: `AppointmentGetNext`,
+        params: params,
+        connection,
+      });
+
+      AppointmentGetNextResult = AppointmentGetNextResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        AppointmentGetNextResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async appointmentReport(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Appointment.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, FromDate, ToDate, DoctorId, BranchId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        DateString({ fieldName: "FromDate", value: FromDate }),
+        DateString({ fieldName: "ToDate", value: ToDate }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        EntityId({ fieldName: "BranchId", value: BranchId }),
+      ];
+
+      let appointmentReportResult = await executeSp({
+        spName: `AppointmentReport`,
+        params: params,
+        connection,
+      });
+
+      appointmentReportResult = appointmentReportResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Appointment Report retrieved successfully",
+        appointmentReportResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
       next(error);
     }
   },

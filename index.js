@@ -20,7 +20,6 @@ import drugRouter from "./features/drug/routes/drug.route.js";
 import appointmentRouter from "./features/appointment/routes/appointment.route.js";
 import notificationScheduleRouter from "./features/notificationSchedule/routes/notificationSchedule.route.js";
 
-
 dotenv.config();
 
 const app = express();
@@ -55,7 +54,7 @@ app.use(`/api/v1`, noteRouter);
 app.use(`/api/v1`, drugRouter);
 app.use(`/api/v1`, employeeRouter);
 app.use(`/api/v1`, appointmentRouter);
-app.use(`/api/v1`, instituteRouter);
+// app.use(`/api/v1`, instituteRouter);
 app.use(`/api/v1`, notificationScheduleRouter);
 
 // set port, listen for requests

@@ -7,6 +7,7 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
+  DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
 
@@ -395,7 +396,7 @@ const PatientController = {
         response,
         200,
         "success",
-        "Data data retrived successfully",
+        "Data retrived successfully",
         gynoObstetricsHistoryGetResult
       );
     } catch (error) {
@@ -460,7 +461,7 @@ const PatientController = {
         response,
         200,
         "success",
-        "Data data retrieved successfully",
+        "Data retrieved successfully",
         gynoObstetricsHistorySaveResult
       );
     } catch (error) {
@@ -573,6 +574,514 @@ const PatientController = {
         "success",
         "Food allergy data retrived successfully",
         patientNewFoodAllergyGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * save Patient New Food Allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async savePatientNewFoodAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        PatientId,
+        AllergyFoods,
+        Status,
+        UserSaved,
+      } = request.body;
+
+    var params = [
+      EntityId({ fieldName: "Id", value: Id }),
+      EntityId({ fieldName: "PatientId", value: PatientId }),
+      StringValue({ fieldName: "AllergyFoods", value: AllergyFoods }),
+      EntityId({ fieldName: "Status", value: Status }),
+      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+    ];
+
+      let patientNewFoodAllergySaveResult = await executeSp({
+        spName: `PatientNewFoodAllergySave`,
+        params: params,
+        connection,
+      });
+
+      console.log(patientNewFoodAllergySaveResult.recordsets);
+      patientNewFoodAllergySaveResult = patientNewFoodAllergySaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        patientNewFoodAllergySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get Patient
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatient(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        UserId,
+        NIC,
+        Passport,
+        Mobile,
+        BedHeadTicketNumber ,
+        ClinicId ,
+        UniqueId  ,
+        Name  ,
+        DateOfBirth  ,
+        ParentId ,
+        Guid   ,
+        Address ,
+        Id
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        StringValue({ fieldName: "NIC", value: NIC }),
+        StringValue({ fieldName: "Passport", value: Passport }),
+        StringValue({ fieldName: "Mobile", value: Mobile }),
+        StringValue({ fieldName: "BedHeadTicketNumber", value: BedHeadTicketNumber }),
+        StringValue({ fieldName: "ClinicId", value: ClinicId }),
+        StringValue({ fieldName: "UniqueId", value: UniqueId }),
+        StringValue({ fieldName: "Name", value: Name }),
+        DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
+        EntityId({ fieldName: "ParentId", value: ParentId }),
+        EntityId({ fieldName: "Guid", value: Guid }),
+        StringValue({ fieldName: "Address", value: Address }),
+        EntityId({ fieldName: "Id", value: Id}),
+      ];
+
+      let patientGetResult = await executeSp({
+        spName: `PatientGet`,
+        params: params,
+        connection,
+      });
+
+      patientGetResult = patientGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Patient retrived successfully",
+        patientGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+   /**
+   *
+   * get Patient New Surgery
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientNewSurgery(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, PatientId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let patientNewSurgeryGetResult = await executeSp({
+        spName: `PatientNewSurgeryGet`,
+        params: params,
+        connection,
+      });
+
+      patientNewSurgeryGetResult = patientNewSurgeryGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Surgery data retrived successfully",
+        patientNewSurgeryGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * save Patient New Surgery
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientNewSurgery(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        Id, 
+        PatientId, 
+        Surgeries,
+        Status,
+        UserSaved
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "Surgeries", value: Surgeries }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
+
+      let patientNewSurgerySaveResult = await executeSp({
+        spName: `PatientNewSurgerySave`,
+        params: params,
+        connection,
+      });
+
+      patientNewSurgerySaveResult = patientNewSurgerySaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Surgery data retrived successfully",
+        patientNewSurgerySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get patient other surgery
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientOtherAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, PatientId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let patientOtherAllergyGetResult = await executeSp({
+        spName: `PatientOtherAllergyGet`,
+        params: params,
+        connection,
+      });
+
+      patientOtherAllergyGetResult = patientOtherAllergyGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientOtherAllergyGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * save patient other surgery
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientOtherAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        Id, 
+        PatientId, 
+        Allergies,
+        Status,
+        UserSaved
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "Allergies", value: Allergies }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
+
+      let patientOtherAllergySaveResult = await executeSp({
+        spName: `PatientOtherAllergySave`,
+        params: params,
+        connection,
+      });
+
+      patientOtherAllergySaveResult = patientOtherAllergySaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientOtherAllergySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get patient other diseases
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientOtherDiseases(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, PatientId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let patientOtherDiseasesGetResult = await executeSp({
+        spName: `PatientOtherDiseasesGet`,
+        params: params,
+        connection,
+      });
+
+      patientOtherDiseasesGetResult = patientOtherDiseasesGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientOtherDiseasesGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * save patient other diseases
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientOtherDiseases(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        Id, 
+        PatientId, 
+        Diseases,
+        Status,
+        UserSaved
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "Diseases", value: Diseases }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
+
+      let patientOtherDiseasesSaveResult = await executeSp({
+        spName: `PatientOtherDiseasesSave`,
+        params: params,
+        connection,
+      });
+
+      patientOtherDiseasesSaveResult = patientOtherDiseasesSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientOtherDiseasesSaveResult
       );
     } catch (error) {
       handleError(

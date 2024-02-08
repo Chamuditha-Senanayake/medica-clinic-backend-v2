@@ -19,7 +19,7 @@ router.post(
     check("PatientId").isInt(),
     check("Type").not().isEmpty(),
     check("FileName").not().isEmpty(),
-    check("Id").isInt(),
+    check("Id").isInt().not().isEmpty(),
     check("Name").not().isEmpty(),
     check("UserId").not().isEmpty(),
   ],
@@ -39,8 +39,8 @@ router.post(
 router.post(
   "/PatientDispositionGet",
   [
-    check("Id").not().isEmpty(),
-    check("UserId").not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
   ],
   PatientController.getPatientDisposition
 );
@@ -95,10 +95,10 @@ router.post(
   "/GynoObstetricsHistorySave",
   [
     check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt(),
+    check("PatientId").isInt().not().isEmpty(),
     check("GynoObstetricsHistory").not().isEmpty(),
     check("Status").isInt().not().isEmpty(),
-    check("UserSaved").not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
   ],
   PatientController.saveGynoObstetricsHistory
 );
@@ -117,9 +117,107 @@ router.post(
   [
     check("PatientId").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
-    check("Id").not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
   ],
   PatientController.getPatientNewFoodAllergy
+);
+
+router.post(
+  "/PatientNewFoodAllergySave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("AllergyFoods").not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientNewFoodAllergy
+);
+
+router.post(
+  "/PatientGet",
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("NIC").not().isEmpty(),
+    check("Passport").not().isEmpty(),
+    check("Mobile").not().isEmpty(),
+    check("BedHeadTicketNumber").not().isEmpty(),
+    check("ClinicId").not().isEmpty(),
+    check("UniqueId").not().isEmpty(),
+    check("Name").not().isEmpty(),
+    check("DateOfBirth").not().isEmpty(),
+    check("Address").not().isEmpty(),
+    check("ParentId").isInt().not().isEmpty(),
+    check("Guid").isInt().not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatient
+);
+
+router.post(
+  "/PatientNewSurgeryGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientNewSurgery
+);
+
+router.post(
+  "/PatientNewSurgerySave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Surgeries").not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientNewSurgery
+);
+
+router.post(
+  "/PatientOtherAllergyGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientOtherAllergy
+);
+
+router.post(
+  "/PatientOtherAllergySave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Allergies").not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientOtherAllergy
+);
+
+router.post(
+  "/PatientOtherDiseasesGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientOtherAllergy
+);
+
+router.post(
+  "/PatientOtherDiseasesSave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Diseases").not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientOtherDiseases
 );
 
 

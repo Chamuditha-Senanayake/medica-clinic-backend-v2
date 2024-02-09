@@ -220,5 +220,88 @@ router.post(
   PatientController.savePatientOtherDiseases
 );
 
+router.post(
+  "/PatientRelativesGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("RelationId").isInt().not().isEmpty(),
+    check("TypeId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientRelatives
+);
+
+router.post(
+  "/PatientRemarkGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientRemark
+);
+
+router.post(
+  "/PatientRemarkSave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Details").not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientRemark
+);
+
+router.post(
+  "/PatientReminderGet",
+  [
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientReminder
+);
+
+router.post(
+  "/PatientReminderSave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Subject").not().isEmpty(),
+    check("ReminderType").not().isEmpty(),
+    check("Description").not().isEmpty(),
+    check("Date").not().isEmpty(),
+    check("Time").not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientReminder
+);
+
+router.post(
+  "/PatientReportSave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("AppointmentId").isInt().not().isEmpty(),
+    check("FileName").not().isEmpty(),
+    check("FileLocation").not().isEmpty(),
+    check("ReportType").not().isEmpty(),
+    check("Description").not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientReport
+);
+
+router.post(
+  "/PatientRobsonInfoGet",
+  [
+    check("PatientId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientRobsonInfo
+);
+
 
 export default router;

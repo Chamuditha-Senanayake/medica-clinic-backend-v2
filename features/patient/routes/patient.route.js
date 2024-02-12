@@ -303,5 +303,44 @@ router.post(
   PatientController.getPatientRobsonInfo
 );
 
+router.post(
+  "/PatientRobsonReportDataGet",
+  [
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientRobsonReportData
+);
+
+router.post(
+  "/PatientRobsonInfoSave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Parity").not().isEmpty(),
+    check("PreviousCs").not().isEmpty(),
+    check("OnsetOfLabour").not().isEmpty(),
+    check("NoOfFetuses").not().isEmpty(),
+    check("GestationalAge").not().isEmpty(),
+    check("Presentation").not().isEmpty(),
+    check("DeliveryMode").not().isEmpty(),
+    check("DeliveryOutcome").not().isEmpty(),
+    check("DeliveryComplications").not().isEmpty(),
+    check("CsElectiveIndications").not().isEmpty(),
+    check("CsEmergencyIndications").not().isEmpty(),
+    check("Notes").not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientRobsonInfo
+);
+
+router.post(
+  "/PatientStatusGet",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientStatus
+);
 
 export default router;

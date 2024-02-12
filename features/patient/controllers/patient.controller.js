@@ -1535,6 +1535,201 @@ const PatientController = {
     }
   },
 
+  /*
+   *
+   * get patient robson report data
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientRobsonReportData(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let patientRobsonReportDataGetResult = await executeSp({
+        spName: `PatientRobsonReportDataGet`,
+        params: params,
+        connection,
+      });
+
+      patientRobsonReportDataGetResult = patientRobsonReportDataGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientRobsonReportDataGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /*
+   *
+   * get patient robson info save
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientRobsonInfo(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        Id ,
+        PatientId ,
+        Parity  ,
+        PreviousCs  ,
+        OnsetOfLabour  ,
+        NoOfFetuses  ,
+        GestationalAge ,
+        Presentation  ,
+        DeliveryMode  ,
+        DeliveryOutcome  ,
+        DeliveryComplications  ,
+        CsElectiveIndications  ,
+        CsEmergencyIndications  ,
+        Notes  ,
+        UserSaved
+
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "Parity", value: Parity }),
+        StringValue({ fieldName: "PreviousCs", value: PreviousCs }),
+        StringValue({ fieldName: "OnsetOfLabour", value: OnsetOfLabour }),
+        StringValue({ fieldName: "NoOfFetuses", value: NoOfFetuses }),
+        StringValue({ fieldName: "GestationalAge", value: GestationalAge }),
+        StringValue({ fieldName: "Presentation", value: Presentation }),
+        StringValue({ fieldName: "DeliveryMode", value: DeliveryMode }),
+        StringValue({ fieldName: "DeliveryOutcome", value: DeliveryOutcome }),
+        StringValue({ fieldName: "DeliveryComplications", value: DeliveryComplications }),
+        StringValue({ fieldName: "CsElectiveIndications", value: CsElectiveIndications }),
+        StringValue({ fieldName: "CsEmergencyIndications", value: CsEmergencyIndications }),
+        StringValue({ fieldName: "Notes", value: Notes }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
+
+      let patientRobsonInfoSaveResult = await executeSp({
+        spName: `PatientRobsonInfoSave`,
+        params: params,
+        connection,
+      });
+
+      patientRobsonInfoSaveResult = patientRobsonInfoSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientRobsonInfoSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /*
+   *
+   * get patient status
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientStatus(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId,Id, PatientId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+      ];
+
+      let patientStatusGetResult = await executeSp({
+        spName: `PatientStatusGet`,
+        params: params,
+        connection,
+      });
+
+      patientStatusGetResult = patientStatusGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientStatusGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
   
 };
 

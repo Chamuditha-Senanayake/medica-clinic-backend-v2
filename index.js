@@ -17,6 +17,7 @@ import diseaseRouter from "./features/disease/routes/disease.route.js";
 import patientRouter from "./features/patient/routes/patient.route.js";
 import noteRouter from "./features/note/routes/note.route.js";
 import drugRouter from "./features/drug/routes/drug.route.js";
+import instituteRouter from "./features/institute/routes/institute.route.js";
 import appointmentRouter from "./features/appointment/routes/appointment.route.js";
 import notificationScheduleRouter from "./features/notificationSchedule/routes/notificationSchedule.route.js";
 
@@ -53,8 +54,8 @@ app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, noteRouter);
 app.use(`/api/v1`, drugRouter);
 app.use(`/api/v1`, employeeRouter);
+app.use(`/api/v1`, instituteRouter);
 app.use(`/api/v1`, appointmentRouter);
-// app.use(`/api/v1`, instituteRouter);
 app.use(`/api/v1`, notificationScheduleRouter);
 
 // set port, listen for requests

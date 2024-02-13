@@ -91,6 +91,16 @@ export const FloatValue = ({ fieldName, value }) => {
   };
 };
 
+export const DecimalValue = ({ fieldName, value }) => {
+  Validation.fieldName({ name: fieldName });
+  Validation.decimalValue({ name: fieldName, value });
+  return {
+    name: fieldName,
+    type: Decimal,
+    value,
+  };
+};
+
 /**
  *
  * @param {tableName} string

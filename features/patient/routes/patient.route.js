@@ -343,4 +343,113 @@ router.post(
   PatientController.getPatientStatus
 );
 
+router.post(
+  "/PatientSave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("ParentId").isInt().not().isEmpty(),
+    check("PatientTypeId").isInt().not().isEmpty(),
+    check("InvalidOTPAttempts").isInt().not().isEmpty(),
+    check("AddressId").isInt().not().isEmpty(),
+    check("RelationId").isInt().not().isEmpty(),
+    check("RelationTypeId").isInt().not().isEmpty(),
+    check("MaritalStatus").isInt().not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+    check("AgeGroupId").isInt().not().isEmpty(),
+    check("EthnicGroupId").isInt().not().isEmpty(),
+    check("EducationLevelId").isInt().not().isEmpty(),
+    check("ReligionId").isInt().not().isEmpty(),
+    check("SpiritualityId").isInt().not().isEmpty(),
+    check("IncomeGroupId").isInt().not().isEmpty(),
+    check("PatientStatusSave").isInt().not().isEmpty(),
+    check("PatientStatusId").isInt().not().isEmpty(),
+    check("PatientStatusStatusType").isInt().not().isEmpty(),
+    check("PatientStatusStatus").isInt().not().isEmpty(),
+    check("Guid").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("LocalTran").isInt().not().isEmpty(),
+    check("OperationUniqueId").isInt().not().isEmpty(),
+
+    check("Title").not().isEmpty(),
+    check("FirstName").not().isEmpty(),
+    check("MiddleName").not().isEmpty(),
+    check("LastName").not().isEmpty(),
+    check("NIC").not().isEmpty(),
+    check("Passport").not().isEmpty(),
+    check("Mobile").not().isEmpty(),
+    check("BedHeadTicketNumber").not().isEmpty(),
+    check("ClinicId").not().isEmpty(),
+    check("UniqueId").not().isEmpty(),
+    check("Email").not().isEmpty(),
+    check("Gender").not().isEmpty(),
+    check("DateOfBirth").not().isEmpty(),
+    check("BloodGroup").not().isEmpty(),
+    check("AddressLine1").not().isEmpty(),
+    check("AddressLine2").not().isEmpty(),
+    check("Suburb").not().isEmpty(),
+    check("City").not().isEmpty(),
+    check("Postcode").not().isEmpty(),
+    check("Province").not().isEmpty(),
+    check("Country").not().isEmpty(),
+    check("EmergencyContact").not().isEmpty(),
+    check("Occupation").not().isEmpty(),
+    check("PHIArea").not().isEmpty(),
+    check("MOH").not().isEmpty(),
+    check("GNDivision").not().isEmpty(),
+    check("PatientStatusStatusDate").not().isEmpty(),
+  ],
+  PatientController.savePatient
+);
+
+router.post(
+  "/ConsultationSave",
+  [
+    check("AppointmentId").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("PrescriptionRecordId").isInt().not().isEmpty(),
+    check("CovidSymptoms").not().isEmpty(),
+    check("CovidLab").not().isEmpty(),
+    check("Treatment").not().isEmpty(),
+    check("DisCharge").not().isEmpty(),
+    check("PatientCare").not().isEmpty(),
+    check("WasteManagment").not().isEmpty(),
+    check("RiskFactors").not().isEmpty(),
+    check("Management").not().isEmpty(),
+    check("Advice").not().isEmpty(),
+    check("Prevention").not().isEmpty(),
+  ],
+  PatientController.saveConsultation
+);
+
+router.post(
+  "/PatientDeceasedGet",
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("NIC").not().isEmpty(),
+    check("Passport").not().isEmpty(),
+    check("Mobile").not().isEmpty(),
+    check("MOH").not().isEmpty(),
+    check("GNDivision").not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
+    check("Limit").not().isEmpty(),
+  ],
+  PatientController.getPatientDeceased
+);
+
+router.post(
+  "/IllnessDataDetailGet",
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("SessionId").isInt().not().isEmpty(),
+    check("AppointmentId").isInt().not().isEmpty(),
+    check("PrescriptionRecordId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("Id").not().isEmpty(),
+  ],
+  PatientController.getIllnessDataDetail
+);
+
 export default router;

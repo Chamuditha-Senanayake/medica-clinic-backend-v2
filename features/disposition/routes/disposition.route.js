@@ -94,11 +94,20 @@ router.post(
   [
     check("PatientDispositionId").optional({ values: "null" }).isInt(),
     check("ScheduledTime").notEmpty().isString(),
-    check("ContactType").optional({ values: "null" }).isString(),
+    check("ContactType")
+      .optional({ values: "null" })
+      .isString()
+      .isLength({ max: 50 }),
     check("RecipientID").optional({ values: "null" }).isInt(),
-    check("ContactNumber").optional({ values: "null" }).isString(),
+    check("ContactNumber")
+      .optional({ values: "null" })
+      .isString()
+      .isLength({ max: 50 }),
     check("MessageMedium").optional({ values: "null" }).isString(),
-    check("Message").optional({ values: "null" }).isString(),
+    check("Message")
+      .optional({ values: "null" })
+      .isString()
+      .isLength({ max: 50 }),
     check("Status").notEmpty().isInt(),
     check("UserSaved").notEmpty().isInt(),
     check("Id").optional({ values: "null" }).isInt(),

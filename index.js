@@ -21,6 +21,7 @@ import instituteRouter from "./features/institute/routes/institute.route.js";
 import appointmentRouter from "./features/appointment/routes/appointment.route.js";
 import notificationScheduleRouter from "./features/notificationSchedule/routes/notificationSchedule.route.js";
 import billRouter from "./features/bill/routes/bill.route.js";
+import dispositionRouter from "./features/disposition/routes/disposition.route.js";
 
 dotenv.config();
 
@@ -59,6 +60,7 @@ app.use(`/api/v1`, instituteRouter);
 app.use(`/api/v1`, appointmentRouter);
 app.use(`/api/v1`, notificationScheduleRouter);
 app.use(`/api/v1`, billRouter);
+app.use(`/api/v1`, dispositionRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

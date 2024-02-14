@@ -157,6 +157,15 @@ const BillController = {
     }
   },
 
+  /**
+   *
+   * Get medical bill results
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async getMedicalBillResults(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -184,20 +193,20 @@ const BillController = {
         PatientPassport = "",
         PatientMobile = "",
         PatientEmail = "",
-        PatientDateOfBirth = "",
+        PatientDateOfBirth,
         PatientGender = "",
         PatientParentId = 0,
         PatientPatientTypeId = 0,
         PatientBloodGroup = "",
         PatientInvalidOTPAttempts = 0,
         PatientStatus = 0,
-        HomeAddress = "",
-        OfficeAddress = "",
+        HomeAddress,
+        OfficeAddress,
         ChargesForDrugs = 0,
         ChargesForDoctor = 0,
         ChargesForInvestigations = 0,
         ChargesForOther = 0,
-        IssuingDate = "",
+        IssuingDate,
         Status,
         UserSaved,
         Id = 0,

@@ -452,4 +452,55 @@ router.post(
   PatientController.getIllnessDataDetail
 );
 
+router.post(
+  "/IllnessDataDetailSave",
+  [
+    check("AppointmentId").isInt().not().isEmpty(),
+    check("AppointmentNumber").isInt().not().isEmpty(),
+    check("AppointmentSessionId").isInt().not().isEmpty(),
+    check("AppointmentStatus").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
+    check("PatientParentId").isInt().not().isEmpty(),
+    check("PatientPatientTypeId").isInt().not().isEmpty(),
+    check("PatientStatus").isInt().not().isEmpty(),
+    check("EpisodeType").isInt().not().isEmpty(),
+    check("PrescriptionRecordId").isInt().not().isEmpty(),
+    check("Status").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),    
+
+    check("PatientTitle").not().isEmpty(),
+    check("PatientFirstName").not().isEmpty(),
+    check("PatientMiddleName").not().isEmpty(),
+    check("PatientLastName").not().isEmpty(),
+    check("PatientNIC").not().isEmpty(),
+    check("PatientPassport").not().isEmpty(),
+    check("PatientMobile").not().isEmpty(),
+    check("PatientEmail").not().isEmpty(),
+    check("PatientDateOfBirth").not().isEmpty(),
+    check("PatientGender").not().isEmpty(),
+    check("PatientBloodGroup").not().isEmpty(),
+    check("CurrentEpisodeDuration").not().isEmpty(),
+    check("TotalDuration").not().isEmpty(),
+    check("OnsetDescription").not().isEmpty(),
+    check("Profile").not().isEmpty(),
+    check("PrecipitatingFactors").not().isEmpty(),
+    check("PredisposingFactors").not().isEmpty(),
+    check("RelievingFactors").not().isEmpty(),
+    check("FunctionalStatus").not().isEmpty(),
+    check("FamilyMedicineVitalSigns").not().isEmpty(),
+    check("ChronicDiseaseMx").not().isEmpty(),
+    check("CurrentMedications").not().isEmpty(),
+    check("Weight").not().isEmpty(),
+    check("Height").not().isEmpty(),
+    check("BloodPressureSystolic").not().isEmpty(),
+    check("BloodPressureDiastolic").not().isEmpty(),
+    check("Temperature").not().isEmpty(),
+    check("Pulse").not().isEmpty(),
+    check("RespiratoryRate").not().isEmpty(),
+    check("WaistCircumference").not().isEmpty(),
+  ],
+  PatientController.saveIllnessDataDetail
+);
+
 export default router;

@@ -11,9 +11,17 @@ import loggerMiddleware from "./middleware/logger.middleware.js";
 // Import Routes
 import doctorRouter from "./features/doctor/routes/doctor.route.js";
 import nurseRouter from "./features/nurse/routes/nurse.route.js";
+import employeeRouter from "./features/employee/routes/employee.route.js";
 import prescriptionRouter from "./features/prescription/routes/prescription.route.js";
 import diseaseRouter from "./features/disease/routes/disease.route.js";
-
+import patientRouter from "./features/patient/routes/patient.route.js";
+import noteRouter from "./features/note/routes/note.route.js";
+import drugRouter from "./features/drug/routes/drug.route.js";
+import instituteRouter from "./features/institute/routes/institute.route.js";
+import appointmentRouter from "./features/appointment/routes/appointment.route.js";
+import notificationScheduleRouter from "./features/notificationSchedule/routes/notificationSchedule.route.js";
+import billRouter from "./features/bill/routes/bill.route.js";
+import dispositionRouter from "./features/disposition/routes/disposition.route.js";
 
 dotenv.config();
 
@@ -44,6 +52,15 @@ app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);
 app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, diseaseRouter);
+app.use(`/api/v1`, patientRouter);
+app.use(`/api/v1`, noteRouter);
+app.use(`/api/v1`, drugRouter);
+app.use(`/api/v1`, employeeRouter);
+app.use(`/api/v1`, instituteRouter);
+app.use(`/api/v1`, appointmentRouter);
+app.use(`/api/v1`, notificationScheduleRouter);
+app.use(`/api/v1`, billRouter);
+app.use(`/api/v1`, dispositionRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

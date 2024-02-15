@@ -9,22 +9,146 @@ import {
   SignedInteger,
 } from "../../../utils/type-def.js";
 
-const DiseaseController = {
+const EmployeeController = {
   /**
    *
-   * get disease by [Id, UserId]
+   * get Employee Branch
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getDisease(request, response, next) {
+  async getEmployeeBranch(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Disease.VALIDATION_ERROR,
+        message: ResponseMessage.Employee.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, InstituteBranchId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let employeeBranchGetResult = await executeSp({
+        spName: `EmployeeBranchGet`,
+        params: params,
+        connection,
+      });
+
+      employeeBranchGetResult = employeeBranchGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Employee data retrived successfully",
+        employeeBranchGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * save Employee Branch
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async saveEmployeeBranch(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Employee.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        InstituteBranchId,
+        EmployeeId,
+        Status,
+        UserSaved,
+      } = request.body;
+
+    var params = [
+      EntityId({ fieldName: "Id", value: Id }),
+      EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
+      EntityId({ fieldName: "EmployeeId", value: EmployeeId }),
+      SignedInteger({
+        fieldName: "Status",
+        value: Status,
+      }),
+      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+    ];
+
+      let employeeBranchSaveResult = await executeSp({
+        spName: `EmployeeBranchSave`,
+        params: params,
+        connection,
+      });
+
+      console.log(employeeBranchSaveResult.recordsets);
+      employeeBranchSaveResult = employeeBranchSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Employee data retrieved successfully",
+        employeeBranchSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get Employee Institute Branch
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getEmployeeInstituteBranch(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Employee.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -38,20 +162,20 @@ const DiseaseController = {
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
-      let diseaseGetResult = await executeSp({
-        spName: `DiseaseGet`,
+      let employeeInstituteBranchGetResult = await executeSp({
+        spName: `EmployeeInstituteBranchGet`,
         params: params,
         connection,
       });
 
-      diseaseGetResult = diseaseGetResult.recordsets;
+      employeeInstituteBranchGetResult = employeeInstituteBranchGetResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
-        "Disease data retrived successfully",
-        diseaseGetResult
+        "Data retrived successfully",
+        employeeInstituteBranchGetResult
       );
     } catch (error) {
       handleError(
@@ -67,19 +191,19 @@ const DiseaseController = {
 
   /**
    *
-   * save a disease
+   * save a Employee
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next function
    * @returns
    */
-  async saveDisease(request, response, next) {
+  async saveEmployee(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Disease.VALIDATION_ERROR,
+        message: ResponseMessage.Employee.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -88,14 +212,22 @@ const DiseaseController = {
       let connection = request.app.locals.db;
       const {
         Id,
-        Name,
+        FirstName,
+        MiddleName,
+        LastName,
+        NIC,
+        Email,
         Status,
-        UserSaved,
+        UserSaved
       } = request.body;
 
     var params = [
       EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "Name", value: Name }),
+      StringValue({ fieldName: "FirstName", value: FirstName }),
+      StringValue({ fieldName: "MiddleName", value: MiddleName }),
+      StringValue({ fieldName: "LastName", value: LastName }),
+      StringValue({ fieldName: "NIC", value: NIC }),
+      StringValue({ fieldName: "Email", value: Email }),
       SignedInteger({
         fieldName: "Status",
         value: Status,
@@ -103,142 +235,21 @@ const DiseaseController = {
       EntityId({ fieldName: "UserSaved", value: UserSaved }),
     ];
 
-      let diseaseSavetResult = await executeSp({
-        spName: `DiseaseSave`,
+      let employeeSaveResult = await executeSp({
+        spName: `EmployeeSave`,
         params: params,
         connection,
       });
 
-      console.log(diseaseSavetResult.recordsets);
-      diseaseSavetResult = diseaseSavetResult.recordsets;
+      console.log(employeeSaveResult.recordsets);
+      employeeSaveResult = employeeSaveResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
-        "Disease data retrieved successfully",
-        diseaseSavetResult
-      );
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
-    }
-  },
-
-  /**
-   *
-   * get allergy by [Id, UserId]
-   *
-   * @param {request} request object
-   * @param {response} response object
-   * @param {next} next - middleware
-   * @returns
-   */
-  async getFoodAllergy(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.Disease.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
-
-    try {
-      let connection = request.app.locals.db;
-      const { Id, UserId } = request.body;
-
-      var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
-      ];
-
-      let foodAllergyGet = await executeSp({
-        spName: `FoodAllergyGet`,
-        params: params,
-        connection,
-      });
-
-      foodAllergyGet = foodAllergyGet.recordsets;
-
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Allergy data retrived successfully",
-        foodAllergyGet
-      );
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
-    }
-  },
-
-  /**
-   *
-   * save a allergy
-   *
-   * @param {request} request object
-   * @param {response} response object
-   * @param {next} next function
-   * @returns
-   */
-  async saveFoodAllergy(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.Disease.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
-
-    try {
-      let connection = request.app.locals.db;
-      const {
-        Id,
-        Name,
-        Status,
-        UserSaved,
-      } = request.body;
-
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "Name", value: Name }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
-
-      let foodAllergySaveResult = await executeSp({
-        spName: `FoodAllergySave`,
-        params: params,
-        connection,
-      });
-
-      console.log(foodAllergySaveResult.recordsets);
-      foodAllergySaveResult = foodAllergySaveResult.recordsets;
-
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Allergy data retrieved successfully",
-        foodAllergySaveResult
+        "Employee data retrieved successfully",
+        employeeSaveResult
       );
     } catch (error) {
       handleError(
@@ -254,4 +265,4 @@ const DiseaseController = {
 
 };
 
-export default DiseaseController;
+export default EmployeeController;

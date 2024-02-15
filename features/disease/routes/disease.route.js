@@ -23,4 +23,24 @@ router.post(
   DiseaseController.saveDisease
 );
 
+router.post(
+  "/FoodAllergyGet",
+  [
+    check("Id").not().isEmpty(),
+    check("UserId").not().isEmpty(),
+  ],
+  DiseaseController.getFoodAllergy
+);
+
+router.post(
+  "/FoodAllergySave",
+  [
+    check("Id").isInt(),
+    check("Name").not().isEmpty(),
+    check("Status").not().isEmpty(),
+    check("UserSaved").not().isEmpty(),
+  ],
+  DiseaseController.saveFoodAllergy
+);
+
 export default router;

@@ -117,4 +117,64 @@ router.post(
   DoctorController.saveDoctorSpecialization
 );
 
+router.post(
+  "/DoctorChannelingStatusGet",
+  [
+    check("UserId").optional({ values: "null" }).isInt(),
+    check("Id").optional({ values: "null" }).isInt(),
+    check("AppointmentId").optional({ values: "null" }).isInt(),
+    check("SessionId").optional({ values: "null" }).isInt(),
+    check("PatientId").optional({ values: "null" }).isInt(),
+  ],
+  DoctorController.DoctorChannelingStatusGet
+);
+
+router.post(
+  "/DoctorChannelingStatusSave",
+  [
+    check("SessionId").not().isEmpty().isInt(),
+    check("PatientId").not().isEmpty().isInt(),
+    check("AppointmentId").not().isEmpty().isInt(),
+    check("UserSaved").not().isEmpty().isInt(),
+    check("Id").optional({ values: "null" }).isInt(),
+    check("DoctorStatus").optional({ values: "null" }).isString(),
+    check("ChanalingStatus").optional({ values: "null" }).isString(),
+  ],
+  DoctorController.DoctorChannelingStatusSave
+);
+
+router.post(
+  "/DoctorContactNumberGet",
+  [
+    check("Id").optional({ values: "null" }).isInt(),
+    check("DoctorId").optional({ values: "null" }).isInt(),
+    check("ContactNumber").optional({ values: "null" }).isString(),
+    check("UserId").not().isEmpty().isInt(),
+  ],
+  DoctorController.DoctorContactNumberGet
+);
+
+router.post(
+  "/DoctorDispositionReminderGet",
+  [check("UserId").not().isEmpty().isInt(), check("PatientId").isInt()],
+  DoctorController.DoctorDispositionReminderGet
+);
+
+router.post(
+  "/DoctorDispositionReminderSave",
+  [
+    check("Id").optional({ values: "null" }).isInt(),
+    check("PrescriptionRecordId").optional({ values: "null" }).isInt(),
+    check("AppointmentId").optional({ values: "null" }).isInt(),
+    check("PatientId").optional({ values: "null" }).isInt(),
+    check("RemindOn").optional({ values: "null" }).isInt(),
+    check("RemindFromDate").optional({ values: "null" }).isString(),
+    check("RemindType").optional({ values: "null" }).isString(),
+    check("Message").optional({ values: "null" }).isString(),
+    check("Status").optional({ values: "null" }).isInt(),
+    check("UserSaved").not().isEmpty().isInt(),
+  ],
+  DoctorController.DoctorDispositionReminderSave
+);
+
 export default router;

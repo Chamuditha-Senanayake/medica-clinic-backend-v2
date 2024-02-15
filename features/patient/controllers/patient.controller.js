@@ -2279,6 +2279,3 @@ const PatientController = {
 };
 
 export default PatientController;
-
-
-//Analytics.PatientCountGet - SP

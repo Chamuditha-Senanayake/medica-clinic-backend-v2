@@ -506,8 +506,8 @@ router.post(
 router.post(
   "/PatientCountGet",
   [
-    check("UserId").not().isEmpty(),
-    check("DoctorId").not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
     check("DateFrom").not().isEmpty(),
     check("DateTo").not().isEmpty(),
   ],

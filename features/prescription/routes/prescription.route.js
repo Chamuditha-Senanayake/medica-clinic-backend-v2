@@ -6,8 +6,8 @@ const router = express.Router();
 router.post(
   "/PrescriptionRecordCountGet",
   [
-    check("UserId").not().isEmpty(),
-    check("DoctorId").not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
     check("DateFrom").not().isEmpty(),
     check("DateTo").not().isEmpty(),
   ],
@@ -17,8 +17,8 @@ router.post(
 router.post(
   "/PrescriptionRecordDiseaseCountGet",
   [
-    check("UserId").not().isEmpty(),
-    check("DoctorId").not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
     check("DateFrom").not().isEmpty(),
     check("DateTo").not().isEmpty(),
   ],
@@ -28,8 +28,8 @@ router.post(
 router.post(
   "/PrescriptionRecordDiseaseDetailsGet",
   [
-    check("UserId").not().isEmpty(),
-    check("DoctorId").not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
     check("DateFrom").not().isEmpty(),
     check("DateTo").not().isEmpty(),
   ],
@@ -39,8 +39,8 @@ router.post(
 router.post(
   "/PrescriptionRecordDrugCountGet",
   [
-    check("UserId").not().isEmpty(),
-    check("DoctorId").not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
     check("DateFrom").not().isEmpty(),
     check("DateTo").not().isEmpty(),
   ],

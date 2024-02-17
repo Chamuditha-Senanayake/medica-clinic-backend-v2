@@ -162,12 +162,10 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
    * ]
    */
 
-  const rowValues = values.map((value) => {
-    return Object.values(value);
-  });
-
-  table.rows.add(rowValues);
-
+   values.map((value) => {
+      table.rows.add(...value);
+    });
+      
   return {
     name: tableName,
     type: sql.TVP(table),

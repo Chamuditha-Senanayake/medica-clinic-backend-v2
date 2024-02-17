@@ -151,6 +151,25 @@ const ResponseMessages = {
     DELETE: "Institute deleted!",
     DELETE_FAILED: "Failed to delete institute!",
   },
+  NotificationSchedule: {
+    VALIDATION_ERROR: "Validation errors",
+    LIST_RETRIEVE: "Notification schedule list retrieved!",
+    LIST_RETRIEVE_FAILED: "Failed to fetch notification schedule list!",
+    RETRIEVE: "Notification schedule retrieved!",
+    RETRIEVE_FAILED: "Failed to fetch notification schedule!",
+    CREATE: "Notification schedule created!",
+    CREATE_FAILED: "Failed to create notification schedule!",
+    UPDATE: "Notification schedule updated!",
+    UPDATE_FAILED: "Failed to update notification schedule!",
+    DELETE: "Notification schedule deleted!",
+    DELETE_FAILED: "Failed to delete notification schedule!",
+  },
+  Analytics: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
+  MedicalCertificate: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
 };
 
 export default ResponseMessages;

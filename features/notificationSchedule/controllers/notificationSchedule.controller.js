@@ -10,131 +10,117 @@ import {
 } from "../../../utils/type-def.js";
 
 const NotificationScheduleController = {
-  // /**
-  //  *
-  //  * get disease by [Id, UserId]
-  //  *
-  //  * @param {request} request object
-  //  * @param {response} response object
-  //  * @param {next} next - middleware
-  //  * @returns
-  //  */
-  // async getNote(request, response, next) {
-  //   const errors = validationResult(request);
-  //   if (!errors.isEmpty()) {
-  //     return response.status(422).json({
-  //       error: true,
-  //       message: ResponseMessage.Note.VALIDATION_ERROR,
-  //       data: errors,
-  //     });
-  //   }
+  /**
+   *
+   * get disease by [Id, UserId]
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getNotificationSchedule(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.NotificationSchedule.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
 
-  //   try {
-  //     let connection = request.app.locals.db;
-  //     const { Id, PatientId, UserId } = request.body;
+    try {
+      let connection = request.app.locals.db;      
 
-  //     var params = [
-  //       EntityId({ fieldName: "Id", value: Id }),
-  //       EntityId({ fieldName: "PatientId", value: PatientId }),
-  //       EntityId({ fieldName: "UserId", value: UserId }),
-  //     ];
+      var params = [];
 
-  //     let noteGetResult = await executeSp({
-  //       spName: `NoteGet`,
-  //       params: params,
-  //       connection,
-  //     });
+      let notificationScheduleGetResult = await executeSp({
+        spName: `NotificationScheduleGet`,
+        params: params,
+        connection,
+      });
 
-  //     noteGetResult = noteGetResult.recordsets;
+      notificationScheduleGetResult = notificationScheduleGetResult.recordsets;
 
-  //     handleResponse(
-  //       response,
-  //       200,
-  //       "success",
-  //       "Notes retrived successfully",
-  //       noteGetResult
-  //     );
-  //   } catch (error) {
-  //     handleError(
-  //       response,
-  //       500,
-  //       "error",
-  //       error.message,
-  //       "Something went wrong"
-  //     );
-  //     next(error);
-  //   }
-  // },
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Notification schedule retrived successfully",
+        notificationScheduleGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
-  // /**
-  //  *
-  //  * save a disease
-  //  *
-  //  * @param {request} request object
-  //  * @param {response} response object
-  //  * @param {next} next function
-  //  * @returns
-  //  */
-  // async saveNote(request, response, next) {
-  //   const errors = validationResult(request);
-  //   if (!errors.isEmpty()) {
-  //     return response.status(422).json({
-  //       error: true,
-  //       message: ResponseMessage.Note.VALIDATION_ERROR,
-  //       data: errors,
-  //     });
-  //   }
+  /**
+   *
+   * save a disease
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next function
+   * @returns
+   */
+  async updateNotificationSchedule(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.NotificationSchedule.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
 
-  //   try {
-  //     let connection = request.app.locals.db;
-  //     const {
-  //       Id,
-  //       PatientId,
-  //       Note,
-  //       AgeYears,
-  //       AgeMonths,
-  //       Status,
-  //       UserSaved
-  //     } = request.body;
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Status,
+        ScheduleId,
+        MediumId,
+      } = request.body;
 
-  //   var params = [
-  //     EntityId({ fieldName: "Id", value: Id }),
-  //     EntityId({ fieldName: "PatientId", value: PatientId }),
-  //     StringValue({ fieldName: "Note", value: Note }),
-  //     EntityId({ fieldName: "AgeYears", value: AgeYears }),
-  //     EntityId({ fieldName: "AgeMonths", value: AgeMonths }),
-  //     EntityId({ fieldName: "Status", value: Status }),
-  //     EntityId({ fieldName: "UserSaved", value: UserSaved }),
+    var params = [
+      EntityId({ fieldName: "Status", value: Status }),
+      EntityId({ fieldName: "ScheduleId", value: ScheduleId }),
+      EntityId({ fieldName: "MediumId", value: MediumId }),
+    ];
 
-  //   ];
+      let notificationScheduleUpdateResult = await executeSp({
+        spName: `NotificationScheduleUpdate`,
+        params: params,
+        connection,
+      });
 
-  //     let noteSaveResult = await executeSp({
-  //       spName: `NoteSave`,
-  //       params: params,
-  //       connection,
-  //     });
+      console.log(notificationScheduleUpdateResult.recordsets);
+      notificationScheduleUpdateResult = notificationScheduleUpdateResult.recordsets;
 
-  //     console.log(noteSaveResult.recordsets);
-  //     noteSaveResult = noteSaveResult.recordsets;
-
-  //     handleResponse(
-  //       response,
-  //       200,
-  //       "success",
-  //       "Note retrieved successfully",
-  //       noteSaveResult
-  //     );
-  //   } catch (error) {
-  //     handleError(
-  //       response,
-  //       500,
-  //       "error",
-  //       error.message,
-  //       "Something went wrong"
-  //     );
-  //     next(error);
-  //   }
-  // },
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        notificationScheduleUpdateResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
 };
 

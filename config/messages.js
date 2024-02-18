@@ -167,6 +167,9 @@ const ResponseMessages = {
   Analytics: {
     VALIDATION_ERROR: "Validation errors",   
   },
+  MedicalCertificate: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
 };
 
 export default ResponseMessages;

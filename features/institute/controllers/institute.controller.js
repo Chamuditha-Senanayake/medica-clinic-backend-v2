@@ -7,7 +7,9 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
+  TableValueParameters,
 } from "../../../utils/type-def.js";
+import sql from "mssql";
 
 const InstituteController = {
   /**
@@ -216,6 +218,11 @@ const InstituteController = {
         ContactNumbers,
       } = request.body;
 
+    const ContactNumberList = [];
+    ContactNumbers.forEach((phoneNumber) => {
+      ContactNumberList.push([null, phoneNumber, 1]);
+    });
+
     var params = [
       EntityId({ fieldName: "Id", value: Id }),
       EntityId({ fieldName: "InstituteId", value: InstituteId }),
@@ -229,8 +236,17 @@ const InstituteController = {
         value: Status,
       }),
       EntityId({ fieldName: "UserSaved", value: UserSaved }),
-      StringValue({ fieldName: "ContactNumbers", value: ContactNumbers }),
 
+      TableValueParameters({
+        tableName:"ContactNumbers",        
+        columns:
+        [
+          {columnName:"Id", type: sql.Int},
+          {columnName:"Number", type: sql.VarChar(15)},
+          {columnName:"Status", type: sql.TinyInt},
+        ],
+        values:ContactNumberList
+      })
     ];
 
       let instituteBranchSaveResult = await executeSp({

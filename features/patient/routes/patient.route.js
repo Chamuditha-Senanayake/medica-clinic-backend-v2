@@ -514,4 +514,22 @@ router.post(
   PatientController.getPatientCount
 );
 
+router.post(
+  "/PatientDrugAllergySave",
+  [
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientDrugAllergy
+);
+
+router.post(
+  "/PatientFoodAllergySave",
+  [
+    check("PatientId").isInt().not().isEmpty(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientFoodAllergy
+);
+
 export default router;

@@ -8,7 +8,9 @@ import {
   StringValue,
   SignedInteger,
   DateString,
+  TableValueParameters
 } from "../../../utils/type-def.js";
+import sql from "mssql";
 
 const PatientController = {
   /**
@@ -2320,6 +2322,152 @@ const PatientController = {
         "success",
         "Patient count retrived successfully",
         patientCountGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Save Patient Drug Allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientDrugAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { PatientId, UserSaved, PatientAllergyDrug } = request.body;
+
+      const PatientAllergyDrugList = [];
+        PatientAllergyDrug.forEach((patientAllergyDrug) => {
+        PatientAllergyDrugList.push([patientAllergyDrug.Id, patientAllergyDrug.AllergyDrugId, patientAllergyDrug.Name, patientAllergyDrug.Comments,patientAllergyDrug.Status]);
+    });
+      
+      var params = [
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+
+        TableValueParameters({
+        tableName:"PatientAllergyDrug",        
+        columns:
+        [
+          {columnName:"Id", type: sql.Int},
+          {columnName:"AllergyDrugId", type: sql.Int},
+          {columnName:"Name", type: sql.VarChar(50)},
+          {columnName:"Comments", type: sql.VarChar()},
+          {columnName:"Status", type: sql.TinyInt},
+        ],
+        values:PatientAllergyDrugList
+      })
+    ];
+
+      let patientDrugAllergySaveResult = await executeSp({
+        spName: `PatientDrugAllergySave`,
+        params: params,
+        connection,
+      });
+
+      patientDrugAllergySaveResult = patientDrugAllergySaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientDrugAllergySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Save Patient Food Allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientFoodAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { PatientId, UserSaved, PatientAllergyFood } = request.body;
+
+      const PatientAllergyFoodList = [];
+        PatientAllergyFood.forEach((patientAllergyFood) => {
+        PatientAllergyFoodList.push([patientAllergyFood.Id, patientAllergyFood.AllergyDrugId, patientAllergyFood.Name, patientAllergyFood.Comments,patientAllergyFood.Status]);
+    });
+      
+      var params = [
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+
+        TableValueParameters({
+        tableName:"PatientAllergyFood",        
+        columns:
+        [
+          {columnName:"Id", type: sql.Int},
+          {columnName:"AllergyFoodId", type: sql.Int},
+          {columnName:"Name", type: sql.VarChar(50)},
+          {columnName:"Comments", type: sql.VarChar()},
+          {columnName:"Status", type: sql.TinyInt},
+        ],
+        values:PatientAllergyFoodList
+      })
+    ];
+
+      let patientFoodAllergySaveResult = await executeSp({
+        spName: `PatientFoodAllergySave`,
+        params: params,
+        connection,
+      });
+
+      patientFoodAllergySaveResult = patientFoodAllergySaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientFoodAllergySaveResult
       );
     } catch (error) {
       handleError(

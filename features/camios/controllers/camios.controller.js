@@ -76,75 +76,129 @@ const CamiosController = {
     }
   },
 
-  /**
-   *
-   * save camios request
-   *
-   * @param {request} request object
-   * @param {response} response object
-   * @param {next} next function
-   * @returns
-   */
-  async saveCamiosRequest(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.Camios.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
+  // /**
+  //  *
+  //  * save camios request
+  //  *
+  //  * @param {request} request object
+  //  * @param {response} response object
+  //  * @param {next} next function
+  //  * @returns
+  //  */
+  // async saveCamiosRequest(request, response, next) {
+  //   const errors = validationResult(request);
+  //   if (!errors.isEmpty()) {
+  //     return response.status(422).json({
+  //       error: true,
+  //       message: ResponseMessage.Camios.VALIDATION_ERROR,
+  //       data: errors,
+  //     });
+  //   }
 
-    try {
-      let connection = request.app.locals.db;
-      const {
-        Id,
-        PatientId,
-        Note,
-        AgeYears,
-        AgeMonths,
-        Status,
-        UserSaved
-      } = request.body;
+  //   try {
+  //     let connection = request.app.locals.db;
+  //     const {
+  //       Id,
+  //       DoctorId,
+  //       SessionId,
+  //       AgeYears,
+  //       AgeMonths,
+  //       AppointmentId,
+  //       PatientId,
+  //       SymptomsReported,
+  //       CamiosDifferentDiagnosisByContributoryProbability,
+  //       CamiosDifferentDiagnosisByExpanatoryProbability,
+  //       CamiosFinalDiagnosis,
+  //       CamiosDiagnosticStatic,
+  //       Status,
+  //       UserSaved
+  //     } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "PatientId", value: PatientId }),
-      StringValue({ fieldName: "Note", value: Note }),
-      EntityId({ fieldName: "AgeYears", value: AgeYears }),
-      EntityId({ fieldName: "AgeMonths", value: AgeMonths }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+  //   const CamiosDifferentDiagnosisByContributoryProbabilityList = [];
+  //   const CamiosDifferentDiagnosisByExpanatoryProbabilityList = [];  
+  //   const CamiosFinalDiagnosisList = [];  
+  //   const CamiosDiagnosticStaticList = []; 
+    
+  //   CamiosDifferentDiagnosisByContributoryProbability.forEach((camiosDifferentDiagnosisByContributoryProbability) => {
+  //       CamiosDifferentDiagnosisByContributoryProbabilityList.push([]);
+  //   });
+  //   CamiosDifferentDiagnosisByExpanatoryProbability.forEach((camiosDifferentDiagnosisByExpanatoryProbability) => {
+  //       CamiosDifferentDiagnosisByExpanatoryProbabilityList.push([]);
+  //   });
+  //   CamiosFinalDiagnosis.forEach((camiosFinalDiagnosis) => {
+  //       CamiosFinalDiagnosisList.push([]);
+  //   });
+  //   CamiosDiagnosticStatic.forEach((camiosDiagnosticStatic) => {
+  //       CamiosDiagnosticStaticList.push([]);
+  //   });
+    
+    
 
-    ];
+  //   var params = [
+  //     EntityId({ fieldName: "Id", value: Id }),
+  //     EntityId({ fieldName: "DoctorId", value: DoctorId }),
+  //     EntityId({ fieldName: "SessionId", value: SessionId }),
+  //     EntityId({ fieldName: "AgeMonths", value: AgeMonths }),
+  //     EntityId({ fieldName: "AgeYears", value: AgeYears }),
+  //     EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+  //     EntityId({ fieldName: "PatientId", value: PatientId }),
+  //     StringValue({ fieldName: "SymptomsReported", value: SymptomsReported }),
+  //     EntityId({ fieldName: "Status", value: Status }),
+  //     EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
-      let noteSaveResult = await executeSp({
-        spName: `NoteSave`,
-        params: params,
-        connection,
-      });
+  //     TableValueParameters({
+  //       tableName:"CamiosDifferentDiagnosisByContributoryProbability",        
+  //       columns:
+  //       [],
+  //       values:CamiosDifferentDiagnosisByContributoryProbabilityList
+  //     }),
+  //     TableValueParameters({
+  //       tableName:"CamiosDifferentDiagnosisByExpanatoryProbability",        
+  //       columns:
+  //       [],
+  //       values:CamiosDifferentDiagnosisByExpanatoryProbabilityList
+  //     }),
+  //     TableValueParameters({
+  //       tableName:"CamiosFinalDiagnosis",        
+  //       columns:
+  //       [],
+  //       values:CamiosFinalDiagnosisList
+  //     }),
+  //     TableValueParameters({
+  //       tableName:"CamiosDiagnosticStatic",        
+  //       columns:
+  //       [],
+  //       values:CamiosDiagnosticStaticList
+  //     })
+  //   ];
 
-      console.log(noteSaveResult.recordsets);
-      noteSaveResult = noteSaveResult.recordsets;
+  //     let CamiosRequestSaveResult = await executeSp({
+  //       spName: `CamiosRequestSave`,
+  //       params: params,
+  //       connection,
+  //     });
 
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Note retrieved successfully",
-        noteSaveResult
-      );
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
-    }
-  },
+  //     console.log(CamiosRequestSaveResult.recordsets);
+  //     CamiosRequestSaveResult = CamiosRequestSaveResult.recordsets;
+
+  //     handleResponse(
+  //       response,
+  //       200,
+  //       "success",
+  //       "Data retrieved successfully",
+  //       CamiosRequestSaveResult
+  //     );
+  //   } catch (error) {
+  //     handleError(
+  //       response,
+  //       500,
+  //       "error",
+  //       error.message,
+  //       "Something went wrong"
+  //     );
+  //     next(error);
+  //   }
+  // },
 
 };
 

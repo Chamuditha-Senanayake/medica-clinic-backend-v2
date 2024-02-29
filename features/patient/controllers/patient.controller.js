@@ -2276,6 +2276,63 @@ const PatientController = {
     }
   },
 
+   /**
+   *
+   * get patient count
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientCount(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        DateString({ fieldName: "DateFrom", value: DateFrom }),
+        DateString({ fieldName: "DateTo", value: DateTo })
+    ];
+
+      let patientCountGetResult = await executeSp({
+        spName: `Analytic.PatientCountGet`,
+        params: params,
+        connection,
+      });
+
+      patientCountGetResult = patientCountGetResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Patient count retrived successfully",
+        patientCountGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
 };
 
 export default PatientController;

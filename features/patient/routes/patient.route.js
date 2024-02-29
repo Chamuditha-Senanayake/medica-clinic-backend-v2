@@ -503,4 +503,15 @@ router.post(
   PatientController.saveIllnessDataDetail
 );
 
+router.post(
+  "/PatientCountGet",
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("DoctorId").isInt().not().isEmpty(),
+    check("DateFrom").not().isEmpty(),
+    check("DateTo").not().isEmpty(),
+  ],
+  PatientController.getPatientCount
+);
+
 export default router;

@@ -7,7 +7,6 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
-  TableValueParameters,
   DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
@@ -217,6 +216,13 @@ const AppointmentController = {
     }
   },
 
+  /**
+   *
+   * @param {request} request  object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async appointmentReport(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -253,6 +259,51 @@ const AppointmentController = {
         "success",
         "Appointment Report retrieved successfully",
         appointmentReportResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async deleteAppointment(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Appointment.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { AppoinmentId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "AppoinmentId", value: AppoinmentId }),
+      ];
+
+      let appointmentDeleteResult = await executeSp({
+        spName: `AppointmentDelete`,
+        params: params,
+        connection,
+      });
+
+      appointmentDeleteResult = appointmentDeleteResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Appointment deleted successfully",
+        appointmentDeleteResult
       );
     } catch (error) {
       handleError(

@@ -11,21 +11,17 @@ import {
   DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
-const {
-  Int,
-  NVarChar,
-  VarChar,
-  TinyInt,
-  Bit,
-  Float,
-  Decimal,
-  Date,
-  DateTime,
-  Binary,
-  TVP,
-} = sql;
 
 const UserController = {
+  /**
+   *
+   * Get addresses
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async getAddress(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -72,6 +68,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Save addresses
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async saveAddress(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -151,6 +156,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Delete records from a table
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async deleteRecord(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -198,6 +212,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Save OCR
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async ocrSaves(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -255,6 +278,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Authenticate User
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async authenticate(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -313,6 +345,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Check OTP
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async checkOTP(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -360,6 +401,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Get OTP
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async getOTP(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -406,6 +456,15 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Rest Password
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async resetPassword(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

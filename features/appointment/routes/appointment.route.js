@@ -51,4 +51,10 @@ router.post(
   AppointmentController.appointmentReport
 );
 
+router.post(
+  "/AppointmentDelete",
+  [check("AppoinmentId").notEmpty().isInt()],
+  AppointmentController.deleteAppointment
+);
+
 export default router;

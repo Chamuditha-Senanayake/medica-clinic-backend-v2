@@ -170,6 +170,12 @@ const ResponseMessages = {
   MedicalCertificate: {
     VALIDATION_ERROR: "Validation errors",   
   },
+  Camios: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
+  Bill:{
+    VALIDATION_ERROR: "Validation errors", 
+  }
 };
 
 export default ResponseMessages;

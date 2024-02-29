@@ -10,6 +10,7 @@ import {
   EntityId,
   SignedInteger,
   StringValue,
+  TableValueParameters
 } from "../../../utils/type-def.js";
 
 const BillController = {
@@ -28,7 +29,7 @@ const BillController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Bill.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -48,6 +49,11 @@ const BillController = {
         UserSaved = 0,
       } = request.body;
 
+    const BillDataList = [];
+    BillDataSet.forEach((BillData) => {
+    BillDataList.push([BillData.Amount, BillData.FeeType, BillData.ItemName]);
+    });
+
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "SessionId", value: SessionId }),
@@ -60,8 +66,18 @@ const BillController = {
         }),
         StringValue({ fieldName: "Total", value: Total }),
         StringValue({ fieldName: "Discount", value: Discount }),
-        StringValue({ fieldName: "BillDataSet", value: BillDataSet }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      
+        TableValueParameters({
+          tableName:"BillDataSet",        
+          columns:
+          [
+            {columnName:"Amount", type: sql.VarChar(15)},
+            {columnName:"FeeType", type: sql.VarChar(20)},
+            {columnName:"ItemName", type: sql.VarChar(15)},
+          ],
+          values:BillDataList
+        })
       ];
 
       let billSaveResult = await executeSp({
@@ -106,7 +122,7 @@ const BillController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Bill.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -171,7 +187,7 @@ const BillController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Bill.VALIDATION_ERROR,
         data: errors,
       });
     }

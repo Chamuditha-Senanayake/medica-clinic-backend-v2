@@ -91,6 +91,16 @@ export const FloatValue = ({ fieldName, value }) => {
   };
 };
 
+export const DecimalValue = ({ fieldName, value }) => {
+  Validation.fieldName({ name: fieldName });
+  Validation.decimalValue({ name: fieldName, value });
+  return {
+    name: fieldName,
+    type: Decimal,
+    value,
+  };
+};
+
 /**
  *
  * @param {tableName} string
@@ -152,12 +162,10 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
    * ]
    */
 
-  const rowValues = values.map((value) => {
-    return Object.values(value);
-  });
-
-  table.rows.add(rowValues);
-
+   values.map((value) => {
+      table.rows.add(...value);
+    });
+      
   return {
     name: tableName,
     type: sql.TVP(table),

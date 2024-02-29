@@ -7,7 +7,6 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
-  TableValueParameters,
   DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";

@@ -8,7 +8,9 @@ import {
   StringValue,
   SignedInteger,
   DateString,
+  TableValueParameters
 } from "../../../utils/type-def.js";
+import sql from "mssql";
 
 const PatientController = {
   /**
@@ -1967,7 +1969,7 @@ const PatientController = {
         connection,
       });
 
-      consultationSaveResult = consultationSaveResult.recordsets;
+      consultationSaveResult = consultationSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -2115,6 +2117,357 @@ const PatientController = {
         "success",
         "Illness data retrived successfully",
         illnessDataDetailGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /*
+   *
+   * save illness data detail
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async saveIllnessDataDetail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        AppointmentId,
+        AppointmentNumber,
+        AppointmentSessionId,
+        AppointmentStatus,
+        PatientId ,
+        PatientTitle,
+        PatientFirstName,
+        PatientMiddleName,
+        PatientLastName,
+        PatientNIC,
+        PatientPassport,
+        PatientMobile,
+        PatientEmail,
+        PatientDateOfBirth,
+        PatientGender,
+        PatientParentId,
+        PatientPatientTypeId,
+        PatientBloodGroup,
+        PatientStatus,
+        EpisodeType,
+        PrescriptionRecordId,
+        CurrentEpisodeDuration ,
+        TotalDuration,
+        OnsetDescription,
+        Profile,
+        PrecipitatingFactors ,
+        PredisposingFactors ,
+        RelievingFactors,
+        FunctionalStatus,
+        FamilyMedicineVitalSigns,
+        ChronicDiseaseMx,
+        CurrentMedications,
+        Weight,
+        Height,
+        BloodPressureSystolic   ,
+        BloodPressureDiastolic,
+        Temperature,
+        Pulse,
+        RespiratoryRate,
+        WaistCircumference,
+        Status,
+        UserSaved,
+        Id
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "AppointmentNumber", value: AppointmentNumber }),
+        EntityId({ fieldName: "AppointmentSessionId", value: AppointmentSessionId }),
+        SignedInteger({
+          fieldName: "AppointmentStatus",
+          value: AppointmentStatus,
+        }),
+        EntityId({ fieldName: "PatientId", value: PatientId    }),
+        StringValue({ fieldName: "PatientTitle", value: PatientTitle }),
+        StringValue({ fieldName: "PatientFirstName", value: PatientFirstName }),
+        StringValue({ fieldName: "PatientMiddleName", value: PatientMiddleName }),
+        StringValue({ fieldName: "PatientLastName", value: PatientLastName }),
+        StringValue({ fieldName: "PatientNIC", value: PatientNIC }),
+        StringValue({ fieldName: "PatientPassport", value: PatientPassport }),
+        StringValue({ fieldName: "PatientMobile", value: PatientMobile }),
+        StringValue({ fieldName: "PatientEmail", value: PatientEmail }),
+        DateString({ fieldName: "PatientDateOfBirth", value: PatientDateOfBirth }),
+        StringValue({ fieldName: "PatientGender", value: PatientGender }),
+        EntityId({ fieldName: "PatientParentId", value: PatientParentId    }),
+        EntityId({ fieldName: "PatientPatientTypeId", value: PatientPatientTypeId }),
+        StringValue({ fieldName: "PatientBloodGroup", value: PatientBloodGroup }),
+        SignedInteger({
+          fieldName: "PatientStatus",
+          value: PatientStatus,
+        }),SignedInteger({
+          fieldName: "EpisodeType",
+          value: EpisodeType,
+        }),
+        EntityId({ fieldName: "PrescriptionRecordId", value: PrescriptionRecordId }),      
+        StringValue({ fieldName: "CurrentEpisodeDuration", value: CurrentEpisodeDuration }),
+        StringValue({ fieldName: "TotalDuration", value: TotalDuration }),
+        StringValue({ fieldName: "OnsetDescription", value: OnsetDescription }),
+        StringValue({ fieldName: "Profile", value: Profile }),
+        StringValue({ fieldName: "PrecipitatingFactors", value: PrecipitatingFactors }),
+        StringValue({ fieldName: "PredisposingFactors", value: PredisposingFactors }),
+        StringValue({ fieldName: "RelievingFactors", value: RelievingFactors }),
+        StringValue({ fieldName: "FunctionalStatus", value: FunctionalStatus }),
+        StringValue({ fieldName: "FamilyMedicineVitalSigns", value: FamilyMedicineVitalSigns }),
+        StringValue({ fieldName: "ChronicDiseaseMx", value: ChronicDiseaseMx }),
+        StringValue({ fieldName: "CurrentMedications", value: CurrentMedications }),
+        StringValue({ fieldName: "Weight", value: Weight }),
+        StringValue({ fieldName: "Height", value: Height }),
+        StringValue({ fieldName: "BloodPressureSystolic", value: BloodPressureSystolic  }),
+        StringValue({ fieldName: "BloodPressureDiastolic", value: BloodPressureDiastolic  }),
+        StringValue({ fieldName: "Temperature", value: Temperature  }),
+        StringValue({ fieldName: "Pulse", value: Pulse  }),
+        StringValue({ fieldName: "RespiratoryRate", value: RespiratoryRate  }),
+        StringValue({ fieldName: "WaistCircumference", value: WaistCircumference  }),
+        EntityId({ fieldName: "Status", value: Status}),
+        EntityId({ fieldName: "UserSaved", value: UserSaved}),
+        EntityId({ fieldName: "Id", value: Id}),
+      ];
+
+      let illnessDataDetailSaveResult = await executeSp({
+        spName: `IllnessDataDetailSave`,
+        params: params,
+        connection,
+      });
+
+      illnessDataDetailSaveResult = illnessDataDetailSaveResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Illness data retrived successfully",
+        illnessDataDetailSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+   /**
+   *
+   * get patient count
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientCount(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        DateString({ fieldName: "DateFrom", value: DateFrom }),
+        DateString({ fieldName: "DateTo", value: DateTo })
+    ];
+
+      let patientCountGetResult = await executeSp({
+        spName: `Analytic.PatientCountGet`,
+        params: params,
+        connection,
+      });
+
+      patientCountGetResult = patientCountGetResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Patient count retrived successfully",
+        patientCountGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Save Patient Drug Allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientDrugAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { PatientId, UserSaved, PatientAllergyDrug } = request.body;
+
+      const PatientAllergyDrugList = [];
+        PatientAllergyDrug.forEach((patientAllergyDrug) => {
+        PatientAllergyDrugList.push([patientAllergyDrug.Id, patientAllergyDrug.AllergyDrugId, patientAllergyDrug.Name, patientAllergyDrug.Comments,patientAllergyDrug.Status]);
+    });
+      
+      var params = [
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+
+        TableValueParameters({
+        tableName:"PatientAllergyDrug",        
+        columns:
+        [
+          {columnName:"Id", type: sql.Int},
+          {columnName:"AllergyDrugId", type: sql.Int},
+          {columnName:"Name", type: sql.VarChar(50)},
+          {columnName:"Comments", type: sql.VarChar()},
+          {columnName:"Status", type: sql.TinyInt},
+        ],
+        values:PatientAllergyDrugList
+      })
+    ];
+
+      let patientDrugAllergySaveResult = await executeSp({
+        spName: `PatientDrugAllergySave`,
+        params: params,
+        connection,
+      });
+
+      patientDrugAllergySaveResult = patientDrugAllergySaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientDrugAllergySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Save Patient Food Allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientFoodAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { PatientId, UserSaved, PatientAllergyFood } = request.body;
+
+      const PatientAllergyFoodList = [];
+        PatientAllergyFood.forEach((patientAllergyFood) => {
+        PatientAllergyFoodList.push([patientAllergyFood.Id, patientAllergyFood.AllergyDrugId, patientAllergyFood.Name, patientAllergyFood.Comments,patientAllergyFood.Status]);
+    });
+      
+      var params = [
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+
+        TableValueParameters({
+        tableName:"PatientAllergyFood",        
+        columns:
+        [
+          {columnName:"Id", type: sql.Int},
+          {columnName:"AllergyFoodId", type: sql.Int},
+          {columnName:"Name", type: sql.VarChar(50)},
+          {columnName:"Comments", type: sql.VarChar()},
+          {columnName:"Status", type: sql.TinyInt},
+        ],
+        values:PatientAllergyFoodList
+      })
+    ];
+
+      let patientFoodAllergySaveResult = await executeSp({
+        spName: `PatientFoodAllergySave`,
+        params: params,
+        connection,
+      });
+
+      patientFoodAllergySaveResult = patientFoodAllergySaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientFoodAllergySaveResult
       );
     } catch (error) {
       handleError(

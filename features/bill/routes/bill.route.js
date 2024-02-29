@@ -14,8 +14,6 @@ router.post(
     check("AppointmentNumber").not().isEmpty().isString(),
     check("Total").not().isEmpty().isString(),
     check("Discount").not().isEmpty().isString(),
-    // TODO: billDataSet data type
-    check("BillDataSet").notEmpty(),
     check("UserSaved").not().isEmpty().isInt(),
   ],
   BillController.saveBill

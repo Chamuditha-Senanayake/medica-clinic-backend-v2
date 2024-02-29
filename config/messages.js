@@ -173,6 +173,9 @@ const ResponseMessages = {
   Camios: {
     VALIDATION_ERROR: "Validation errors",   
   },
+  Bill:{
+    VALIDATION_ERROR: "Validation errors", 
+  }
 };
 
 export default ResponseMessages;

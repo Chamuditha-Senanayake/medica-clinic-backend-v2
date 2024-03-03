@@ -309,6 +309,8 @@ const DispositionController = {
           value: PatientEmailStatus,
         }),
         StringValue({ fieldName: "DoctorSMS", value: DoctorSMS }),
+        StringValue({ fieldName: "DoctorEmail", value: DoctorEmail }),
+        StringValue({ fieldName: "DoctorSMSData", value: DoctorSMSData }),
         StringValue({ fieldName: "DoctorEmailData", value: DoctorEmailData }),
         SignedInteger({
           fieldName: "DoctorSMSStatus",

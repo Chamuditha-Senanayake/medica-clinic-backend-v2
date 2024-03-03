@@ -22,6 +22,10 @@ import appointmentRouter from "./features/appointment/routes/appointment.route.j
 import notificationScheduleRouter from "./features/notificationSchedule/routes/notificationSchedule.route.js";
 import billRouter from "./features/bill/routes/bill.route.js";
 import dispositionRouter from "./features/disposition/routes/disposition.route.js";
+import UserRouter from "./features/users/routes/user.route.js";
+import analyticsRouter from "./features/analytics/routes/analytics.route.js";
+import medicalCertificateRouter from "./features/medicalCertificate/routes/medicalCertificate.route.js";
+import camiosRouter from "./features/camios/routes/camios.route.js";
 
 dotenv.config();
 
@@ -61,6 +65,10 @@ app.use(`/api/v1`, appointmentRouter);
 app.use(`/api/v1`, notificationScheduleRouter);
 app.use(`/api/v1`, billRouter);
 app.use(`/api/v1`, dispositionRouter);
+app.use(`/api/v1`, UserRouter);
+app.use(`/api/v1`, analyticsRouter);
+app.use(`/api/v1`, medicalCertificateRouter);
+app.use(`/api/v1`, camiosRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

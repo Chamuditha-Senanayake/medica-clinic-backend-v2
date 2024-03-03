@@ -1,16 +1,18 @@
 import { validationResult } from "express-validator";
+import sql from "mssql";
 import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
 import {
-  EntityId,
-  StringValue,
-  SignedInteger,
-  TableValueParameters,
   DateString,
+  EntityId,
+  SignedInteger,
+  StringValue,
+  TableValueParameters,
+  FloatValue,
+
 } from "../../../utils/type-def.js";
-import sql from "mssql";
 const {
   Int,
   NVarChar,
@@ -120,8 +122,16 @@ const DoctorController = {
         Title,
         ZoomEmail,
         ZoomPassword,
-        Chargers,
+        BranchId,
+        DoctorFee,
+        HospitalFee,
+        OtherFee,
       } = request.body;
+
+    const ContactNumberList = [];
+    ContactNumbers.forEach((phoneNumber) => {
+      ContactNumberList.push([null, phoneNumber, 1]);
+    });
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -134,30 +144,7 @@ const DoctorController = {
           fieldName: "Status",
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        // TODO: Contact numbers is an array of objects
-        // StringValue({ fieldName: "ContactNumbers", value: ContactNumbers }),
-        TableValueParameters({
-          tableName: "ContactNumbers",
-          columns: [
-            {
-              columnName: "Id",
-              type: Int,
-              options: { nullable: true },
-            },
-            {
-              columnName: "Number",
-              type: NVarChar,
-              options: null,
-            },
-            {
-              columnName: "Status",
-              type: TinyInt,
-              options: null,
-            },
-          ],
-          values: ContactNumbers,
-        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),       
         StringValue({
           fieldName: "RegistrationNumber",
           value: RegistrationNumber,
@@ -170,8 +157,22 @@ const DoctorController = {
               fieldName: "ZoomPassword",
               value: ZoomPassword,
             })
-          : null,
-        StringValue({ fieldName: "Chargers", value: Chargers }),
+          : null,        
+        EntityId({ fieldName: "BranchId", value: BranchId }),
+        FloatValue({ fieldName: "DoctorFee", value: DoctorFee }),
+        FloatValue({ fieldName: "HospitalFee", value: HospitalFee }),
+        FloatValue({ fieldName: "OtherFee", value: OtherFee }),
+
+        TableValueParameters({
+          tableName:"ContactNumbers",        
+          columns:
+          [
+            {columnName:"Id", type: sql.Int},
+            {columnName:"Number", type: sql.VarChar(15)},
+            {columnName:"Status", type: sql.TinyInt},
+          ],
+          values:ContactNumberList
+        }),
       ];
 
       let doctorSaveResult = await executeSp({
@@ -200,7 +201,7 @@ const DoctorController = {
         response,
         200,
         "success",
-        "Bill data retrieved successfully",
+        "Data retrieved successfully",
         doctorSaveResult
       );
     } catch (error) {

@@ -164,6 +164,18 @@ const ResponseMessages = {
     DELETE: "Notification schedule deleted!",
     DELETE_FAILED: "Failed to delete notification schedule!",
   },
+  Analytics: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
+  MedicalCertificate: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
+  Camios: {
+    VALIDATION_ERROR: "Validation errors",   
+  },
+  Bill:{
+    VALIDATION_ERROR: "Validation errors", 
+  }
 };
 
 export default ResponseMessages;

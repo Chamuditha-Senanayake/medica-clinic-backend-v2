@@ -98,7 +98,8 @@ router.post(
 
 router.post(
   "/PasswordReset",
-  [check("UserId").notEmpty().isInt(), check("Password").notEmpty().isString()],
+  [check("UserId").notEmpty().isInt(), 
+  check("Password").notEmpty().isString()],
   UserController.resetPassword
 );
 export default router;

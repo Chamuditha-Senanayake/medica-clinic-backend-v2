@@ -712,7 +712,7 @@ const PatientController = {
         connection,
       });
 
-      patientGetResult = patientGetResult.recordsets;
+      patientGetResult = patientGetResult.recordsets[0][0];
 
       handleResponse(
         response,

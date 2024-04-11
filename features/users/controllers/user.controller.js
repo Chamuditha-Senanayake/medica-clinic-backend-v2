@@ -47,13 +47,13 @@ const UserController = {
         connection,
       });
 
-      addressGetResult = addressGetResult.recordsets;
+      addressGetResult = addressGetResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrived successfully",
+        "Address retrived successfully",
         addressGetResult
       );
     } catch (error) {
@@ -191,7 +191,7 @@ const UserController = {
         connection,
       });
 
-      deleteRecordResult = deleteRecordResult.recordsets;
+      deleteRecordResult = deleteRecordResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -324,7 +324,7 @@ const UserController = {
         connection,
       });
 
-      authenticateResult = authenticateResult.recordsets;
+      authenticateResult = authenticateResult.recordsets[0][0];
 
       handleResponse(
         response,

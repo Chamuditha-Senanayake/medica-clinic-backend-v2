@@ -44,7 +44,7 @@ const DiseaseController = {
         connection,
       });
 
-      diseaseGetResult = diseaseGetResult.recordsets;
+      diseaseGetResult = diseaseGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -110,7 +110,7 @@ const DiseaseController = {
       });
 
       console.log(diseaseSavetResult.recordsets);
-      diseaseSavetResult = diseaseSavetResult.recordsets;
+      diseaseSavetResult = diseaseSavetResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -165,7 +165,7 @@ const DiseaseController = {
         connection,
       });
 
-      foodAllergyGet = foodAllergyGet.recordsets;
+      foodAllergyGet = foodAllergyGet.recordsets[0];
 
       handleResponse(
         response,
@@ -231,7 +231,7 @@ const DiseaseController = {
       });
 
       console.log(foodAllergySaveResult.recordsets);
-      foodAllergySaveResult = foodAllergySaveResult.recordsets;
+      foodAllergySaveResult = foodAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,

@@ -7,23 +7,8 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
-  TableValueParameters,
   DateString,
 } from "../../../utils/type-def.js";
-import sql from "mssql";
-const {
-  Int,
-  NVarChar,
-  VarChar,
-  TinyInt,
-  Bit,
-  Float,
-  Decimal,
-  Date,
-  DateTime,
-  Binary,
-  TVP,
-} = sql;
 
 const DispositionController = {
   /**

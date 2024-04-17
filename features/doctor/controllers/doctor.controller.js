@@ -65,7 +65,7 @@ const DoctorController = {
         connection,
       });
 
-      doctorGetResult = doctorGetResult.recordsets;
+      doctorGetResult = doctorGetResult.recordsets[0][0];
 
       handleResponse(
         response,

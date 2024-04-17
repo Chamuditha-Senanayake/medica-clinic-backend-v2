@@ -152,7 +152,7 @@ const BillController = {
         connection,
       });
 
-      medicalBillGetResult = medicalBillGetResult.recordsets;
+      medicalBillGetResult = medicalBillGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -305,7 +305,7 @@ const BillController = {
         connection,
       });
 
-      medicalBillSaveResult = medicalBillSaveResult.recordsets;
+      medicalBillSaveResult = medicalBillSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

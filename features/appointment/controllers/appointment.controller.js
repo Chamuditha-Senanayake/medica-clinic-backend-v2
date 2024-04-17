@@ -9,20 +9,7 @@ import {
   SignedInteger,
   DateString,
 } from "../../../utils/type-def.js";
-import sql from "mssql";
-const {
-  Int,
-  NVarChar,
-  VarChar,
-  TinyInt,
-  Bit,
-  Float,
-  Decimal,
-  Date,
-  DateTime,
-  Binary,
-  TVP,
-} = sql;
+
 const AppointmentController = {
   /**
    *
@@ -69,7 +56,7 @@ const AppointmentController = {
         connection,
       });
 
-      appointmentGetResult = appointmentGetResult.recordsets;
+      appointmentGetResult = appointmentGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -139,7 +126,7 @@ const AppointmentController = {
         connection,
       });
 
-      AppointmentSaveResult = AppointmentSaveResult.recordsets;
+      AppointmentSaveResult = AppointmentSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -195,7 +182,7 @@ const AppointmentController = {
         connection,
       });
 
-      AppointmentGetNextResult = AppointmentGetNextResult.recordsets;
+      AppointmentGetNextResult = AppointmentGetNextResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -251,7 +238,7 @@ const AppointmentController = {
         connection,
       });
 
-      appointmentReportResult = appointmentReportResult.recordsets;
+      appointmentReportResult = appointmentReportResult.recordsets[0];
 
       handleResponse(
         response,

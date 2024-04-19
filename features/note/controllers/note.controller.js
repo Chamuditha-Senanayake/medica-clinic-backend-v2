@@ -45,7 +45,7 @@ const NoteController = {
         connection,
       });
 
-      noteGetResult = noteGetResult.recordsets;
+      noteGetResult = noteGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -115,7 +115,7 @@ const NoteController = {
       });
 
       console.log(noteSaveResult.recordsets);
-      noteSaveResult = noteSaveResult.recordsets;
+      noteSaveResult = noteSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

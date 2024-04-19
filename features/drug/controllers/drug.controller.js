@@ -46,7 +46,7 @@ const DrugController = {
         connection,
       });
 
-      drugAllergyGetResult = drugAllergyGetResult.recordsets;
+      drugAllergyGetResult = drugAllergyGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -113,7 +113,7 @@ const DrugController = {
       });
 
       console.log(drugAllergySaveResult.recordsets);
-      drugAllergySaveResult = drugAllergySaveResult.recordsets;
+      drugAllergySaveResult = drugAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -226,7 +226,7 @@ const DrugController = {
         connection,
       });
 
-      drugGetResult = drugGetResult.recordsets;
+      drugGetResult = drugGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -307,7 +307,7 @@ const DrugController = {
       });
 
       console.log(drugSaveResult.recordsets);
-      drugSaveResult = drugSaveResult.recordsets;
+      drugSaveResult = drugSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -422,7 +422,7 @@ const DrugController = {
         connection,
       });
 
-      drugTemplateGetResult = drugTemplateGetResult.recordsets;
+      drugTemplateGetResult = drugTemplateGetResult.recordsets[0];
 
       handleResponse(
         response,

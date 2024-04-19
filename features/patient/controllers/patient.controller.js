@@ -115,7 +115,7 @@ const PatientController = {
       });
 
       console.log(PatientDiagnosisDocumentSaveResult.recordsets);
-      PatientDiagnosisDocumentSaveResult = PatientDiagnosisDocumentSaveResult.recordsets;
+      PatientDiagnosisDocumentSaveResult = PatientDiagnosisDocumentSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -288,7 +288,7 @@ const PatientController = {
         connection,
       });
 
-      patientDispositionSaveResult = patientDispositionSaveResult.recordsets;
+      patientDispositionSaveResult = patientDispositionSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -456,7 +456,7 @@ const PatientController = {
       });
 
       console.log(gynoObstetricsHistorySaveResult.recordsets);
-      gynoObstetricsHistorySaveResult = gynoObstetricsHistorySaveResult.recordsets;
+      gynoObstetricsHistorySaveResult = gynoObstetricsHistorySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -632,7 +632,7 @@ const PatientController = {
       });
 
       console.log(patientNewFoodAllergySaveResult.recordsets);
-      patientNewFoodAllergySaveResult = patientNewFoodAllergySaveResult.recordsets;
+      patientNewFoodAllergySaveResult = patientNewFoodAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -833,7 +833,7 @@ const PatientController = {
         connection,
       });
 
-      patientNewSurgerySaveResult = patientNewSurgerySaveResult.recordsets;
+      patientNewSurgerySaveResult = patientNewSurgerySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -954,7 +954,7 @@ const PatientController = {
         connection,
       });
 
-      patientOtherAllergySaveResult = patientOtherAllergySaveResult.recordsets;
+      patientOtherAllergySaveResult = patientOtherAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1075,7 +1075,7 @@ const PatientController = {
         connection,
       });
 
-      patientOtherDiseasesSaveResult = patientOtherDiseasesSaveResult.recordsets;
+      patientOtherDiseasesSaveResult = patientOtherDiseasesSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1260,7 +1260,7 @@ const PatientController = {
         connection,
       });
 
-      patientRemarkSaveResult = patientRemarkSaveResult.recordsets;
+      patientRemarkSaveResult = patientRemarkSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1388,7 +1388,7 @@ const PatientController = {
         connection,
       });
 
-      patientReminderSaveResult = patientReminderSaveResult.recordsets;
+      patientReminderSaveResult = patientReminderSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1462,7 +1462,7 @@ const PatientController = {
         connection,
       });
 
-      patientReportSaveResult = patientReportSaveResult.recordsets;
+      patientReportSaveResult = patientReportSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1655,7 +1655,7 @@ const PatientController = {
         connection,
       });
 
-      patientRobsonInfoSaveResult = patientRobsonInfoSaveResult.recordsets;
+      patientRobsonInfoSaveResult = patientRobsonInfoSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

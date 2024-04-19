@@ -135,7 +135,7 @@ const DispositionController = {
         response,
         200,
         "success",
-        "Bill data retrived successfully",
+        "Data retrived successfully",
         dispositionNotificationScheduleGet
       );
     } catch (error) {

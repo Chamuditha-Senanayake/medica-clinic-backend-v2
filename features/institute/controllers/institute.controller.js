@@ -47,7 +47,7 @@ const InstituteController = {
         connection,
       });
 
-      instituteBranchDoctorGetResult = instituteBranchDoctorGetResult.recordsets;
+      instituteBranchDoctorGetResult = instituteBranchDoctorGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -113,7 +113,7 @@ const InstituteController = {
       });
 
       console.log(instituteBranchDoctorSaveResult.recordsets);
-      instituteBranchDoctorSaveResult = instituteBranchDoctorSaveResult.recordsets;
+      instituteBranchDoctorSaveResult = instituteBranchDoctorSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -164,7 +164,7 @@ const InstituteController = {
         connection,
       });
 
-      instituteBranchGetResult = instituteBranchGetResult.recordsets;
+      instituteBranchGetResult = instituteBranchGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -304,7 +304,7 @@ const InstituteController = {
         connection,
       });
 
-      instituteDoctorGetResult = instituteDoctorGetResult.recordsets;
+      instituteDoctorGetResult = instituteDoctorGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -353,7 +353,7 @@ const InstituteController = {
         connection,
       });
 
-      instituteGetResult = instituteGetResult.recordsets;
+      instituteGetResult = instituteGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -425,7 +425,7 @@ const InstituteController = {
       });
 
       console.log(instituteSaveResult.recordsets);
-      instituteSaveResult = instituteSaveResult.recordsets;
+      instituteSaveResult = instituteSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

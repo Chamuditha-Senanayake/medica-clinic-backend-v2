@@ -45,7 +45,7 @@ const NurseController = {
         connection,
       });
 
-      nurseGetResult = nurseGetResult.recordsets;
+      nurseGetResult = nurseGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -121,7 +121,7 @@ const NurseController = {
       });
 
       console.log(nurseSaveResult.recordsets);
-      nurseSaveResult = nurseSaveResult.recordsets;
+      nurseSaveResult = nurseSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -180,7 +180,7 @@ const NurseController = {
       });
 
       console.log(nurseBranchSaveResult.recordsets);
-      nurseBranchSaveResult = nurseBranchSaveResult.recordsets;
+      nurseBranchSaveResult = nurseBranchSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

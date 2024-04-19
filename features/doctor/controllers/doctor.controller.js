@@ -184,19 +184,6 @@ const DoctorController = {
       console.log(doctorSaveResult.recordsets);
       doctorSaveResult = doctorSaveResult.recordsets;
 
-      //handle no data
-      // if (doctorSaveResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorSaveResult[0][0];
-      // const billData = doctorSaveResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
-
       handleResponse(
         response,
         200,
@@ -257,7 +244,7 @@ const DoctorController = {
         response,
         200,
         "success",
-        "Bill data retrived successfully",
+        "Data retrived successfully",
         doctorSpecializationsGetResult
       );
     } catch (error) {
@@ -326,7 +313,7 @@ const DoctorController = {
         response,
         200,
         "success",
-        "Bill data retrived successfully",
+        "Data retrived successfully",
         doctorSpecializationsSaveResult
       );
     } catch (error) {
@@ -383,21 +370,7 @@ const DoctorController = {
         connection,
       });
 
-      doctorChannelingStatusGetResult =
-        doctorChannelingStatusGetResult.recordsets;
-
-      //handle no data
-      // if (doctorChannelingStatusGetResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorChannelingStatusGetResult[0][0];
-      // const billData = doctorChannelingStatusGetResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
+      doctorChannelingStatusGetResult = doctorChannelingStatusGetResult.recordsets;
 
       handleResponse(
         response,
@@ -523,20 +496,7 @@ const DoctorController = {
         connection,
       });
 
-      doctorContactNumberGetResult = doctorContactNumberGetResult.recordsets;
-
-      //handle no data
-      // if (doctorContactNumberGetResult[0].length == 0) {
-      //   handleResponse(res, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorContactNumberGetResult[0][0];
-      // const billData = doctorContactNumberGetResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
+      doctorContactNumberGetResult = doctorContactNumberGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -592,7 +552,7 @@ const DoctorController = {
       });
 
       doctorDispositionReminderGetResult =
-        doctorDispositionReminderGetResult.recordsets;
+        doctorDispositionReminderGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -677,7 +637,7 @@ const DoctorController = {
       });
 
       doctorDispositionReminderSaveResult =
-        doctorDispositionReminderSaveResult.recordsets;
+        doctorDispositionReminderSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

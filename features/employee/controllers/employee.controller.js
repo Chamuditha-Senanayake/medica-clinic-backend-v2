@@ -45,7 +45,7 @@ const EmployeeController = {
         connection,
       });
 
-      employeeBranchGetResult = employeeBranchGetResult.recordsets;
+      employeeBranchGetResult = employeeBranchGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -113,7 +113,7 @@ const EmployeeController = {
       });
 
       console.log(employeeBranchSaveResult.recordsets);
-      employeeBranchSaveResult = employeeBranchSaveResult.recordsets;
+      employeeBranchSaveResult = employeeBranchSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -242,7 +242,7 @@ const EmployeeController = {
       });
 
       console.log(employeeSaveResult.recordsets);
-      employeeSaveResult = employeeSaveResult.recordsets;
+      employeeSaveResult = employeeSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

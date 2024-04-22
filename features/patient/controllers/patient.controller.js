@@ -48,7 +48,7 @@ const PatientController = {
         connection,
       });
 
-      patientDiagnosisDocumentGetResult = patientDiagnosisDocumentGetResult.recordsets;
+      patientDiagnosisDocumentGetResult = patientDiagnosisDocumentGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -210,7 +210,7 @@ const PatientController = {
         connection,
       });
 
-      patientDispositionGetResult = patientDispositionGetResult.recordsets;
+      patientDispositionGetResult = patientDispositionGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -391,7 +391,7 @@ const PatientController = {
         connection,
       });
 
-      gynoObstetricsHistoryGetResult = gynoObstetricsHistoryGetResult.recordsets;
+      gynoObstetricsHistoryGetResult = gynoObstetricsHistoryGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -511,7 +511,7 @@ const PatientController = {
         connection,
       });
 
-      patientDiagnosisDocumentDeleteResult = patientDiagnosisDocumentDeleteResult.recordsets;
+      patientDiagnosisDocumentDeleteResult = patientDiagnosisDocumentDeleteResult.recordsets[0];
 
       handleResponse(
         response,
@@ -567,7 +567,7 @@ const PatientController = {
         connection,
       });
 
-      patientNewFoodAllergyGetResult = patientNewFoodAllergyGetResult.recordsets;
+      patientNewFoodAllergyGetResult = patientNewFoodAllergyGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -768,7 +768,7 @@ const PatientController = {
         connection,
       });
 
-      patientNewSurgeryGetResult = patientNewSurgeryGetResult.recordsets;
+      patientNewSurgeryGetResult = patientNewSurgeryGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -889,7 +889,7 @@ const PatientController = {
         connection,
       });
 
-      patientOtherAllergyGetResult = patientOtherAllergyGetResult.recordsets;
+      patientOtherAllergyGetResult = patientOtherAllergyGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1010,7 +1010,7 @@ const PatientController = {
         connection,
       });
 
-      patientOtherDiseasesGetResult = patientOtherDiseasesGetResult.recordsets;
+      patientOtherDiseasesGetResult = patientOtherDiseasesGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1196,7 +1196,7 @@ const PatientController = {
         connection,
       });
 
-      patientRemarkGetResult = patientRemarkGetResult.recordsets;
+      patientRemarkGetResult = patientRemarkGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1316,7 +1316,7 @@ const PatientController = {
         connection,
       });
 
-      patientReminderGetResult = patientReminderGetResult.recordsets;
+      patientReminderGetResult = patientReminderGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1516,7 +1516,7 @@ const PatientController = {
         connection,
       });
 
-      patientRobsonInfoGetResult = patientRobsonInfoGetResult.recordsets;
+      patientRobsonInfoGetResult = patientRobsonInfoGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1570,7 +1570,7 @@ const PatientController = {
         connection,
       });
 
-      patientRobsonReportDataGetResult = patientRobsonReportDataGetResult.recordsets;
+      patientRobsonReportDataGetResult = patientRobsonReportDataGetResult.recordsets[0];
 
       handleResponse(
         response,

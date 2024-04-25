@@ -1734,6 +1734,179 @@ const PatientController = {
 
   /*
    *
+   * signup patient
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatient(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id  ,
+        Title  ,
+        FirstName  ,
+        MiddleName ,
+        LastName  ,
+        NIC  ,
+        Passport  ,
+        Mobile  ,
+        BedHeadTicketNumber  ,
+        ClinicId ,
+        UniqueId ,
+        Email ,
+        DateOfBirth ,
+        Gender  ,
+        ParentId ,
+        PatientTypeId  ,
+        BloodGroup  ,
+        InvalidOTPAttempts  ,
+        AddressId ,
+        AddressLine1  ,
+        AddressLine2  ,
+        Suburb  ,
+        City ,
+        Postcode  ,
+        Province  ,
+        Country ,
+        // RelationId  ,
+        // RelationTypeId ,
+        EmergencyContact  ,
+        Occupation ,
+        MaritalStatus  ,
+        Status ,
+        UserSaved  ,
+        PHIArea  ,
+        MOH  ,
+        GNDivision  ,
+        AgeGroupId ,
+        EthnicGroupId  ,
+        EducationLevelId ,
+        ReligionId ,
+        SpiritualityId  ,
+        IncomeGroupId ,
+        PatientStatusSave  ,
+        PatientStatusId  ,
+        PatientStatusStatusType ,/*1 - Hostapitalized, 2 - Dead*/
+        PatientStatusStatusDate  ,
+        PatientStatusStatus  ,
+        Guid  ,
+        UserId ,
+        LocalTran  ,
+        OperationUniqueId
+
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+
+        StringValue({ fieldName: "Title", value: Title }),
+        StringValue({ fieldName: "FirstName", value: FirstName }),
+        StringValue({ fieldName: "MiddleName", value: MiddleName }),
+        StringValue({ fieldName: "LastName", value: LastName }),
+        StringValue({ fieldName: "NIC", value: NIC }),
+        StringValue({ fieldName: "Passport", value: Passport }),
+        StringValue({ fieldName: "Mobile", value: Mobile }),
+        StringValue({ fieldName: "BedHeadTicketNumber", value: BedHeadTicketNumber }),
+        StringValue({ fieldName: "ClinicId", value: ClinicId }),
+        StringValue({ fieldName: "UniqueId", value: UniqueId }),
+        StringValue({ fieldName: "Email", value: Email }),
+        DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
+        StringValue({ fieldName: "Gender", value: Gender }),        
+        EntityId({ fieldName: "ParentId", value: ParentId }),
+        EntityId({ fieldName: "PatientTypeId", value: PatientTypeId }),        
+        StringValue({ fieldName: "BloodGroup", value: BloodGroup }),        
+        EntityId({ fieldName: "InvalidOTPAttempts", value: InvalidOTPAttempts }),
+        EntityId({ fieldName: "AddressId", value: AddressId }),        
+        StringValue({ fieldName: "AddressLine1", value: AddressLine1 }),
+        StringValue({ fieldName: "AddressLine2", value: AddressLine2 }),
+        StringValue({ fieldName: "Suburb", value: Suburb }),
+        StringValue({ fieldName: "City", value: City }),
+        StringValue({ fieldName: "Postcode", value: Postcode }),
+        StringValue({ fieldName: "Province", value: Province }),
+        StringValue({ fieldName: "Country", value: Country  }),        
+        // EntityId({ fieldName: "RelationId", value: RelationId }),
+        // EntityId({ fieldName: "RelationTypeId", value: RelationTypeId }),        
+        StringValue({ fieldName: "EmergencyContact", value: EmergencyContact  }),
+        StringValue({ fieldName: "Occupation", value: Occupation  }),        
+        SignedInteger({
+          fieldName: "MaritalStatus",
+          value: MaritalStatus,
+        }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),        
+        StringValue({ fieldName: "PHIArea", value: PHIArea  }),
+        StringValue({ fieldName: "MOH", value: MOH  }),
+        StringValue({ fieldName: "GNDivision", value: GNDivision  }),        
+        EntityId({ fieldName: "AgeGroupId", value: AgeGroupId }),
+        EntityId({ fieldName: "EthnicGroupId", value: EthnicGroupId }),
+        EntityId({ fieldName: "EducationLevelId", value: EducationLevelId }),
+        EntityId({ fieldName: "ReligionId", value: ReligionId }),
+        EntityId({ fieldName: "SpiritualityId", value: SpiritualityId }),
+        EntityId({ fieldName: "IncomeGroupId", value: IncomeGroupId }),        
+        SignedInteger({
+          fieldName: "PatientStatusSave",
+          value: PatientStatusSave,
+        }),
+        EntityId({ fieldName: "PatientStatusId", value: PatientStatusId }),    
+        SignedInteger({
+          fieldName: "PatientStatusStatusType",
+          value: PatientStatusStatusType,
+        }),        
+        DateString({ fieldName: "PatientStatusStatusDate", value: PatientStatusStatusDate }),       
+        SignedInteger({
+          fieldName: "PatientStatusStatus",
+          value: PatientStatusStatus,
+        }),        
+        EntityId({ fieldName: "Guid", value: Guid }),
+        EntityId({ fieldName: "UserId", value: UserId }),        
+        SignedInteger({
+          fieldName: "LocalTran",
+          value: LocalTran,
+        }),        
+        StringValue({ fieldName: "OperationUniqueId", value: OperationUniqueId }),
+      ];
+
+      let patientSaveResult = await executeSp({
+        spName: `PatientSave`,
+        params: params,
+        connection,
+      });
+
+      patientSaveResult = patientSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Patient retrived successfully",
+        patientSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /*
+   *
    * save patient
    *
    * @param {request} request object

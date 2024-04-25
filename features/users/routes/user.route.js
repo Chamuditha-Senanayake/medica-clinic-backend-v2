@@ -5,6 +5,22 @@ import UserController from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.post(
+  "/Signup",
+  [
+    check("Username").notEmpty().isString(),
+    check("Password").notEmpty().isString(),
+    check("UserGroupId").notEmpty().isInt(),
+    check("Gender").notEmpty().isString(),
+    check("FName").notEmpty().isString(),
+    check("LName").notEmpty().isString(),
+    check("dob").notEmpty().isDate(),
+    check("Email").notEmpty().isString(),
+    check("ContactNo").notEmpty().isString(),
+  ],
+  UserController.signup
+);
+
+router.post(
   "/AddressGet",
   [check("UserId").notEmpty().isInt(), check("Id").notEmpty().isInt()],
   UserController.getAddress

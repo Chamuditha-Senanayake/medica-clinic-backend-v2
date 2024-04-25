@@ -1875,7 +1875,7 @@ const PatientController = {
           fieldName: "LocalTran",
           value: LocalTran,
         }),        
-        EntityId({ fieldName: "OperationUniqueId", value: OperationUniqueId }),
+        StringValue({ fieldName: "OperationUniqueId", value: OperationUniqueId }),
       ];
 
       let patientSaveResult = await executeSp({

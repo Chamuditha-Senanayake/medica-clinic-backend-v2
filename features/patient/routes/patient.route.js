@@ -369,7 +369,7 @@ router.post(
     check("Guid").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
     check("LocalTran").isInt().not().isEmpty(),
-    check("OperationUniqueId").isInt().not().isEmpty(),
+    check("OperationUniqueId").not().isEmpty(),
 
     check("Title").not().isEmpty(),
     check("FirstName").not().isEmpty(),

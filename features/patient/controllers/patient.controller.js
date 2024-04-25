@@ -1836,8 +1836,8 @@ const PatientController = {
         StringValue({ fieldName: "Postcode", value: Postcode }),
         StringValue({ fieldName: "Province", value: Province }),
         StringValue({ fieldName: "Country", value: Country  }),        
-        EntityId({ fieldName: "RelationId", value: RelationId }),
-        EntityId({ fieldName: "RelationTypeId", value: RelationTypeId }),        
+        // EntityId({ fieldName: "RelationId", value: RelationId }),
+        // EntityId({ fieldName: "RelationTypeId", value: RelationTypeId }),        
         StringValue({ fieldName: "EmergencyContact", value: EmergencyContact  }),
         StringValue({ fieldName: "Occupation", value: Occupation  }),        
         SignedInteger({

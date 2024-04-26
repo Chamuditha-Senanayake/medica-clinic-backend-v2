@@ -20,7 +20,6 @@ router.post(
   [
     check("Username").notEmpty().isString(),
     check("Password").notEmpty().isString(),
-    check("UserGroupId").notEmpty().isInt(),
     check("Gender").notEmpty().isString(),
     check("FName").notEmpty().isString(),
     check("LName").notEmpty().isString(),

@@ -95,7 +95,87 @@ const UserController = {
         Id = 0,
         Username,
         Password,
-        UserGroupId,
+        UserGroupId = 5,
+        Gender,
+        FName,
+        LName,
+        dob,
+        Email,
+        ContactNo,
+        Status = 1,
+
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "Username", value: Username }),
+        StringValue({ fieldName: "Password", value: Password }),
+        EntityId({ fieldName: "UserGroupId", value: UserGroupId }),
+        StringValue({ fieldName: "Gender", value: Gender }),
+        StringValue({ fieldName: "FName", value: FName }),
+        StringValue({ fieldName: "LName", value: LName }),
+        DateString({ fieldName: "dob", value: dob }),
+        StringValue({ fieldName: "Email", value: Email }),
+        StringValue({ fieldName: "ContactNo", value: ContactNo }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+      ];
+
+      let userSaveResult = await executeSp({
+        spName: `UserSave`,
+        params: params,
+        connection,
+      });
+
+      userSaveResult = userSaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User saved successfully",
+        userSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Social Signup
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async socialSignup(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id = 0,
+        Username,
+        token,
+        provider,
+        UserGroupId=5,
         Gender,
         FName,
         LName,

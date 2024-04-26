@@ -35,25 +35,21 @@ const UserController = {
       const {
         Username,
         Password,
-        Email,
-        ContactNo,
       } = request.body;
 
       var params = [
 
         StringValue({ fieldName: "Username", value: Username }),
         StringValue({ fieldName: "Password", value: Password }),
-        StringValue({ fieldName: "Email", value: Email }),
-        StringValue({ fieldName: "ContactNo", value: ContactNo }),
       ];
 
       let userLoginResult = await executeSp({
-        spName: `UserSave`,
+        spName: `UserLogin`,
         params: params,
         connection,
       });
 
-      userLoginResult = userLoginResult.recordsets[0][0];
+      userLoginResult = userLoginResult.recordsets;
 
       handleResponse(
         response,

@@ -14,6 +14,69 @@ const UserController = {
 
   /**
    *
+   * Login
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async login(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Username,
+        Password,
+        Email,
+        ContactNo,
+      } = request.body;
+
+      var params = [
+
+        StringValue({ fieldName: "Username", value: Username }),
+        StringValue({ fieldName: "Password", value: Password }),
+        StringValue({ fieldName: "Email", value: Email }),
+        StringValue({ fieldName: "ContactNo", value: ContactNo }),
+      ];
+
+      let userLoginResult = await executeSp({
+        spName: `UserSave`,
+        params: params,
+        connection,
+      });
+
+      userLoginResult = userLoginResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User logged successfully",
+        userLoginResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
    * Signup
    *
    * @param {request} request object

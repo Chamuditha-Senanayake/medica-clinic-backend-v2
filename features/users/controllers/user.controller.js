@@ -7,88 +7,10 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
-  TableValueParameters,
   DateString,
 } from "../../../utils/type-def.js";
-import sql from "mssql";
 
 const UserController = {
-
-  /**
-   *
-   * Login
-   *
-   * @param {request} request object
-   * @param {response} response object
-   * @param {next} next middleware
-   * @returns
-   */
-  async login(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.User.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
-    try {
-      let connection = request.app.locals.db;
-      const {
-        Id = 0,
-        Username,
-        Password,
-        UserGroupId,
-        Gender,
-        FName,
-        LName,
-        dob,
-        Email,
-        ContactNo,
-        Status = 1,
-
-      } = request.body;
-
-      var params = [
-
-        StringValue({ fieldName: "Username", value: Username }),
-        StringValue({ fieldName: "Password", value: Password }),
-        EntityId({ fieldName: "UserGroupId", value: UserGroupId }),
-        StringValue({ fieldName: "Email", value: Email }),
-        StringValue({ fieldName: "ContactNo", value: ContactNo }),
-        SignedInteger({
-          fieldName: "Status",
-          value: Status,
-        }),
-      ];
-
-      let userLoginResult = await executeSp({
-        spName: `UserSave`,
-        params: params,
-        connection,
-      });
-
-      userLoginResult = userLoginResult.recordsets[0][0];
-
-      handleResponse(
-        response,
-        200,
-        "success",
-        "User logged successfully",
-        userLoginResult
-      );
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
-    }
-  },
-
 
   /**
    *

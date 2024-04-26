@@ -4,11 +4,14 @@ import dotenv from "dotenv";
 import express from "express";
 import statusMonitor from "express-status-monitor";
 import helmet from "helmet";
+import passport from "passport";
 import { errorWithData, info } from "./config/logger.js";
 import getConnection from "./db_init.js";
 import loggerMiddleware from "./middleware/logger.middleware.js";
+import "./config/passport.js";
 
 // Import Routes
+import authRouter from "./features/auth/routes.js";
 import doctorRouter from "./features/doctor/routes/doctor.route.js";
 import nurseRouter from "./features/nurse/routes/nurse.route.js";
 import employeeRouter from "./features/employee/routes/employee.route.js";
@@ -26,6 +29,7 @@ import UserRouter from "./features/users/routes/user.route.js";
 import analyticsRouter from "./features/analytics/routes/analytics.route.js";
 import medicalCertificateRouter from "./features/medicalCertificate/routes/medicalCertificate.route.js";
 import camiosRouter from "./features/camios/routes/camios.route.js";
+import cookieSession from "cookie-session";
 
 dotenv.config();
 
@@ -34,6 +38,15 @@ const app = express();
 //DB connection
 //
 
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["YH2"],
+    maxAge: 24 * 60 * 60 * 1000, // 1day
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cors());
@@ -52,6 +65,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
 
+app.use(`/api/v1/auth`, authRouter);
 app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);
 app.use(`/api/v1`, prescriptionRouter);

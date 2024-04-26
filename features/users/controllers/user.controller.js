@@ -9,6 +9,7 @@ import {
   SignedInteger,
   DateString,
 } from "../../../utils/type-def.js";
+import { google } from "googleapis";
 
 const UserController = {
 
@@ -173,8 +174,8 @@ const UserController = {
       const {
         Id = 0,
         Username,
-        token,
-        provider,
+        Token,
+        Provider,
         UserGroupId=5,
         Gender,
         FName,
@@ -183,13 +184,42 @@ const UserController = {
         Email,
         ContactNo,
         Status = 1,
-
       } = request.body;
+ 
+      switch (Provider) {
+        
+          case "google":                     
+            const oauth2Client = new google.auth.OAuth2();
+            oauth2Client.setCredentials({ access_token: Token });
+            google.oauth2('v2').userinfo.get({
+            auth: oauth2Client,
+            }, (err, response) => {
+            if (err) {
+                console.error('The API returned an error: ' + err);
+                return;
+            }
+            Email=response.data.email;
+            console.log(response.data);
+            });
+            break;
+
+          case "apple":
+              console.log("Provider is 'apple'");
+
+              break;
+          case "microsoft":
+              console.log("Provider is 'microsoft'");
+
+              break;
+          default:
+              console.log("Provider is not recognized");              
+              break;
+      }
+
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
         StringValue({ fieldName: "Username", value: Username }),
-        StringValue({ fieldName: "Password", value: Password }),
         EntityId({ fieldName: "UserGroupId", value: UserGroupId }),
         StringValue({ fieldName: "Gender", value: Gender }),
         StringValue({ fieldName: "FName", value: FName }),

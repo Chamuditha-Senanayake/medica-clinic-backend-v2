@@ -12,6 +12,9 @@ const ResponseMessages = {
     DELETE: "Customer deleted!",
     DELETE_FAILED: "Failed to delete customer!",
   },
+  User: {
+    VALIDATION_ERROR: "Validation errors",
+  },
   Inventory: {
     VALIDATION_ERROR: "Validation errors",
     LIST_RETRIEVE: "Inventory list retrieved!",
@@ -175,6 +178,9 @@ const ResponseMessages = {
   },
   Bill:{
     VALIDATION_ERROR: "Validation errors", 
+  },
+  Provider:{
+    VALIDATION_ERROR:'Provider must be either "google" or "apple" or "microsoft".'
   }
 };
 

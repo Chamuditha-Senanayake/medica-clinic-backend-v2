@@ -1,8 +1,50 @@
 import express from "express";
 import { check } from "express-validator";
 import UserController from "../controllers/user.controller.js";
+import AppConstants from "../../../config/constants.js";
+import ResponseMessages from "../../../config/messages.js";
 
 const router = express.Router();
+
+router.post(
+  "/Login",
+  [
+    check("Username").notEmpty().isString(),
+    check("Password").notEmpty().isString(),
+  ],
+  UserController.login
+);
+
+router.post(
+  "/Signup",
+  [
+    check("Username").notEmpty().isString(),
+    check("Password").notEmpty().isString(),
+    check("Gender").notEmpty().isString(),
+    check("FName").notEmpty().isString(),
+    check("LName").notEmpty().isString(),
+    check("dob").notEmpty().isDate(),
+    check("Email").notEmpty().isString(),
+    check("ContactNo").notEmpty().isString(),
+  ],
+  UserController.signup
+);
+
+router.post(
+  "/Signup/Social",
+  [
+    check("Username").notEmpty().isString(),
+    check("Token").notEmpty().isString(),
+    check('Provider').notEmpty().withMessage('Provider is required.').isIn(AppConstants.Providers).withMessage(ResponseMessages.Provider.VALIDATION_ERROR),
+    check("Gender").notEmpty().isString(),
+    check("FName").notEmpty().isString(),
+    check("LName").notEmpty().isString(),
+    check("dob").notEmpty().isDate(),
+    check("Email").notEmpty().isString(),
+    check("ContactNo").notEmpty().isString(),
+  ],
+  UserController.socialSignup
+);
 
 router.post(
   "/AddressGet",

@@ -171,7 +171,7 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
-      const {
+      let {
         Id = 0,
         Username,
         Token,
@@ -185,37 +185,45 @@ const UserController = {
         ContactNo,
         Status = 1,
       } = request.body;
- 
+
       switch (Provider) {
         
-          case "google":                     
-            const oauth2Client = new google.auth.OAuth2();
-            oauth2Client.setCredentials({ access_token: Token });
-            google.oauth2('v2').userinfo.get({
-            auth: oauth2Client,
-            }, (err, response) => {
-            if (err) {
-                console.error('The API returned an error: ' + err);
-                return;
-            }
-            Email=response.data.email;
-            console.log(response.data);
-            });
+          case "google":  
+            await getGoogleUserEmail(Token);                               
             break;
 
           case "apple":
               console.log("Provider is 'apple'");
-
               break;
           case "microsoft":
               console.log("Provider is 'microsoft'");
-
               break;
           default:
               console.log("Provider is not recognized");              
-              break;
+              break;       
       }
 
+      async function getGoogleUserEmail(token) {
+        return new Promise((resolve, reject) => {
+          const oauth2Client = new google.auth.OAuth2();
+          oauth2Client.setCredentials({ access_token: token });
+          google.oauth2('v2').userinfo.get({
+            auth: oauth2Client,
+            }, (err, response) => {
+              if (err) {
+                console.error('The API returned an error: ' + err);
+                reject(err);
+              } else {
+                Email=response.data.email
+                resolve(response.data.email);
+              }
+            });
+        });
+      }
+
+      async function getAppleUserEmail(token) {}
+
+      async function getMicrosoftUserEmail(token) {}
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -233,6 +241,7 @@ const UserController = {
         }),
       ];
 
+      console.log(Email)
       let userSaveResult = await executeSp({
         spName: `UserSave`,
         params: params,

@@ -10,9 +10,12 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, callback) {
       // TODO: Save user here
+
+      let token = "dsfgjrfehethetr"
+      console.log(token);
       console.log("GOOGLE USER ", profile);
 
-      callback(null, profile);
+      callback(token, profile);
     }
   )
 );

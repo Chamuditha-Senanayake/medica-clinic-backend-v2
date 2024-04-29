@@ -1,4 +1,5 @@
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
@@ -48,9 +49,18 @@ const UserController = {
         spName: `UserLogin`,
         params: params,
         connection,
-      });
+      });      
 
-      userLoginResult = userLoginResult.recordsets;
+      userLoginResult = userLoginResult.recordsets[0][0];
+
+      let token = jwt.sign({
+                    userId: userLoginResult.Id,
+                    email: userLoginResult.Email
+                    },
+                    process.env.JWT_SECRET,
+                    { expiresIn: process.env.TOKEN_EXPIRATION_TIME }
+                  );
+      userLoginResult.token = token;
 
       handleResponse(
         response,

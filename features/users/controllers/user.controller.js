@@ -45,6 +45,8 @@ const UserController = {
         StringValue({ fieldName: "Password", value: Password }),
       ];
 
+      console.log(connection)
+
       let userLoginResult = await executeSp({
         spName: `UserLogin`,
         params: params,
@@ -53,13 +55,17 @@ const UserController = {
 
       userLoginResult = userLoginResult.recordsets[0][0];
 
-      let token = jwt.sign({
-                    userId: userLoginResult.Id,
-                    email: userLoginResult.Email
+      let token = jwt.sign(
+                    {
+                      userId: userLoginResult.Id,
+                      username: userLoginResult.Username
                     },
                     process.env.JWT_SECRET,
-                    { expiresIn: process.env.TOKEN_EXPIRATION_TIME }
+                    { 
+                      expiresIn: process.env.TOKEN_EXPIRATION_TIME
+                    }
                   );
+                  
       userLoginResult.token = token;
 
       handleResponse(
@@ -110,7 +116,7 @@ const UserController = {
         Gender,
         FName,
         LName,
-        dob,
+        Dob,
         Email,
         ContactNo,
         Status = 1,
@@ -125,7 +131,7 @@ const UserController = {
         StringValue({ fieldName: "Gender", value: Gender }),
         StringValue({ fieldName: "FName", value: FName }),
         StringValue({ fieldName: "LName", value: LName }),
-        DateString({ fieldName: "dob", value: dob }),
+        DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
         SignedInteger({
@@ -190,7 +196,7 @@ const UserController = {
         Gender,
         FName,
         LName,
-        dob,
+        Dob,
         Email,
         ContactNo,
         Status = 1,
@@ -242,7 +248,7 @@ const UserController = {
         StringValue({ fieldName: "Gender", value: Gender }),
         StringValue({ fieldName: "FName", value: FName }),
         StringValue({ fieldName: "LName", value: LName }),
-        DateString({ fieldName: "dob", value: dob }),
+        DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
         SignedInteger({

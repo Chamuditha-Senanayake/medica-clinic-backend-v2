@@ -9,7 +9,10 @@ router.get("/login/failed", (req, res) => {
   });
 });
 
-router.get("/google", passport.authenticate("google", { scope: ["profile","email"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
 router.get(
   "/facebook",
@@ -19,14 +22,12 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-      successRedirect:
-        "http://localhost:5173/dashboard?status=success&token=KKKKK",
-    failureRedirect: "http://localhost:5173?status=failure",
+    failureRedirect: "http://localhost:5173/login?status=failure",
   }),
   function (req, res) {
-    console.log(token);
+    console.log(req.user);
     res.redirect(
-      "http://localhost:5173/login?status=success&token=KKKKK&auth=google"
+      `http://localhost:5173/login?status=success&token=${req.user}&auth=google`
     );
   }
 );

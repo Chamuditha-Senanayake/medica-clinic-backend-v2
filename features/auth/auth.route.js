@@ -22,12 +22,12 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173/login?status=failure",
+    failureRedirect: `${process.env.FRONTEND_URL}/login?status=failure`,
   }),
   function (req, res) {
     console.log(req.user);
     res.redirect(
-      `http://localhost:5173/login?status=success&token=${req.user}&auth=google`
+      `${process.env.FRONTEND_URL}/login?status=success&token=${req.user}&auth=google`
     );
   }
 );

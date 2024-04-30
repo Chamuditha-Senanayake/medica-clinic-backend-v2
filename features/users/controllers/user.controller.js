@@ -34,18 +34,9 @@ const UserController = {
       });
     }
     try {
-
-      sendEmailFromCustomAccount({
-        emailUser: "mms.dim.kln@gmail.com",
-        emailPassword: "gqikpkwktknpalod",
-        to:"sithumdashantha@gmail.com",
-        subject:"testing yh2",
-        html:"<h1>verify your email1</h1><br><p>Click here - </p><a href='http://localhost:5173/forgot-password?token=111111111'><Button>Verify</Button></a>"
-      })
-
       let connection = request.app.locals.db;
       const { Username, Password } = request.body;
-
+      
       var params = [
         StringValue({ fieldName: "Username", value: Username }),
         StringValue({ fieldName: "Password", value: Password }),
@@ -343,7 +334,7 @@ const UserController = {
         emailPassword: "gqikpkwktknpalod",
         to: Email,   //chamudithacbs@gmail.com  //sithumdashantha@gmail.com
         subject:"Reset Password",
-        html:`<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='http://localhost:5173/forgot-password?token=${token}'>http://localhost:5173/forgot-password?token=${token}</a>`
+        html:`<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`
       })
 
       handleResponse(

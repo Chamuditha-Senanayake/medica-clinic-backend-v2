@@ -302,6 +302,9 @@ const UserController = {
         data: errors,
       });
     }
+
+    let userGetByEmailResult;
+
     try {
       let connection = request.app.locals.db;
       const { Email } = request.body;
@@ -310,13 +313,13 @@ const UserController = {
         StringValue({ fieldName: "Email", value: Email }),
       ];
 
-      let userGetByEmailResult = await executeSp({
+      userGetByEmailResult = await executeSp({
         spName: `UserGetByEmail`,
         params: params,
         connection,
       });   
       
-      userGetByEmailResult = userGetByEmailResult.recordsets[0][0];
+      userGetByEmailResult = {Availabillity: false};
 
       handleResponse(
         response,
@@ -326,14 +329,14 @@ const UserController = {
         userGetByEmailResult
       );
     } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
+        userGetByEmailResult = {Availabillity: true};
+        handleResponse(
+          response,
+          200,
+          "success",
+          "Data retrived successfully",
+          userGetByEmailResult
+        );
     }
   },
 
@@ -356,6 +359,9 @@ const UserController = {
         data: errors,
       });
     }
+
+    let userGetByUsernameResult;
+
     try {
       let connection = request.app.locals.db;
       const { Username } = request.body;
@@ -364,13 +370,13 @@ const UserController = {
         StringValue({ fieldName: "Username", value: Username }),
       ];
 
-      let userGetByUsernameResult = await executeSp({
+      userGetByUsernameResult = await executeSp({
         spName: `UserGetByUsername`,
         params: params,
         connection,
       });   
       
-      userGetByUsernameResult = userGetByUsernameResult.recordsets[0][0];
+      userGetByUsernameResult = {Availabillity: false};
 
       handleResponse(
         response,
@@ -380,14 +386,14 @@ const UserController = {
         userGetByUsernameResult
       );
     } catch (error) {
-      handleError(
+        userGetByUsernameResult = {Availabillity: true};
+      handleResponse(
         response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByUsernameResult
       );
-      next(error);
     }
   },
 
@@ -410,6 +416,9 @@ const UserController = {
         data: errors,
       });
     }
+
+    let userGetByContactNoResult;
+
     try {
       let connection = request.app.locals.db;
       const { ContactNo } = request.body;
@@ -424,7 +433,7 @@ const UserController = {
         connection,
       });   
       
-      userGetByContactNoResult = userGetByContactNoResult.recordsets[0][0];
+      userGetByContactNoResult = {Availabillity: false};
 
       handleResponse(
         response,
@@ -434,14 +443,15 @@ const UserController = {
         userGetByContactNoResult
       );
     } catch (error) {
-      handleError(
+      userGetByContactNoResult = {Availabillity: true};
+      handleResponse(
         response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByContactNoResult
       );
-      next(error);
+      // next(error);
     }
   },
 

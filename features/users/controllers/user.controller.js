@@ -13,7 +13,6 @@ import {
 import { google } from "googleapis";
 
 const UserController = {
-
   /**
    *
    * Login
@@ -34,13 +33,9 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
-      const {
-        Username,
-        Password,
-      } = request.body;
+      const { Username, Password } = request.body;
 
       var params = [
-
         StringValue({ fieldName: "Username", value: Username }),
         StringValue({ fieldName: "Password", value: Password }),
       ];
@@ -49,21 +44,21 @@ const UserController = {
         spName: `UserLogin`,
         params: params,
         connection,
-      });      
+      });
 
       userLoginResult = userLoginResult.recordsets[0][0];
 
       let token = jwt.sign(
-                    {
-                      userId: userLoginResult.Id,
-                      username: userLoginResult.Username
-                    },
-                    process.env.JWT_SECRET,
-                    { 
-                      expiresIn: process.env.TOKEN_EXPIRATION_TIME
-                    }
-                  );
-                  
+        {
+          userId: userLoginResult.Id,
+          username: userLoginResult.Username,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: process.env.TOKEN_EXPIRATION_TIME,
+        }
+      );
+
       userLoginResult.token = token;
 
       handleResponse(
@@ -84,7 +79,6 @@ const UserController = {
       next(error);
     }
   },
-
 
   /**
    *
@@ -118,7 +112,6 @@ const UserController = {
         Email,
         ContactNo,
         Status = 1,
-
       } = request.body;
 
       var params = [
@@ -190,7 +183,7 @@ const UserController = {
         Username,
         Token,
         Provider,
-        UserGroupId=5,
+        UserGroupId = 5,
         Gender,
         FName,
         LName,
@@ -201,37 +194,39 @@ const UserController = {
       } = request.body;
 
       switch (Provider) {
-        
-          case "google":  
-            await getGoogleUserEmail(Token);                               
-            break;
+        case "google":
+          await getGoogleUserEmail(Token);
+          break;
 
-          case "apple":
-              console.log("Provider is 'apple'");
-              break;
-          case "microsoft":
-              console.log("Provider is 'microsoft'");
-              break;
-          default:
-              console.log("Provider is not recognized");              
-              break;       
+        case "apple":
+          console.log("Provider is 'apple'");
+          break;
+        case "microsoft":
+          console.log("Provider is 'microsoft'");
+          break;
+        default:
+          console.log("Provider is not recognized");
+          break;
       }
 
       async function getGoogleUserEmail(token) {
         return new Promise((resolve, reject) => {
           const oauth2Client = new google.auth.OAuth2();
           oauth2Client.setCredentials({ access_token: token });
-          google.oauth2('v2').userinfo.get({
-            auth: oauth2Client,
-            }, (err, response) => {
+          google.oauth2("v2").userinfo.get(
+            {
+              auth: oauth2Client,
+            },
+            (err, response) => {
               if (err) {
-                console.error('The API returned an error: ' + err);
+                console.error("The API returned an error: " + err);
                 reject(err);
               } else {
-                Email=response.data.email
+                Email = response.data.email;
                 resolve(response.data.email);
               }
-            });
+            }
+          );
         });
       }
 
@@ -255,7 +250,7 @@ const UserController = {
         }),
       ];
 
-      console.log(Email)
+      console.log(Email);
       let userSaveResult = await executeSp({
         spName: `UserSave`,
         params: params,
@@ -283,7 +278,6 @@ const UserController = {
     }
   },
 
-
   /**
    *
    * Get user by email
@@ -306,16 +300,14 @@ const UserController = {
       let connection = request.app.locals.db;
       const { Email } = request.body;
 
-      var params = [
-        StringValue({ fieldName: "Email", value: Email }),
-      ];
+      var params = [StringValue({ fieldName: "Email", value: Email })];
 
       let userGetByEmailResult = await executeSp({
         spName: `UserGetByEmail`,
         params: params,
         connection,
-      });   
-      
+      });
+
       userGetByEmailResult = userGetByEmailResult.recordsets[0][0];
 
       handleResponse(
@@ -336,7 +328,6 @@ const UserController = {
       next(error);
     }
   },
-
 
   /**
    *
@@ -360,16 +351,14 @@ const UserController = {
       let connection = request.app.locals.db;
       const { Username } = request.body;
 
-      var params = [
-        StringValue({ fieldName: "Username", value: Username }),
-      ];
+      var params = [StringValue({ fieldName: "Username", value: Username })];
 
       let userGetByUsernameResult = await executeSp({
         spName: `UserGetByUsername`,
         params: params,
         connection,
-      });   
-      
+      });
+
       userGetByUsernameResult = userGetByUsernameResult.recordsets[0][0];
 
       handleResponse(
@@ -390,7 +379,6 @@ const UserController = {
       next(error);
     }
   },
-
 
   /**
    *
@@ -414,16 +402,14 @@ const UserController = {
       let connection = request.app.locals.db;
       const { ContactNo } = request.body;
 
-      var params = [
-        StringValue({ fieldName: "ContactNo", value: ContactNo }),
-      ];
+      var params = [StringValue({ fieldName: "ContactNo", value: ContactNo })];
 
       let userGetByContactNoResult = await executeSp({
         spName: `UserGetByContactNo`,
         params: params,
         connection,
-      });   
-      
+      });
+
       userGetByContactNoResult = userGetByContactNoResult.recordsets[0][0];
 
       handleResponse(

@@ -47,6 +47,30 @@ router.post(
 );
 
 router.post(
+  "/EmailAvailabilityCheck",
+  [
+    check("Email").notEmpty().isString(),
+  ],
+  UserController.getUserByEmail
+);
+
+router.post(
+  "/UsernameAvailabilityCheck",
+  [
+    check("Username").notEmpty().isString(),
+  ],
+  UserController.getUserByUsername
+);
+
+router.post(
+  "/ContactNoAvailabilityCheck",
+  [
+    check("ContactNo").notEmpty().isString(),
+  ],
+  UserController.getUserByContactNo
+);
+
+router.post(
   "/AddressGet",
   [check("UserId").notEmpty().isInt(), check("Id").notEmpty().isInt()],
   UserController.getAddress

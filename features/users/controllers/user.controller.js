@@ -45,8 +45,6 @@ const UserController = {
         StringValue({ fieldName: "Password", value: Password }),
       ];
 
-      console.log(connection)
-
       let userLoginResult = await executeSp({
         spName: `UserLogin`,
         params: params,
@@ -285,6 +283,167 @@ const UserController = {
     }
   },
 
+
+  /**
+   *
+   * Get user by email
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByEmail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const { Email } = request.body;
+
+      var params = [
+        StringValue({ fieldName: "Email", value: Email }),
+      ];
+
+      let userGetByEmailResult = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });   
+      
+      userGetByEmailResult = userGetByEmailResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByEmailResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * Get user by username
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByUsername(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const { Username } = request.body;
+
+      var params = [
+        StringValue({ fieldName: "Username", value: Username }),
+      ];
+
+      let userGetByUsernameResult = await executeSp({
+        spName: `UserGetByUsername`,
+        params: params,
+        connection,
+      });   
+      
+      userGetByUsernameResult = userGetByUsernameResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByUsernameResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * Get user by contact number
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByContactNo(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const { ContactNo } = request.body;
+
+      var params = [
+        StringValue({ fieldName: "ContactNo", value: ContactNo }),
+      ];
+
+      let userGetByContactNoResult = await executeSp({
+        spName: `UserGetByContactNo`,
+        params: params,
+        connection,
+      });   
+      
+      userGetByContactNoResult = userGetByContactNoResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByContactNoResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
   /**
    *

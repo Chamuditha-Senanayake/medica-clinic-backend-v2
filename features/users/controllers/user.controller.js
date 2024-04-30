@@ -4,6 +4,7 @@ import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
+import { sendEmailFromCustomAccount } from "../../../utils/sendMail.js";
 import {
   EntityId,
   StringValue,
@@ -11,6 +12,7 @@ import {
   DateString,
 } from "../../../utils/type-def.js";
 import { google } from "googleapis";
+
 
 const UserController = {
   /**
@@ -32,6 +34,15 @@ const UserController = {
       });
     }
     try {
+
+      sendEmailFromCustomAccount({
+        emailUser: "mms.dim.kln@gmail.com",
+        emailPassword: "gqikpkwktknpalod",
+        to:"sithumdashantha@gmail.com",
+        subject:"testing yh2",
+        html:"<h1>verify your email1</h1><br><p>Click here - </p><a href='http://localhost:5173/forgot-password?token=111111111'><Button>Verify</Button></a>"
+      })
+
       let connection = request.app.locals.db;
       const { Username, Password } = request.body;
 
@@ -265,6 +276,81 @@ const UserController = {
         "success",
         "User saved successfully",
         userSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Verify email
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async verifyEmail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+
+      let connection = request.app.locals.db;
+      const { Email } = request.body;
+
+      var params = [
+        StringValue({ fieldName: "Email", value: Email }),
+      ];
+
+      let userData = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });   
+
+      if(!userData){
+        throw Error;
+      }
+
+      let token = jwt.sign(
+        {
+          userId: userData.recordsets[0][0].Id,
+          username: userData.recordsets[0][0].Username,
+          email: userData.recordsets[0][0].Email,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: process.env.TOKEN_EXPIRATION_TIME,
+        }
+      );
+
+      sendEmailFromCustomAccount({
+        emailUser: "mms.dim.kln@gmail.com",
+        emailPassword: "gqikpkwktknpalod",
+        to: Email,   //chamudithacbs@gmail.com  //sithumdashantha@gmail.com
+        subject:"Reset Password",
+        html:`<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='http://localhost:5173/forgot-password?token=${token}'>http://localhost:5173/forgot-password?token=${token}</a>`
+      })
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Verification email sent",
       );
     } catch (error) {
       handleError(

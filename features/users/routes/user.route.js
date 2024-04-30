@@ -47,26 +47,26 @@ router.post(
 );
 
 router.post(
+  "/EmailVerify",
+  [check("Email").notEmpty().isString()],
+  UserController.verifyEmail
+);
+
+router.post(
   "/EmailAvailabilityCheck",
-  [
-    check("Email").notEmpty().isString(),
-  ],
+  [check("Email").notEmpty().isString()],
   UserController.getUserByEmail
 );
 
 router.post(
   "/UsernameAvailabilityCheck",
-  [
-    check("Username").notEmpty().isString(),
-  ],
+  [check("Username").notEmpty().isString()],
   UserController.getUserByUsername
 );
 
 router.post(
   "/ContactNoAvailabilityCheck",
-  [
-    check("ContactNo").notEmpty().isString(),
-  ],
+  [check("ContactNo").notEmpty().isString()],
   UserController.getUserByContactNo
 );
 

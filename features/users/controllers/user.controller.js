@@ -11,6 +11,7 @@ import {
   SignedInteger,
   DateString,
 } from "../../../utils/type-def.js";
+import jwt from "jsonwebtoken";
 import { google } from "googleapis";
 
 
@@ -309,8 +310,6 @@ const UserController = {
         connection,
       });   
 
-      console.log(userData)
-
       if(!userData){
         throw Error;
       }
@@ -321,12 +320,11 @@ const UserController = {
           username: userData.recordsets[0][0].Username,
           email: userData.recordsets[0][0].Email,
         },
+        "1h"
       );
 
       sendEmailFromCustomAccount({
-        emailUser: "mms.dim.kln@gmail.com",
-        emailPassword: "gqikpkwktknpalod",
-        to: Email,   //chamudithacbs@gmail.com  //sithumdashantha@gmail.com
+        to: Email,  
         subject:"Reset Password",
         html:`<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`
       })
@@ -978,29 +976,47 @@ const UserController = {
       let connection = request.app.locals.db;
       const { Email, Password, Token } = request.body;
 
-      let params = [
-        StringValue({ fieldName: "Email", value: Email }),
-      ];
+      let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
+      if (Email !== decodedToken.email ){
+        console.log(Email )
+        console.log(decodedToken.email)
+        throw Error("Unauthorized");
+      }
 
-      let User = await executeSp({
-        spName: `UserGetByEmail`,
-        params: params,
-        connection,
-      });   
+      let userPasswordResetResult;
 
-      //TODO: verify token then compare req email with token email, then send verify or unauthorize res
+      try{
+
+        let params = [
+          StringValue({ fieldName: "Email", value: Email }),
+        ];
+
+        let User = await executeSp({
+          spName: `UserGetByEmail`,
+          params: params,
+          connection,
+        }); 
       
+        params = [
+          StringValue({ fieldName: "Username", value: User.recordsets[0][0].Username }),
+          StringValue({ fieldName: "Password", value: Password }),       
+        ];
 
-      params = [
-        StringValue({ fieldName: "Username", value: User.recordsets[0][0].Username }),
-        StringValue({ fieldName: "Password", value: Password }),       
-      ];
-
-      let userPasswordResetResult = await executeSp({
-        spName: `UserResetPassword`,
-        params: params,
-        connection,
-      });
+        userPasswordResetResult = await executeSp({
+          spName: `UserResetPassword`,
+          params: params,
+          connection,
+        }); 
+      } catch (error) {
+        handleError(
+          response,
+          500,
+          "error",
+          error.message,
+          "Something went wrong"
+      );
+        next(error);
+    }
 
       userPasswordResetResult = userPasswordResetResult.recordsets;
 
@@ -1014,7 +1030,7 @@ const UserController = {
     } catch (error) {
       handleError(
         response,
-        500,
+        401,
         "error",
         error.message,
         "Something went wrong"

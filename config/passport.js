@@ -1,6 +1,6 @@
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth";
-import jwt from "jsonwebtoken";
+import jwtSign from "../utils/jwtSign.js";
 import { StringValue } from "../utils/type-def.js";
 import executeSp from "../utils/exeSp.js";
 
@@ -23,15 +23,11 @@ passport.use(
 
       userLoginResult = userLoginResult.recordsets[0][0];
 
-      let token = jwt.sign(
+      let token = jwtSign(
         {
           userId: userLoginResult.Id,
           username: userLoginResult.Username,
-        },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: process.env.TOKEN_EXPIRATION_TIME,
-        }
+        },        
       );
 
       callback(null, token);

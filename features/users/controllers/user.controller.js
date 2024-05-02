@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
+import jwtSign from "../../../utils/jwtSign.js";
 import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
@@ -50,14 +50,10 @@ const UserController = {
 
       userLoginResult = userLoginResult.recordsets[0][0];
 
-      let token = jwt.sign(
+      let token = jwtSign(
         {
           userId: userLoginResult.Id,
           username: userLoginResult.Username,
-        },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: process.env.TOKEN_EXPIRATION_TIME,
         }
       );
 
@@ -313,20 +309,18 @@ const UserController = {
         connection,
       });   
 
+      console.log(userData)
+
       if(!userData){
         throw Error;
       }
 
-      let token = jwt.sign(
+      let token = jwtSign(
         {
           userId: userData.recordsets[0][0].Id,
           username: userData.recordsets[0][0].Username,
           email: userData.recordsets[0][0].Email,
         },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: process.env.TOKEN_EXPIRATION_TIME,
-        }
       );
 
       sendEmailFromCustomAccount({
@@ -970,7 +964,7 @@ const UserController = {
    * @param {next} next middleware
    * @returns
    */
-  async resetPassword(request, response, next) {
+  async userResetPassword(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -982,27 +976,40 @@ const UserController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, Password } = request.body;
+      const { Email, Password, Token } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        StringValue({ fieldName: "Password", value: Password }),
+      let params = [
+        StringValue({ fieldName: "Email", value: Email }),
       ];
 
-      let passwordResetResult = await executeSp({
-        spName: `PasswordReset`,
+      let User = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });   
+
+      //TODO: verify token then compare req email with token email, then send verify or unauthorize res
+      
+
+      params = [
+        StringValue({ fieldName: "Username", value: User.recordsets[0][0].Username }),
+        StringValue({ fieldName: "Password", value: Password }),       
+      ];
+
+      let userPasswordResetResult = await executeSp({
+        spName: `UserResetPassword`,
         params: params,
         connection,
       });
 
-      passwordResetResult = passwordResetResult.recordsets;
+      userPasswordResetResult = userPasswordResetResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
         "Password changed successfully",
-        passwordResetResult
+        userPasswordResetResult
       );
     } catch (error) {
       handleError(

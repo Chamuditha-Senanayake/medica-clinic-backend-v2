@@ -1,9 +1,10 @@
 import { validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
+import jwtSign from "../../../utils/jwtSign.js";
 import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
+import { sendEmailFromCustomAccount } from "../../../utils/sendMail.js";
 import {
   EntityId,
   StringValue,
@@ -12,8 +13,8 @@ import {
 } from "../../../utils/type-def.js";
 import { google } from "googleapis";
 
-const UserController = {
 
+const UserController = {
   /**
    *
    * Login
@@ -34,38 +35,28 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
-      const {
-        Username,
-        Password,
-      } = request.body;
-
+      const { Username, Password } = request.body;
+      
       var params = [
-
         StringValue({ fieldName: "Username", value: Username }),
         StringValue({ fieldName: "Password", value: Password }),
       ];
-
-      console.log(connection)
 
       let userLoginResult = await executeSp({
         spName: `UserLogin`,
         params: params,
         connection,
-      });      
+      });
 
       userLoginResult = userLoginResult.recordsets[0][0];
 
-      let token = jwt.sign(
-                    {
-                      userId: userLoginResult.Id,
-                      username: userLoginResult.Username
-                    },
-                    process.env.JWT_SECRET,
-                    { 
-                      expiresIn: process.env.TOKEN_EXPIRATION_TIME
-                    }
-                  );
-                  
+      let token = jwtSign(
+        {
+          userId: userLoginResult.Id,
+          username: userLoginResult.Username,
+        }
+      );
+
       userLoginResult.token = token;
 
       handleResponse(
@@ -86,7 +77,6 @@ const UserController = {
       next(error);
     }
   },
-
 
   /**
    *
@@ -120,7 +110,6 @@ const UserController = {
         Email,
         ContactNo,
         Status = 1,
-
       } = request.body;
 
       var params = [
@@ -192,7 +181,7 @@ const UserController = {
         Username,
         Token,
         Provider,
-        UserGroupId=5,
+        UserGroupId = 5,
         Gender,
         FName,
         LName,
@@ -203,37 +192,39 @@ const UserController = {
       } = request.body;
 
       switch (Provider) {
-        
-          case "google":  
-            await getGoogleUserEmail(Token);                               
-            break;
+        case "google":
+          await getGoogleUserEmail(Token);
+          break;
 
-          case "apple":
-              console.log("Provider is 'apple'");
-              break;
-          case "microsoft":
-              console.log("Provider is 'microsoft'");
-              break;
-          default:
-              console.log("Provider is not recognized");              
-              break;       
+        case "apple":
+          console.log("Provider is 'apple'");
+          break;
+        case "microsoft":
+          console.log("Provider is 'microsoft'");
+          break;
+        default:
+          console.log("Provider is not recognized");
+          break;
       }
 
       async function getGoogleUserEmail(token) {
         return new Promise((resolve, reject) => {
           const oauth2Client = new google.auth.OAuth2();
           oauth2Client.setCredentials({ access_token: token });
-          google.oauth2('v2').userinfo.get({
-            auth: oauth2Client,
-            }, (err, response) => {
+          google.oauth2("v2").userinfo.get(
+            {
+              auth: oauth2Client,
+            },
+            (err, response) => {
               if (err) {
-                console.error('The API returned an error: ' + err);
+                console.error("The API returned an error: " + err);
                 reject(err);
               } else {
-                Email=response.data.email
+                Email = response.data.email;
                 resolve(response.data.email);
               }
-            });
+            }
+          );
         });
       }
 
@@ -257,7 +248,7 @@ const UserController = {
         }),
       ];
 
-      console.log(Email)
+      console.log(Email);
       let userSaveResult = await executeSp({
         spName: `UserSave`,
         params: params,
@@ -285,6 +276,241 @@ const UserController = {
     }
   },
 
+  /**
+   *
+   * Verify email
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async verifyEmail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+
+      let connection = request.app.locals.db;
+      const { Email } = request.body;
+
+      var params = [
+        StringValue({ fieldName: "Email", value: Email }),
+      ];
+
+      let userData = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });   
+
+      console.log(userData)
+
+      if(!userData){
+        throw Error;
+      }
+
+      let token = jwtSign(
+        {
+          userId: userData.recordsets[0][0].Id,
+          username: userData.recordsets[0][0].Username,
+          email: userData.recordsets[0][0].Email,
+        },
+      );
+
+      sendEmailFromCustomAccount({
+        emailUser: "mms.dim.kln@gmail.com",
+        emailPassword: "gqikpkwktknpalod",
+        to: Email,   //chamudithacbs@gmail.com  //sithumdashantha@gmail.com
+        subject:"Reset Password",
+        html:`<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`
+      })
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Verification email sent",
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get user by email
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByEmail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    let userGetByEmailResult;
+
+    try {
+      let connection = request.app.locals.db;
+      const { Email } = request.body;
+
+      var params = [StringValue({ fieldName: "Email", value: Email })];
+
+      userGetByEmailResult = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });   
+      
+      userGetByEmailResult = {Availabillity: false};
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByEmailResult
+      );
+    } catch (error) {
+        userGetByEmailResult = {Availabillity: true};
+        handleResponse(
+          response,
+          200,
+          "success",
+          "Data retrived successfully",
+          userGetByEmailResult
+        );
+    }
+  },
+
+  /**
+   *
+   * Get user by username
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByUsername(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    let userGetByUsernameResult;
+
+    try {
+      let connection = request.app.locals.db;
+      const { Username } = request.body;
+
+      var params = [StringValue({ fieldName: "Username", value: Username })];
+
+      userGetByUsernameResult = await executeSp({
+        spName: `UserGetByUsername`,
+        params: params,
+        connection,
+      });   
+      
+      userGetByUsernameResult = {Availabillity: false};
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByUsernameResult
+      );
+    } catch (error) {
+        userGetByUsernameResult = {Availabillity: true};
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByUsernameResult
+      );
+    }
+  },
+
+  /**
+   *
+   * Get user by contact number
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByContactNo(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    let userGetByContactNoResult;
+
+    try {
+      let connection = request.app.locals.db;
+      const { ContactNo } = request.body;
+
+      var params = [StringValue({ fieldName: "ContactNo", value: ContactNo })];
+
+      let userGetByContactNoResult = await executeSp({
+        spName: `UserGetByContactNo`,
+        params: params,
+        connection,
+      });   
+      
+      userGetByContactNoResult = {Availabillity: false};
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByContactNoResult
+      );
+    } catch (error) {
+      userGetByContactNoResult = {Availabillity: true};
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByContactNoResult
+      );
+      // next(error);
+    }
+  },
 
   /**
    *
@@ -738,7 +964,7 @@ const UserController = {
    * @param {next} next middleware
    * @returns
    */
-  async resetPassword(request, response, next) {
+  async userResetPassword(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -750,27 +976,40 @@ const UserController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, Password } = request.body;
+      const { Email, Password, Token } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        StringValue({ fieldName: "Password", value: Password }),
+      let params = [
+        StringValue({ fieldName: "Email", value: Email }),
       ];
 
-      let passwordResetResult = await executeSp({
-        spName: `PasswordReset`,
+      let User = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });   
+
+      //TODO: verify token then compare req email with token email, then send verify or unauthorize res
+      
+
+      params = [
+        StringValue({ fieldName: "Username", value: User.recordsets[0][0].Username }),
+        StringValue({ fieldName: "Password", value: Password }),       
+      ];
+
+      let userPasswordResetResult = await executeSp({
+        spName: `UserResetPassword`,
         params: params,
         connection,
       });
 
-      passwordResetResult = passwordResetResult.recordsets;
+      userPasswordResetResult = userPasswordResetResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
         "Password changed successfully",
-        passwordResetResult
+        userPasswordResetResult
       );
     } catch (error) {
       handleError(

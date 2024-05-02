@@ -47,6 +47,30 @@ router.post(
 );
 
 router.post(
+  "/EmailVerify",
+  [check("Email").notEmpty().isString()],
+  UserController.verifyEmail
+);
+
+router.post(
+  "/EmailAvailabilityCheck",
+  [check("Email").notEmpty().isString()],
+  UserController.getUserByEmail
+);
+
+router.post(
+  "/UsernameAvailabilityCheck",
+  [check("Username").notEmpty().isString()],
+  UserController.getUserByUsername
+);
+
+router.post(
+  "/ContactNoAvailabilityCheck",
+  [check("ContactNo").notEmpty().isString()],
+  UserController.getUserByContactNo
+);
+
+router.post(
   "/AddressGet",
   [check("UserId").notEmpty().isInt(), check("Id").notEmpty().isInt()],
   UserController.getAddress
@@ -140,8 +164,11 @@ router.post(
 
 router.post(
   "/PasswordReset",
-  [check("UserId").notEmpty().isInt(), 
-  check("Password").notEmpty().isString()],
-  UserController.resetPassword
+  [
+    check("Email").notEmpty().isString(), 
+    check("Password").notEmpty().isString(),
+    check("Token").notEmpty().isString()
+  ],
+  UserController.userResetPassword
 );
 export default router;

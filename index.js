@@ -11,7 +11,7 @@ import loggerMiddleware from "./middleware/logger.middleware.js";
 import "./config/passport.js";
 
 // Import Routes
-import authRouter from "./features/auth/routes.js";
+import authRouter from "./features/auth/auth.route.js";
 import doctorRouter from "./features/doctor/routes/doctor.route.js";
 import nurseRouter from "./features/nurse/routes/nurse.route.js";
 import employeeRouter from "./features/employee/routes/employee.route.js";

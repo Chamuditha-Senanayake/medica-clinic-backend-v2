@@ -177,6 +177,7 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
+      let ProfileImage;
       let {
         Id = 0,
         Username,
@@ -206,8 +207,6 @@ const UserController = {
           console.log("Provider is not recognized");
           break;
       }
-
-      let ProfileImage;
 
       async function getGoogleUserEmail(token) {
         console.log("object")

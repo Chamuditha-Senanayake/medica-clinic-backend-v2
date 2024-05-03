@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
 export const sendEmailFromCustomAccount = ({
-  emailUser,
-  emailPassword,
+  emailUser = process.env.EMAIL_USER,
+  emailPassword = process.env.EMAIL_PASSWORD,
   to,
   subject,
   html,

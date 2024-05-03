@@ -8,7 +8,7 @@ import passport from "passport";
 import { errorWithData, info } from "./config/logger.js";
 import getConnection from "./db_init.js";
 import loggerMiddleware from "./middleware/logger.middleware.js";
-import "./config/passport.js";
+import "./utils/passport.js";
 
 // Import Routes
 import authRouter from "./features/auth/auth.route.js";

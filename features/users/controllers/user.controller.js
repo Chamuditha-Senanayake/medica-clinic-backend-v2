@@ -11,6 +11,7 @@ import {
   SignedInteger,
   DateString,
 } from "../../../utils/type-def.js";
+import jwt from "jsonwebtoken";
 import { google } from "googleapis";
 
 
@@ -176,6 +177,7 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
+      let ProfileImage;
       let {
         Id = 0,
         Username,
@@ -195,7 +197,6 @@ const UserController = {
         case "google":
           await getGoogleUserEmail(Token);
           break;
-
         case "apple":
           console.log("Provider is 'apple'");
           break;
@@ -208,6 +209,7 @@ const UserController = {
       }
 
       async function getGoogleUserEmail(token) {
+        console.log("object")
         return new Promise((resolve, reject) => {
           const oauth2Client = new google.auth.OAuth2();
           oauth2Client.setCredentials({ access_token: token });
@@ -220,7 +222,9 @@ const UserController = {
                 console.error("The API returned an error: " + err);
                 reject(err);
               } else {
+                console.log("response.data", response.data)
                 Email = response.data.email;
+                ProfileImage = response.data.picture;
                 resolve(response.data.email);
               }
             }
@@ -242,13 +246,13 @@ const UserController = {
         DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
+        StringValue({ fieldName: "ProfileImage", value: ProfileImage }),
         SignedInteger({
           fieldName: "Status",
           value: Status,
         }),
       ];
 
-      console.log(Email);
       let userSaveResult = await executeSp({
         spName: `UserSave`,
         params: params,
@@ -309,10 +313,8 @@ const UserController = {
         connection,
       });   
 
-      console.log(userData)
-
       if(!userData){
-        throw Error;
+        throw Error("User not found");
       }
 
       let token = jwtSign(
@@ -321,12 +323,11 @@ const UserController = {
           username: userData.recordsets[0][0].Username,
           email: userData.recordsets[0][0].Email,
         },
+        "1h"
       );
 
       sendEmailFromCustomAccount({
-        emailUser: "mms.dim.kln@gmail.com",
-        emailPassword: "gqikpkwktknpalod",
-        to: Email,   //chamudithacbs@gmail.com  //sithumdashantha@gmail.com
+        to: Email,  
         subject:"Reset Password",
         html:`<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`
       })
@@ -978,29 +979,45 @@ const UserController = {
       let connection = request.app.locals.db;
       const { Email, Password, Token } = request.body;
 
-      let params = [
-        StringValue({ fieldName: "Email", value: Email }),
-      ];
+      let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
+      if (Email !== decodedToken.email ){
+        throw Error("Unauthorized");
+      }
 
-      let User = await executeSp({
-        spName: `UserGetByEmail`,
-        params: params,
-        connection,
-      });   
+      let userPasswordResetResult;
 
-      //TODO: verify token then compare req email with token email, then send verify or unauthorize res
+      try{
+
+        let params = [
+          StringValue({ fieldName: "Email", value: Email }),
+        ];
+
+        let User = await executeSp({
+          spName: `UserGetByEmail`,
+          params: params,
+          connection,
+        }); 
       
+        params = [
+          StringValue({ fieldName: "Username", value: User.recordsets[0][0].Username }),
+          StringValue({ fieldName: "Password", value: Password }),       
+        ];
 
-      params = [
-        StringValue({ fieldName: "Username", value: User.recordsets[0][0].Username }),
-        StringValue({ fieldName: "Password", value: Password }),       
-      ];
-
-      let userPasswordResetResult = await executeSp({
-        spName: `UserResetPassword`,
-        params: params,
-        connection,
-      });
+        userPasswordResetResult = await executeSp({
+          spName: `UserResetPassword`,
+          params: params,
+          connection,
+        }); 
+      } catch (error) {
+        handleError(
+          response,
+          500,
+          "error",
+          error.message,
+          "Something went wrong"
+      );
+        next(error);
+    }
 
       userPasswordResetResult = userPasswordResetResult.recordsets;
 
@@ -1010,6 +1027,56 @@ const UserController = {
         "success",
         "Password changed successfully",
         userPasswordResetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        401,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get profile
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getProfile(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      
+      var params = [StringValue({ fieldName: "Email", value: request.user.email })];
+
+      let getProfileResult = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });
+
+      getProfileResult = getProfileResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User data retrived successfully",
+        getProfileResult
       );
     } catch (error) {
       handleError(

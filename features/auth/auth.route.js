@@ -2,13 +2,6 @@ import express from "express";
 import passport from "passport";
 const router = express.Router();
 
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    success: false,
-    message: "failure",
-  });
-});
-
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -22,13 +15,12 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: `${process.env.FRONTEND_URL}/login?status=failure`,
+    failureRedirect: `${process.env.FRONTEND_URL}/signup?status=not-registered`,
   }),
   function (req, res) {
-    console.log(req.user);
     res.redirect(
       `${process.env.FRONTEND_URL}/login?status=success&token=${req.user}&auth=google`
-    );
+    );   
   }
 );
 

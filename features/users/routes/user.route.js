@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import UserController from "../controllers/user.controller.js";
 import AppConstants from "../../../config/constants.js";
 import ResponseMessages from "../../../config/messages.js";
+import { isAuth } from "../../../middleware/auth.middlewarw.js";
 
 const router = express.Router();
 
@@ -35,7 +36,7 @@ router.post(
   [
     check("Username").notEmpty().isString(),
     check("Token").notEmpty().isString(),
-    check('Provider').notEmpty().withMessage('Provider is required.').isIn(AppConstants.Providers).withMessage(ResponseMessages.Provider.VALIDATION_ERROR),
+    check("Provider").notEmpty().withMessage('Provider is required.').isIn(AppConstants.Providers).withMessage(ResponseMessages.Provider.VALIDATION_ERROR),
     check("Gender").notEmpty().isString(),
     check("FName").notEmpty().isString(),
     check("LName").notEmpty().isString(),
@@ -171,4 +172,11 @@ router.post(
   ],
   UserController.userResetPassword
 );
+
+router.post(
+  "/ProfileGet",
+  isAuth,
+  UserController.getProfile
+);
+
 export default router;

@@ -194,13 +194,10 @@ const UserController = {
         Status = 1,
       } = request.body;
 
-      console.log("object4")
-
       switch (Provider) {
         case "google":
           await getGoogleUserEmail(Token);
           break;
-
         case "apple":
           console.log("Provider is 'apple'");
           break;
@@ -229,7 +226,7 @@ const UserController = {
                 reject(err);
               } else {
                 console.log("response.data", response.data)
-                Email = "email@g.com";
+                Email = response.data.email;
                 ProfileImage = response.data.picture;
                 resolve(response.data.email);
               }
@@ -259,7 +256,6 @@ const UserController = {
         }),
       ];
 
-      console.log(Email);
       let userSaveResult = await executeSp({
         spName: `UserSave`,
         params: params,

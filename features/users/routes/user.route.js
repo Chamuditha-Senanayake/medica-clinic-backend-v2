@@ -179,4 +179,29 @@ router.post(
   UserController.getProfile
 );
 
+router.post(
+  "/ProfileUpdate",
+  [
+    check("Id").optional({ values: "null" }).isInt(),
+    check("Gender").optional({ values: "null" }).notEmpty().isString(),
+    check("FName").optional({ values: "null" }).notEmpty().isString(),
+    check("MName").optional({ values: "null" }).notEmpty().isString(),
+    check("LName").optional({ values: "null" }).notEmpty().isString(),
+    check("Occupation").optional({ values: "null" }).notEmpty().isString(),
+    check("SSN").optional({ values: "null" }).notEmpty().isString(),
+    check("NIC").optional({ values: "null" }).notEmpty().isString(),
+    check("Passport").optional({ values: "null" }).notEmpty().isString(),    
+    check("Dob").optional({ values: "null" }).notEmpty().isDate(),
+    check("Email").optional({ values: "null" }).notEmpty().isString(),
+    check("PrimaryContact").optional({ values: "null" }).notEmpty().isString(),
+    check("SecondaryContact").optional({ values: "null" }).notEmpty().isString(),
+    check("Facebook").optional({ values: "null" }).notEmpty().isString(),
+    check("Instagram").optional({ values: "null" }).notEmpty().isString(),
+    check("CivilStatus").optional({ values: "null" }).notEmpty().isString(),
+    check("Ethnicity").optional({ values: "null" }).notEmpty().isString(),
+    check("ProfileImage").optional({ values: "null" }).notEmpty().isString(),
+  ],
+  UserController.updateProfile
+);
+
 export default router;

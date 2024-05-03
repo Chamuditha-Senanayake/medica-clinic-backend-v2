@@ -27,7 +27,6 @@ router.post(
     check("Dob").notEmpty().isDate(),
     check("Email").notEmpty().isString(),
     check("ContactNo").notEmpty().isString(),
-    check("ProfileImage").optional({ values: "null" }).isString(),
   ],
   UserController.signup
 );
@@ -37,7 +36,7 @@ router.post(
   [
     check("Username").notEmpty().isString(),
     check("Token").notEmpty().isString(),
-    check('Provider').notEmpty().withMessage('Provider is required.').isIn(AppConstants.Providers).withMessage(ResponseMessages.Provider.VALIDATION_ERROR),
+    check("Provider").notEmpty().withMessage('Provider is required.').isIn(AppConstants.Providers).withMessage(ResponseMessages.Provider.VALIDATION_ERROR),
     check("Gender").notEmpty().isString(),
     check("FName").notEmpty().isString(),
     check("LName").notEmpty().isString(),

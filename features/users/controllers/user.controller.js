@@ -110,7 +110,6 @@ const UserController = {
         Dob,
         Email,
         ContactNo,
-        ProfileImage,
         Status = 1,
       } = request.body;
 
@@ -125,7 +124,6 @@ const UserController = {
         DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
-        StringValue({ fieldName: "ProfileImage", value: ProfileImage }),
         SignedInteger({
           fieldName: "Status",
           value: Status,
@@ -179,6 +177,7 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
+      let ProfileImage;
       let {
         Id = 0,
         Username,
@@ -194,13 +193,10 @@ const UserController = {
         Status = 1,
       } = request.body;
 
-      console.log("object4")
-
       switch (Provider) {
         case "google":
           await getGoogleUserEmail(Token);
           break;
-
         case "apple":
           console.log("Provider is 'apple'");
           break;
@@ -211,8 +207,6 @@ const UserController = {
           console.log("Provider is not recognized");
           break;
       }
-
-      let ProfileImage;
 
       async function getGoogleUserEmail(token) {
         console.log("object")
@@ -229,7 +223,7 @@ const UserController = {
                 reject(err);
               } else {
                 console.log("response.data", response.data)
-                Email = "email@g.com";
+                Email = response.data.email;
                 ProfileImage = response.data.picture;
                 resolve(response.data.email);
               }
@@ -259,7 +253,6 @@ const UserController = {
         }),
       ];
 
-      console.log(Email);
       let userSaveResult = await executeSp({
         spName: `UserSave`,
         params: params,

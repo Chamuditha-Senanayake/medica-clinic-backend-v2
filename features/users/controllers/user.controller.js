@@ -110,6 +110,7 @@ const UserController = {
         Dob,
         Email,
         ContactNo,
+        ProfileImage,
         Status = 1,
       } = request.body;
 
@@ -124,6 +125,7 @@ const UserController = {
         DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
+        StringValue({ fieldName: "ProfileImage", value: ProfileImage }),
         SignedInteger({
           fieldName: "Status",
           value: Status,
@@ -192,6 +194,8 @@ const UserController = {
         Status = 1,
       } = request.body;
 
+      console.log("object4")
+
       switch (Provider) {
         case "google":
           await getGoogleUserEmail(Token);
@@ -208,7 +212,10 @@ const UserController = {
           break;
       }
 
+      let ProfileImage;
+
       async function getGoogleUserEmail(token) {
+        console.log("object")
         return new Promise((resolve, reject) => {
           const oauth2Client = new google.auth.OAuth2();
           oauth2Client.setCredentials({ access_token: token });
@@ -221,7 +228,9 @@ const UserController = {
                 console.error("The API returned an error: " + err);
                 reject(err);
               } else {
-                Email = response.data.email;
+                console.log("response.data", response.data)
+                Email = "email@g.com";
+                ProfileImage = response.data.picture;
                 resolve(response.data.email);
               }
             }
@@ -243,6 +252,7 @@ const UserController = {
         DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
+        StringValue({ fieldName: "ProfileImage", value: ProfileImage }),
         SignedInteger({
           fieldName: "Status",
           value: Status,
@@ -311,7 +321,7 @@ const UserController = {
       });   
 
       if(!userData){
-        throw Error;
+        throw Error("User not found");
       }
 
       let token = jwtSign(
@@ -978,8 +988,6 @@ const UserController = {
 
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
       if (Email !== decodedToken.email ){
-        console.log(Email )
-        console.log(decodedToken.email)
         throw Error("Unauthorized");
       }
 
@@ -1031,6 +1039,56 @@ const UserController = {
       handleError(
         response,
         401,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get profile
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getProfile(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      
+      var params = [StringValue({ fieldName: "Email", value: request.user.email })];
+
+      let getProfileResult = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });
+
+      getProfileResult = getProfileResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User data retrived successfully",
+        getProfileResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
         "error",
         error.message,
         "Something went wrong"

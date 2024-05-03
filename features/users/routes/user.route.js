@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import UserController from "../controllers/user.controller.js";
 import AppConstants from "../../../config/constants.js";
 import ResponseMessages from "../../../config/messages.js";
+import { isAuth } from "../../../middleware/auth.middlewarw.js";
 
 const router = express.Router();
 
@@ -26,6 +27,7 @@ router.post(
     check("Dob").notEmpty().isDate(),
     check("Email").notEmpty().isString(),
     check("ContactNo").notEmpty().isString(),
+    check("ProfileImage").optional({ values: "null" }).isString(),
   ],
   UserController.signup
 );
@@ -171,4 +173,11 @@ router.post(
   ],
   UserController.userResetPassword
 );
+
+router.post(
+  "/ProfileGet",
+  isAuth,
+  UserController.getProfile
+);
+
 export default router;

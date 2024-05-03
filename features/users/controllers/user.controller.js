@@ -110,7 +110,6 @@ const UserController = {
         Dob,
         Email,
         ContactNo,
-        ProfileImage,
         Status = 1,
       } = request.body;
 
@@ -125,7 +124,6 @@ const UserController = {
         DateString({ fieldName: "Dob", value: Dob }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
-        StringValue({ fieldName: "ProfileImage", value: ProfileImage }),
         SignedInteger({
           fieldName: "Status",
           value: Status,

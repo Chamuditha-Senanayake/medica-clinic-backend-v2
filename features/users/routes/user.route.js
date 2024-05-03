@@ -27,7 +27,6 @@ router.post(
     check("Dob").notEmpty().isDate(),
     check("Email").notEmpty().isString(),
     check("ContactNo").notEmpty().isString(),
-    check("ProfileImage").optional({ values: "null" }).isString(),
   ],
   UserController.signup
 );

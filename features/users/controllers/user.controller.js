@@ -13,6 +13,7 @@ import {
 } from "../../../utils/type-def.js";
 import jwt from "jsonwebtoken";
 import { google } from "googleapis";
+import sql from "mssql";
 
 
 const UserController = {
@@ -209,7 +210,6 @@ const UserController = {
       }
 
       async function getGoogleUserEmail(token) {
-        console.log("object")
         return new Promise((resolve, reject) => {
           const oauth2Client = new google.auth.OAuth2();
           oauth2Client.setCredentials({ access_token: token });
@@ -1092,14 +1092,14 @@ const UserController = {
 
    /**
    *
-   * Profile update
+   * Basic profile info update
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next middleware
    * @returns
    */
-  async updateProfile(request, response, next) {
+  async updateBasicProfileInfo(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -1112,76 +1112,74 @@ const UserController = {
       let connection = request.app.locals.db;
       const {
         Id,
-        UserGroupId = 5,
-        Gender,
         FName,
         MName,
         LName,
-        Dob,
         Email,
         Occupation,
-        SSN,
+        SSN ,
         NIC,
         Passport,
-        CivilStatus,
-        Ethnicity,
         ProfileImage,
         Status = 1,
 
         PrimaryContact,
         SecondaryContact,
-        Facebook,
-        Instagram,
 
         Country,
-        Address,
+        AddressLine1,
         City,
         Postcode
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserGroupId", value: UserGroupId }),
-        StringValue({ fieldName: "Gender", value: Gender }),
-        StringValue({ fieldName: "FName", value: FName }),
-        StringValue({ fieldName: "MName", value: MName }),
-        StringValue({ fieldName: "LName", value: LName }),
-        DateString({ fieldName: "Dob", value: Dob }),
-        StringValue({ fieldName: "Email", value: Email }),
-        StringValue({ fieldName: "Occupation", value: Occupation }),
-        StringValue({ fieldName: "SSN", value: SSN }),
-        StringValue({ fieldName: "NIC", value: NIC }),
-        StringValue({ fieldName: "Passport", value: Passport }),
-        StringValue({ fieldName: "CivilStatus", value: CivilStatus }),
-        StringValue({ fieldName: "Ethnicity", value: Ethnicity }),
-        StringValue({ fieldName: "ProfileImage", value: ProfileImage }),      
+        EntityId({ fieldName: "Id", value: Id }),     
+        { name: 'Ethnicity', type: sql.NVarChar, value:FName } ,
+        { name: 'MName', type: sql.NVarChar, value:MName } ,
+        { name: 'LName', type: sql.NVarChar, value:LName } ,
+        { name: 'Email', type: sql.NVarChar, value:Email } ,
+        { name: 'Occupation', type: sql.NVarChar,  value:Occupation } ,
+        { name: 'SSN', type: sql.NVarChar, value:SSN } ,
+        { name: 'NIC', type: sql.NVarChar, value:NIC } ,
+        { name: 'Passport', type: sql.NVarChar, value:Passport } ,
+        { name: 'ProfileImage', type: sql.NVarChar, value:ProfileImage } ,  
         SignedInteger({fieldName: "Status", value: Status}),
-
-        // StringValue({ fieldName: "PrimaryContact", value: PrimaryContact }),
-        // StringValue({ fieldName: "SecondaryContact", value: SecondaryContact }),
-        // StringValue({ fieldName: "Facebook", value: Facebook }),
-        // StringValue({ fieldName: "Instagram", value: Instagram }),
-
-        // StringValue({ fieldName: "Country", value: Country }),
-        // StringValue({ fieldName: "Address", value: Address }),
-        // StringValue({ fieldName: "City", value: City }),
-        // StringValue({ fieldName: "Postcode", value: Postcode }),
+        // [ { name: 'PrimaryContact', type: [sql.NVarChar], value: PrimaryContact } ],
+        // [ { name: 'SecondaryContact', type: [sql.NVarChar], value: SecondaryContact } ],
       ];
 
-      let userSaveResult = await executeSp({
+      let updateBasicProfileInfoResult = await executeSp({
         spName: `UserSave`,
         params: params,
         connection,
       });
 
-      userSaveResult = userSaveResult.recordsets[0][0];
+      updateBasicProfileInfoResult = updateBasicProfileInfoResult.recordsets[0][0];
+
+      var params1 = [
+        EntityId({ fieldName: "UserId", value: Id }),          
+        { name: 'Country', type: sql.NVarChar, value: Country } ,
+        { name: 'AddressLine1', type: sql.NVarChar, value: AddressLine1 } ,
+        { name: 'City', type: sql.NVarChar, value: City } , 
+        { name: 'Postcode', type: sql.NVarChar, value: Postcode } ,
+        SignedInteger({fieldName: "Status", value: Status}),
+ 
+      ];
+
+      let userAddressInfoResult = await executeSp({
+        spName: `AddressSave`,
+        params: params1,
+        connection,
+      });
+
+      updateBasicProfileInfoResult.AddressInfo = userAddressInfoResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         "success",
         "User profile updated successfully",
-        userSaveResult
+        updateBasicProfileInfoResult
       );
     } catch (error) {
       handleError(

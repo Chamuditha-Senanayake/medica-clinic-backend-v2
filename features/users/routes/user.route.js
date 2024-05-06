@@ -179,4 +179,29 @@ router.post(
   UserController.getProfile
 );
 
+router.post(
+  "/BasicProfileInfoUpdate",
+  [
+    check("Id").notEmpty().isInt(),
+    check("FName").isString().trim().isLength({ min: 0 }),
+    check("MName").isString().trim().isLength({ min: 0 }),
+    check("LName").isString().trim().isLength({ min: 0 }),
+    check("Occupation").isString().trim().isLength({ min: 0 }),
+    check("SSN").isString().trim().isLength({ min: 0 }),
+    check("NIC").isString().trim().isLength({ min: 0 }),
+    check("Passport").isString().trim().isLength({ min: 0 }),    
+    check("Email").isString().trim().isLength({ min: 0 }),
+    check("PrimaryContact").isString().trim().isLength({ min: 0 }),
+    check("SecondaryContact").isString().trim().isLength({ min: 0 }),
+    check("ProfileImage").isString().trim().isLength({ min: 0 }),
+
+    // check("Country").isString().trim().isLength({ min: 0 }),
+    // check("Address").isString().trim().isLength({ min: 0 }),
+    // check("City").isString().trim().isLength({ min: 0 }), 
+    // check("Postcode").isString().trim().isLength({ min: 0 }),    
+
+  ],
+  UserController.updateBasicProfileInfo
+);
+
 export default router;

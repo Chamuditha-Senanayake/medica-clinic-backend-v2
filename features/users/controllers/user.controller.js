@@ -13,6 +13,7 @@ import {
 } from "../../../utils/type-def.js";
 import jwt from "jsonwebtoken";
 import { google } from "googleapis";
+import sql from "mssql";
 
 
 const UserController = {
@@ -209,7 +210,6 @@ const UserController = {
       }
 
       async function getGoogleUserEmail(token) {
-        console.log("object")
         return new Promise((resolve, reject) => {
           const oauth2Client = new google.auth.OAuth2();
           oauth2Client.setCredentials({ access_token: token });
@@ -1077,6 +1077,109 @@ const UserController = {
         "success",
         "User data retrived successfully",
         getProfileResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+   /**
+   *
+   * Basic profile info update
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async updateBasicProfileInfo(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        FName,
+        MName,
+        LName,
+        Email,
+        Occupation,
+        SSN ,
+        NIC,
+        Passport,
+        ProfileImage,
+        Status = 1,
+
+        PrimaryContact,
+        SecondaryContact,
+
+        Country,
+        AddressLine1,
+        City,
+        Postcode
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),     
+        { name: 'Ethnicity', type: sql.NVarChar, value:FName } ,
+        { name: 'MName', type: sql.NVarChar, value:MName } ,
+        { name: 'LName', type: sql.NVarChar, value:LName } ,
+        { name: 'Email', type: sql.NVarChar, value:Email } ,
+        { name: 'Occupation', type: sql.NVarChar,  value:Occupation } ,
+        { name: 'SSN', type: sql.NVarChar, value:SSN } ,
+        { name: 'NIC', type: sql.NVarChar, value:NIC } ,
+        { name: 'Passport', type: sql.NVarChar, value:Passport } ,
+        { name: 'ProfileImage', type: sql.NVarChar, value:ProfileImage } ,  
+        SignedInteger({fieldName: "Status", value: Status}),
+        // [ { name: 'PrimaryContact', type: [sql.NVarChar], value: PrimaryContact } ],
+        // [ { name: 'SecondaryContact', type: [sql.NVarChar], value: SecondaryContact } ],
+      ];
+
+      let updateBasicProfileInfoResult = await executeSp({
+        spName: `UserSave`,
+        params: params,
+        connection,
+      });
+
+      updateBasicProfileInfoResult = updateBasicProfileInfoResult.recordsets[0][0];
+
+      var params1 = [
+        EntityId({ fieldName: "UserId", value: Id }),          
+        { name: 'Country', type: sql.NVarChar, value: Country } ,
+        { name: 'AddressLine1', type: sql.NVarChar, value: AddressLine1 } ,
+        { name: 'City', type: sql.NVarChar, value: City } , 
+        { name: 'Postcode', type: sql.NVarChar, value: Postcode } ,
+        SignedInteger({fieldName: "Status", value: Status}),
+ 
+      ];
+
+      let userAddressInfoResult = await executeSp({
+        spName: `AddressSave`,
+        params: params1,
+        connection,
+      });
+
+      updateBasicProfileInfoResult.AddressInfo = userAddressInfoResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User profile updated successfully",
+        updateBasicProfileInfoResult
       );
     } catch (error) {
       handleError(

@@ -1226,6 +1226,123 @@ const UserController = {
     }
   },
 
+
+  // /**
+  //  *
+  //  * Personal profile info update
+  //  *
+  //  * @param {request} request object
+  //  * @param {response} response object
+  //  * @param {next} next middleware
+  //  * @returns
+  //  */
+  // async updatePersonalProfileInfo(request, response, next) {
+  //   const errors = validationResult(request);
+  //   if (!errors.isEmpty()) {
+  //     return response.status(422).json({
+  //       error: true,
+  //       message: ResponseMessage.User.VALIDATION_ERROR,
+  //       data: errors,
+  //     });
+  //   }
+  //   try {
+  //     let connection = request.app.locals.db;
+  //     const {
+  //       Id,
+  //       Gender,
+  //       Dob,
+  //       CivilStatus,
+  //       Ethnicity,
+  //       Weight,
+  //       Height ,
+  //       SocialProfile
+  //     } = request.body;
+
+  //     var params = [
+  //       EntityId({ fieldName: "Id", value: Id }),     
+  //       { name: 'Gender', type: sql.NVarChar, value:Gender } ,
+  //       { name: 'Dob', type: sql.NVarChar, value:Dob } ,
+  //       { name: 'CivilStatus', type: sql.NVarChar, value:CivilStatus } ,
+  //       { name: 'Ethnicity', type: sql.NVarChar, value:Ethnicity } ,  
+  //       SignedInteger({fieldName: "Status", value: Status}),
+  //     ];
+
+  //     let updatePersonalProfileInfoResult = await executeSp({
+  //       spName: `UserSave`,
+  //       params: params,
+  //       connection,
+  //     });
+
+  //     updatePersonalProfileInfoResult = updatePersonalProfileInfoResult.recordsets[0][0];
+
+  //     var params = [
+  //       EntityId({ fieldName: "UserId", value: Id }),          
+  //       { name: 'Weight', type: sql.Float,  value:Weight } ,
+  //       { name: 'Height', type: sql.Float, value:Height } ,
+  //       SignedInteger({fieldName: "Status", value: Status}), 
+  //     ];
+
+  //     let userAddressInfoResult = await executeSp({
+  //       spName: `AddressSave`,
+  //       params: params,
+  //       connection,
+  //     });
+
+  //     updateBasicProfileInfoResult.AddressInfo = userAddressInfoResult.recordsets[0][0];
+
+
+  //     if(PrimaryContact){
+  //       var params = [
+  //         EntityId({ fieldName: "UserId", value: Id }),          
+  //         { name: 'Profile', type: sql.NVarChar, value: PrimaryContact } ,
+  //         { name: 'ProfileType', type: sql.NVarChar, value: 'primary-contact' } ,
+  //         SignedInteger({fieldName: "Status", value: Status}), 
+  //       ];
+
+  //       userContactInfoResult = await executeSp({
+  //       spName: `UserSocialProfileSave`,
+  //       params: params,
+  //       connection,
+  //       });
+
+  //       updateBasicProfileInfoResult.PrimaryContact = userContactInfoResult.recordsets[0][0];
+  //     }
+
+  //     if(SecondaryContact){
+  //       var params = [
+  //         EntityId({ fieldName: "UserId", value: Id }),          
+  //         { name: 'Profile', type: sql.NVarChar, value: SecondaryContact } ,
+  //         { name: 'ProfileType', type: sql.NVarChar, value: 'secondary-contact' } ,
+  //         SignedInteger({fieldName: "Status", value: Status}), 
+  //       ];
+  //       userContactInfoResult = await executeSp({
+  //       spName: `UserSocialProfileSave`,
+  //       params: params,
+  //       connection,
+  //       });
+
+  //       updateBasicProfileInfoResult.SecondaryContact = userContactInfoResult.recordsets[0][0];
+  //     }
+
+  //     handleResponse(
+  //       response,
+  //       200,
+  //       "success",
+  //       "Basic profile info updated successfully",
+  //       updateBasicProfileInfoResult
+  //     );
+  //   } catch (error) {
+  //     handleError(
+  //       response,
+  //       500,
+  //       "error",
+  //       error.message,
+  //       "Something went wrong"
+  //     );
+  //     next(error);
+  //   }
+  // },
+
   /**
    *
    * Basic profile info get

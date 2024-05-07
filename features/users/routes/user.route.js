@@ -205,6 +205,21 @@ router.post(
 );
 
 router.post(
+  "/PersonalProfileInfoUpdate",
+  [
+    check("Id").notEmpty().isInt(),
+    check("Gender").optional({nullable:true}).isString(),
+    check("Dob").optional({nullable:true}).isString(),
+    check("CivilStatus").optional({nullable:true}).isString(),
+    check("Ethnicity").optional({nullable:true}).isString(),
+    check("Weight").optional({nullable:true}).isInt(),
+    check("Height").optional({nullable:true}).isInt(), 
+    check("SocialProfile").optional({nullable:true}).isArray(),   
+  ],
+  UserController.updateBasicProfileInfo
+);
+
+router.post(
   "/BasicProfileInfoGet",
   isAuth,
   UserController.getBasicProfileInfo

@@ -1247,15 +1247,15 @@ const UserController = {
     try {
       let connection = request.app.locals.db;
 
-      let params = [EntityId({ fieldName: "Id", value: request.user.Id })];
+      let params = [EntityId({ fieldName: "Id", value: request.user.userId })];
 
       let getBasicProfileInfoResult = await executeSp({
-        spName: `GetBasicProfileInfo`,
+        spName: `BasicProfileInfoGet`,
         params: params,
         connection,
       });
 
-      getBasicProfileInfoResult = getBasicProfileInfoResult.recordsets[0][0];
+      getBasicProfileInfoResult = getBasicProfileInfoResult.recordsets;
 
       handleResponse(
         response,

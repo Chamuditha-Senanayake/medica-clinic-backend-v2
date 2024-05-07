@@ -1110,6 +1110,7 @@ const UserController = {
     }
     try {
       let connection = request.app.locals.db;
+      let userContactInfoResult;
       const {
         Id,
         FName,
@@ -1144,8 +1145,6 @@ const UserController = {
         { name: 'Passport', type: sql.NVarChar, value:Passport } ,
         { name: 'ProfileImage', type: sql.NVarChar, value:ProfileImage } ,  
         SignedInteger({fieldName: "Status", value: Status}),
-        // [ { name: 'PrimaryContact', type: [sql.NVarChar], value: PrimaryContact } ],
-        // [ { name: 'SecondaryContact', type: [sql.NVarChar], value: SecondaryContact } ],
       ];
 
       let updateBasicProfileInfoResult = await executeSp({
@@ -1156,23 +1155,56 @@ const UserController = {
 
       updateBasicProfileInfoResult = updateBasicProfileInfoResult.recordsets[0][0];
 
-      var params1 = [
+      var params = [
         EntityId({ fieldName: "UserId", value: Id }),          
         { name: 'Country', type: sql.NVarChar, value: Country } ,
         { name: 'AddressLine1', type: sql.NVarChar, value: AddressLine1 } ,
         { name: 'City', type: sql.NVarChar, value: City } , 
         { name: 'Postcode', type: sql.NVarChar, value: Postcode } ,
-        SignedInteger({fieldName: "Status", value: Status}),
- 
+        SignedInteger({fieldName: "Status", value: Status}), 
       ];
 
       let userAddressInfoResult = await executeSp({
         spName: `AddressSave`,
-        params: params1,
+        params: params,
         connection,
       });
 
       updateBasicProfileInfoResult.AddressInfo = userAddressInfoResult.recordsets[0][0];
+
+
+      if(PrimaryContact){
+        var params = [
+          EntityId({ fieldName: "UserId", value: Id }),          
+          { name: 'Profile', type: sql.NVarChar, value: PrimaryContact } ,
+          { name: 'ProfileType', type: sql.NVarChar, value: 'primary-contact' } ,
+          SignedInteger({fieldName: "Status", value: Status}), 
+        ];
+
+        userContactInfoResult = await executeSp({
+        spName: `UserSocialProfileSave`,
+        params: params,
+        connection,
+        });
+
+        updateBasicProfileInfoResult.PrimaryContact = userContactInfoResult.recordsets[0][0];
+      }
+
+      if(SecondaryContact){
+        var params = [
+          EntityId({ fieldName: "UserId", value: Id }),          
+          { name: 'Profile', type: sql.NVarChar, value: SecondaryContact } ,
+          { name: 'ProfileType', type: sql.NVarChar, value: 'secondary-contact' } ,
+          SignedInteger({fieldName: "Status", value: Status}), 
+        ];
+        userContactInfoResult = await executeSp({
+        spName: `UserSocialProfileSave`,
+        params: params,
+        connection,
+        });
+
+        updateBasicProfileInfoResult.SecondaryContact = userContactInfoResult.recordsets[0][0];
+      }
 
       handleResponse(
         response,

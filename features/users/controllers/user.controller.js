@@ -56,6 +56,7 @@ const UserController = {
         {
           userId: userLoginResult.Id,
           username: userLoginResult.Username,
+          email: userLoginResult.Email,
         }
       );
 
@@ -1210,8 +1211,58 @@ const UserController = {
         response,
         200,
         "success",
-        "User profile updated successfully",
+        "Basic profile info updated successfully",
         updateBasicProfileInfoResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Basic profile info get
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getBasicProfileInfo(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+
+      let params = [EntityId({ fieldName: "Id", value: request.user.Id })];
+
+      let getBasicProfileInfoResult = await executeSp({
+        spName: `GetBasicProfileInfo`,
+        params: params,
+        connection,
+      });
+
+      getBasicProfileInfoResult = getBasicProfileInfoResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Basic profile info retrieved successfully",
+        getBasicProfileInfoResult
       );
     } catch (error) {
       handleError(

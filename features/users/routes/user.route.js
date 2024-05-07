@@ -204,4 +204,10 @@ router.post(
   UserController.updateBasicProfileInfo
 );
 
+router.post(
+  "/BasicProfileInfoGet",
+  isAuth,
+  UserController.getBasicProfileInfo
+);
+
 export default router;

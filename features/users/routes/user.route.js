@@ -183,25 +183,46 @@ router.post(
   "/BasicProfileInfoUpdate",
   [
     check("Id").notEmpty().isInt(),
-    check("FName").isString().trim().isLength({ min: 0 }),
-    check("MName").isString().trim().isLength({ min: 0 }),
-    check("LName").isString().trim().isLength({ min: 0 }),
-    check("Occupation").isString().trim().isLength({ min: 0 }),
-    check("SSN").isString().trim().isLength({ min: 0 }),
-    check("NIC").isString().trim().isLength({ min: 0 }),
-    check("Passport").isString().trim().isLength({ min: 0 }),    
-    check("Email").isString().trim().isLength({ min: 0 }),
-    check("PrimaryContact").isString().trim().isLength({ min: 0 }),
-    check("SecondaryContact").isString().trim().isLength({ min: 0 }),
-    check("ProfileImage").isString().trim().isLength({ min: 0 }),
+    check("FName").optional({nullable:true}).isString(),
+    check("MName").optional({nullable:true}).isString(),
+    check("LName").optional({nullable:true}).isString(),
+    check("Occupation").optional({nullable:true}).isString(),
+    check("SSN").optional({nullable:true}).isString(),
+    check("NIC").optional({nullable:true}).isString(),
+    check("Passport").optional({nullable:true}).isString(),    
+    check("Email").optional({nullable:true}).isString(),  
+    check("ProfileImage").optional({nullable:true}).isString(),  
 
-    // check("Country").isString().trim().isLength({ min: 0 }),
-    // check("Address").isString().trim().isLength({ min: 0 }),
-    // check("City").isString().trim().isLength({ min: 0 }), 
-    // check("Postcode").isString().trim().isLength({ min: 0 }),    
+    check("PrimaryContact").optional({nullable:true}).isString(),  
+    check("SecondaryContact").optional({nullable:true}).isString(),  
 
+    check("Country").optional({nullable:true}).isString(), 
+    check("Address").optional({nullable:true}).isString(),  
+    check("City").optional({nullable:true}).isString(),   
+    check("Postcode").optional({nullable:true}).isString(),   
   ],
   UserController.updateBasicProfileInfo
+);
+
+router.post(
+  "/PersonalProfileInfoUpdate",
+  [
+    check("Id").notEmpty().isInt(),
+    check("Gender").optional({nullable:true}).isString(),
+    check("Dob").optional({nullable:true}).isString(),
+    check("CivilStatus").optional({nullable:true}).isString(),
+    check("Ethnicity").optional({nullable:true}).isString(),
+    check("Weight").optional({nullable:true}).isInt(),
+    check("Height").optional({nullable:true}).isInt(), 
+    check("SocialProfile").optional({nullable:true}).isArray(),   
+  ],
+  UserController.updateBasicProfileInfo
+);
+
+router.post(
+  "/BasicProfileInfoGet",
+  isAuth,
+  UserController.getBasicProfileInfo
 );
 
 export default router;

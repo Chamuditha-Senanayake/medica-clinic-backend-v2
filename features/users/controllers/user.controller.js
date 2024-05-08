@@ -1124,6 +1124,7 @@ const UserController = {
         Passport,
         ProfileImage,
         Status = 1,
+        IsBasicProfileInfo=1,
 
         PrimaryContact,
         SecondaryContact,
@@ -1135,8 +1136,8 @@ const UserController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),     
-        { name: 'Ethnicity', type: sql.NVarChar, value:FName } ,
+        EntityId({ fieldName: "Id", value: Id }),  
+        { name: 'FName', type: sql.NVarChar, value:FName } ,           
         { name: 'MName', type: sql.NVarChar, value:MName } ,
         { name: 'LName', type: sql.NVarChar, value:LName } ,
         { name: 'Email', type: sql.NVarChar, value:Email } ,
@@ -1144,7 +1145,8 @@ const UserController = {
         { name: 'SSN', type: sql.NVarChar, value:SSN } ,
         { name: 'NIC', type: sql.NVarChar, value:NIC } ,
         { name: 'Passport', type: sql.NVarChar, value:Passport } ,
-        { name: 'ProfileImage', type: sql.NVarChar, value:ProfileImage } ,  
+        { name: 'ProfileImage', type: sql.NVarChar, value:ProfileImage } , 
+        { name: 'IsBasicProfileInfo', type: sql.Bit, value:IsBasicProfileInfo } , 
         SignedInteger({fieldName: "Status", value: Status}),
       ];
 
@@ -1227,121 +1229,108 @@ const UserController = {
   },
 
 
-  // /**
-  //  *
-  //  * Personal profile info update
-  //  *
-  //  * @param {request} request object
-  //  * @param {response} response object
-  //  * @param {next} next middleware
-  //  * @returns
-  //  */
-  // async updatePersonalProfileInfo(request, response, next) {
-  //   const errors = validationResult(request);
-  //   if (!errors.isEmpty()) {
-  //     return response.status(422).json({
-  //       error: true,
-  //       message: ResponseMessage.User.VALIDATION_ERROR,
-  //       data: errors,
-  //     });
-  //   }
-  //   try {
-  //     let connection = request.app.locals.db;
-  //     const {
-  //       Id,
-  //       Gender,
-  //       Dob,
-  //       CivilStatus,
-  //       Ethnicity,
-  //       Weight,
-  //       Height ,
-  //       SocialProfile
-  //     } = request.body;
+  /**
+   *
+   * Personal profile info update
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async updatePersonalProfileInfo(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        Gender,
+        Dob,
+        CivilStatus,
+        Ethnicity,
+        Weight,
+        Height ,
+        SocialProfile,
+        Status = 1,
+        IsBasicProfileInfo = 0
+      } = request.body;
 
-  //     var params = [
-  //       EntityId({ fieldName: "Id", value: Id }),     
-  //       { name: 'Gender', type: sql.NVarChar, value:Gender } ,
-  //       { name: 'Dob', type: sql.NVarChar, value:Dob } ,
-  //       { name: 'CivilStatus', type: sql.NVarChar, value:CivilStatus } ,
-  //       { name: 'Ethnicity', type: sql.NVarChar, value:Ethnicity } ,  
-  //       SignedInteger({fieldName: "Status", value: Status}),
-  //     ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),     
+        { name: 'Gender', type: sql.NVarChar, value:Gender } ,
+        { name: 'Dob', type: sql.NVarChar, value:Dob } ,
+        { name: 'CivilStatus', type: sql.NVarChar, value:CivilStatus } ,
+        { name: 'Ethnicity', type: sql.NVarChar, value:Ethnicity } ,  
+        { name: 'IsBasicProfileInfo', type: sql.Bit, value:IsBasicProfileInfo } ,   
+        SignedInteger({fieldName: "Status", value: Status}),
+      ];
 
-  //     let updatePersonalProfileInfoResult = await executeSp({
-  //       spName: `UserSave`,
-  //       params: params,
-  //       connection,
-  //     });
+      let updatePersonalProfileInfoResult = await executeSp({
+        spName: `UserSave`,
+        params: params,
+        connection,
+      });
 
-  //     updatePersonalProfileInfoResult = updatePersonalProfileInfoResult.recordsets[0][0];
+      updatePersonalProfileInfoResult = updatePersonalProfileInfoResult.recordsets[0][0];
 
-  //     var params = [
-  //       EntityId({ fieldName: "UserId", value: Id }),          
-  //       { name: 'Weight', type: sql.Float,  value:Weight } ,
-  //       { name: 'Height', type: sql.Float, value:Height } ,
-  //       SignedInteger({fieldName: "Status", value: Status}), 
-  //     ];
+      var params = [
+        EntityId({ fieldName: "UserId", value: Id }),     
+        { name: 'Weight', type: sql.Int, value:Weight } ,
+        { name: 'Height', type: sql.Int, value:Height } , 
+        { name: 'IsPersonalProfileInfo', type: sql.Bit, value:1 } ,   
+        SignedInteger({fieldName: "Status", value: Status}),
+      ];
 
-  //     let userAddressInfoResult = await executeSp({
-  //       spName: `AddressSave`,
-  //       params: params,
-  //       connection,
-  //     });
+      await executeSp({
+        spName: `PatientSave`,
+        params: params,
+        connection,
+      })
 
-  //     updateBasicProfileInfoResult.AddressInfo = userAddressInfoResult.recordsets[0][0];
+       if(SocialProfile){
+        for (let profile of SocialProfile) {
+            const params = [
+                { name: 'UserId', type: sql.Int, value: Id },
+                { name: 'Profile', type: sql.NVarChar, value: profile.Profile },
+                { name: 'ProfileType', type: sql.NVarChar, value: profile.ProfileType },
+                { name: 'Status', type: sql.Int, value: Status } 
+            ];
 
+            const result = await executeSp({
+                spName: 'UserSocialProfileSave',
+                params: params,
+                connection: connection
+            });
 
-  //     if(PrimaryContact){
-  //       var params = [
-  //         EntityId({ fieldName: "UserId", value: Id }),          
-  //         { name: 'Profile', type: sql.NVarChar, value: PrimaryContact } ,
-  //         { name: 'ProfileType', type: sql.NVarChar, value: 'primary-contact' } ,
-  //         SignedInteger({fieldName: "Status", value: Status}), 
-  //       ];
+            console.log(result);
+        }
+      }
 
-  //       userContactInfoResult = await executeSp({
-  //       spName: `UserSocialProfileSave`,
-  //       params: params,
-  //       connection,
-  //       });
-
-  //       updateBasicProfileInfoResult.PrimaryContact = userContactInfoResult.recordsets[0][0];
-  //     }
-
-  //     if(SecondaryContact){
-  //       var params = [
-  //         EntityId({ fieldName: "UserId", value: Id }),          
-  //         { name: 'Profile', type: sql.NVarChar, value: SecondaryContact } ,
-  //         { name: 'ProfileType', type: sql.NVarChar, value: 'secondary-contact' } ,
-  //         SignedInteger({fieldName: "Status", value: Status}), 
-  //       ];
-  //       userContactInfoResult = await executeSp({
-  //       spName: `UserSocialProfileSave`,
-  //       params: params,
-  //       connection,
-  //       });
-
-  //       updateBasicProfileInfoResult.SecondaryContact = userContactInfoResult.recordsets[0][0];
-  //     }
-
-  //     handleResponse(
-  //       response,
-  //       200,
-  //       "success",
-  //       "Basic profile info updated successfully",
-  //       updateBasicProfileInfoResult
-  //     );
-  //   } catch (error) {
-  //     handleError(
-  //       response,
-  //       500,
-  //       "error",
-  //       error.message,
-  //       "Something went wrong"
-  //     );
-  //     next(error);
-  //   }
-  // },
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Basic profile info updated successfully",
+        updatePersonalProfileInfoResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
   /**
    *
@@ -1352,7 +1341,7 @@ const UserController = {
    * @param {next} next middleware
    * @returns
    */
-  async getBasicProfileInfo(request, response, next) {
+  async getUserProfileInfo(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -1366,20 +1355,20 @@ const UserController = {
 
       let params = [EntityId({ fieldName: "Id", value: request.user.userId })];
 
-      let getBasicProfileInfoResult = await executeSp({
+      let getUserProfileInfoResult = await executeSp({
         spName: `BasicProfileInfoGet`,
         params: params,
         connection,
       });
 
-      getBasicProfileInfoResult = getBasicProfileInfoResult.recordsets;
+      getUserProfileInfoResult = getUserProfileInfoResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
-        "Basic profile info retrieved successfully",
-        getBasicProfileInfoResult
+        "User profile info retrieved successfully",
+        getUserProfileInfoResult
       );
     } catch (error) {
       handleError(

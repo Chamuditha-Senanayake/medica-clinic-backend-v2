@@ -216,13 +216,13 @@ router.post(
     check("Height").optional({nullable:true}).isInt(), 
     check("SocialProfile").optional({nullable:true}).isArray(),   
   ],
-  UserController.updateBasicProfileInfo
+  UserController.updatePersonalProfileInfo
 );
 
 router.post(
-  "/BasicProfileInfoGet",
+  "/UserProfileInfoGet",
   isAuth,
-  UserController.getBasicProfileInfo
+  UserController.getUserProfileInfo
 );
 
 export default router;

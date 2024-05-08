@@ -9,6 +9,7 @@ import {
   SignedInteger,
   DateString
 } from "../../../utils/type-def.js";
+import sql from "mssql";
 
 const RecordController = {
   /**
@@ -44,7 +45,7 @@ const RecordController = {
         connection,
       });
 
-      RecordGetResult = RecordGetResult.recordsets;
+      RecordGetResult = RecordGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -100,20 +101,19 @@ const RecordController = {
         UserSaved
       } = request.body;
 
-    var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        StringValue({ fieldName: "BodyPart", value: BodyPart }),
-        StringValue({ fieldName: "SubBodyPart", value: SubBodyPart }),       
-        { fieldName: "SubBodyPartType", value: SubBodyPartType },
-        DateString({ fieldName: "Date", value: Date }),
-        StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
-        StringValue({ fieldName: "Notes", value: Notes }),
-        SignedInteger({fieldName: "Status", value: Status}), 
-        EntityId({ fieldName: "UserCreated", value: UserSaved }),
-    ];
-
+      var params = [
+          EntityId({ fieldName: "Id", value: Id }),
+          EntityId({ fieldName: "UserId", value: UserId }),
+          EntityId({ fieldName: "DoctorId", value: DoctorId }),
+          StringValue({ fieldName: "BodyPart", value: BodyPart }),
+          StringValue({ fieldName: "SubBodyPart", value: SubBodyPart }),       
+          { name: "SubBodyPartType", type: sql.NVarChar, value:SubBodyPartType } ,
+          DateString({ fieldName: "Date", value: Date }),
+          StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
+          StringValue({ fieldName: "Notes", value: Notes }),
+          SignedInteger({fieldName: "Status", value: Status}), 
+          EntityId({ fieldName: "UserCreated", value: UserSaved }),
+      ];
 
       let recordSaveResult = await executeSp({
         spName: `PatientRecordSave`,

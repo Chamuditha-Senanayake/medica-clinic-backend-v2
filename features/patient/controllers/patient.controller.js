@@ -2508,6 +2508,130 @@ const PatientController = {
     }
   },
 
+
+  /**
+   *
+   * Save Patient Allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        Id,
+        UserId,
+        PatientId, 
+        AllergyType,
+        Allergy,
+        Status = 1,
+        Comment,
+        UserSaved,  
+      } = request.body;
+      
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),        
+        EntityId({ fieldName: "UserId", value: UserId }),        
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "AllergyType", value: AllergyType }),
+        StringValue({ fieldName: "Allergy", value: Allergy }),
+        { name: "Comment", type: sql.NVarChar, value:Comment } ,        
+        EntityId({ fieldName: "UserCreated", value: UserSaved }),
+        SignedInteger({fieldName: "Status", value: Status}),    
+      ];
+
+      let patientAllergySaveResult = await executeSp({
+        spName: `PatientAllergySave`,
+        params: params,
+        connection,
+      });
+
+      patientAllergySaveResult = patientAllergySaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientAllergySaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * Get patient allergies
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId } = request.body;
+
+      var params = [ EntityId({ fieldName: "UserId", value: UserId }), ];
+
+      let patientAllergiesGetResult = await executeSp({
+        spName: `PatientAllergiesGet`,
+        params: params,
+        connection,
+      });
+
+      patientAllergiesGetResult = patientAllergiesGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Allergies retrived successfully",
+        patientAllergiesGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+  
   /**
    *
    * Save Patient Drug Allergy

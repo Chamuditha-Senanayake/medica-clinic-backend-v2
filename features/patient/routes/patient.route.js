@@ -515,6 +515,28 @@ router.post(
 );
 
 router.post(
+  "/PatientAllergySave",
+  [
+    check("Id").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),   
+    check("AllergyType").not().isEmpty().isString(),
+    check("Allergy").not().isEmpty().isString(),
+    check("Comment").optional({nullable:true}).isString(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  PatientController.savePatientAllergy
+);
+
+router.post(
+  "/PatientAllergyGet",
+  [
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientAllergy
+);
+
+router.post(
   "/PatientDrugAllergySave",
   [
     check("PatientId").isInt().not().isEmpty(),

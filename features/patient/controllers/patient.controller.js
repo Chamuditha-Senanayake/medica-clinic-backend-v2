@@ -2465,7 +2465,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -2532,8 +2532,7 @@ const PatientController = {
       let connection = request.app.locals.db;
       const { 
         Id,
-        UserId,
-        PatientId, 
+        UserId, 
         AllergyType,
         Allergy,
         Status = 1,
@@ -2544,7 +2543,6 @@ const PatientController = {
       var params = [
         EntityId({ fieldName: "Id", value: Id }),        
         EntityId({ fieldName: "UserId", value: UserId }),        
-        EntityId({ fieldName: "PatientId", value: PatientId }),
         StringValue({ fieldName: "AllergyType", value: AllergyType }),
         StringValue({ fieldName: "Allergy", value: Allergy }),
         { name: "Comment", type: sql.NVarChar, value:Comment } ,        
@@ -2557,6 +2555,8 @@ const PatientController = {
         params: params,
         connection,
       });
+
+      console.log(patientAllergySaveResult)
 
       patientAllergySaveResult = patientAllergySaveResult.recordsets[0][0];
 
@@ -2594,7 +2594,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -2646,7 +2646,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -2719,7 +2719,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }

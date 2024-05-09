@@ -519,7 +519,6 @@ router.post(
   [
     check("Id").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),   
     check("AllergyType").not().isEmpty().isString(),
     check("Allergy").not().isEmpty().isString(),
     check("Comment").optional({nullable:true}).isString(),

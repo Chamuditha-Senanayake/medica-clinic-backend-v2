@@ -17,6 +17,7 @@ router.post(
     check("Id").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
     check("DoctorId").isInt().not().isEmpty(),
+    check("RecordType").isIn(["journal","medical","clinical"]).not().isEmpty(),
     check("BodyPart").isString().not().isEmpty(),
     check("SubBodyPart").isString().not().isEmpty(),
     check("SubBodyPartType").optional({nullable:true}).isString(),

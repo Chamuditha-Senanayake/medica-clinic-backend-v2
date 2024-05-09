@@ -7,52 +7,52 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
+  DateString
 } from "../../../utils/type-def.js";
+import sql from "mssql";
 
-const NoteController = {
+const RecordController = {
   /**
    *
-   * get note by [Id, UserId]
+   * get record
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getNote(request, response, next) {
+  async getPatientRecords(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Note.VALIDATION_ERROR,
+        message: ResponseMessage.Record.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
       let connection = request.app.locals.db;
-      const { Id, PatientId, UserId } = request.body;
+      const { UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
-      let noteGetResult = await executeSp({
-        spName: `NoteGet`,
+      let RecordGetResult = await executeSp({
+        spName: `PatientRecordsGet`,
         params: params,
         connection,
       });
 
-      noteGetResult = noteGetResult.recordsets[0];
+      RecordGetResult = RecordGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
         "success",
-        "Notes retrived successfully",
-        noteGetResult
+        "Records retrived successfully",
+        RecordGetResult
       );
     } catch (error) {
       handleError(
@@ -68,19 +68,19 @@ const NoteController = {
 
   /**
    *
-   * save a note
+   * save a record
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next function
    * @returns
    */
-  async saveNote(request, response, next) {
+  async savePatientRecord(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Note.VALIDATION_ERROR,
+        message: ResponseMessage.Record.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -89,40 +89,48 @@ const NoteController = {
       let connection = request.app.locals.db;
       const {
         Id,
-        PatientId,
-        Note,
-        AgeYears,
-        AgeMonths,
-        Status,
+        UserId,
+        DoctorId,
+        RecordType,
+        BodyPart,
+        SubBodyPart,
+        SubBodyPartType,
+        Date,
+        Diagnosis,
+        Notes,
+        Status = 1,
         UserSaved
       } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "PatientId", value: PatientId }),
-      StringValue({ fieldName: "Note", value: Note }),
-      EntityId({ fieldName: "AgeYears", value: AgeYears }),
-      EntityId({ fieldName: "AgeMonths", value: AgeMonths }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      var params = [
+          EntityId({ fieldName: "Id", value: Id }),
+          EntityId({ fieldName: "UserId", value: UserId }),
+          EntityId({ fieldName: "DoctorId", value: DoctorId }),
+          StringValue({ fieldName: "RecordType", value: RecordType }),
+          StringValue({ fieldName: "BodyPart", value: BodyPart }),
+          StringValue({ fieldName: "SubBodyPart", value: SubBodyPart }),       
+          { name: "SubBodyPartType", type: sql.NVarChar, value:SubBodyPartType } ,
+          DateString({ fieldName: "Date", value: Date }),
+          StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
+          StringValue({ fieldName: "Notes", value: Notes }),
+          SignedInteger({fieldName: "Status", value: Status}), 
+          EntityId({ fieldName: "UserCreated", value: UserSaved }),
+      ];
 
-    ];
-
-      let noteSaveResult = await executeSp({
-        spName: `NoteSave`,
+      let recordSaveResult = await executeSp({
+        spName: `PatientRecordSave`,
         params: params,
         connection,
       });
 
-      console.log(noteSaveResult.recordsets);
-      noteSaveResult = noteSaveResult.recordsets[0][0];
+      recordSaveResult = recordSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         "success",
-        "Note retrieved successfully",
-        noteSaveResult
+        "Record retrieved successfully",
+        recordSaveResult
       );
     } catch (error) {
       handleError(
@@ -138,4 +146,4 @@ const NoteController = {
 
 };
 
-export default NoteController;
+export default RecordController;

@@ -179,6 +179,9 @@ const ResponseMessages = {
   Bill:{
     VALIDATION_ERROR: "Validation errors", 
   },
+  Record:{
+    VALIDATION_ERROR: "Validation errors", 
+  },
   Provider:{
     VALIDATION_ERROR:'Provider must be either "google" or "apple" or "microsoft".'
   }

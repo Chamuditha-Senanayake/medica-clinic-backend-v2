@@ -29,6 +29,7 @@ import UserRouter from "./features/users/routes/user.route.js";
 import analyticsRouter from "./features/analytics/routes/analytics.route.js";
 import medicalCertificateRouter from "./features/medicalCertificate/routes/medicalCertificate.route.js";
 import camiosRouter from "./features/camios/routes/camios.route.js";
+import recordRouter from "./features/record/routes/record.route.js";
 import cookieSession from "cookie-session";
 
 dotenv.config();
@@ -83,6 +84,7 @@ app.use(`/api/v1`, UserRouter);
 app.use(`/api/v1`, analyticsRouter);
 app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
+app.use(`/api/v1`, recordRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

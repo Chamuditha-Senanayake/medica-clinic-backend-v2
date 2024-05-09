@@ -181,6 +181,7 @@ router.post(
 
 router.post(
   "/BasicProfileInfoUpdate",
+  isAuth,
   [
     check("Id").notEmpty().isInt(),
     check("FName").optional({nullable:true}).isString(),
@@ -206,6 +207,7 @@ router.post(
 
 router.post(
   "/PersonalProfileInfoUpdate",
+  isAuth,
   [
     check("Id").notEmpty().isInt(),
     check("Gender").optional({nullable:true}).isString(),

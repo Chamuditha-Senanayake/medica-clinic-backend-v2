@@ -2465,7 +2465,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -2594,7 +2594,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -2646,7 +2646,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -2719,7 +2719,7 @@ const PatientController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
         data: errors,
       });
     }

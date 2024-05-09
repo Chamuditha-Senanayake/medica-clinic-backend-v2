@@ -28,7 +28,7 @@ passport.use(
           {
             userId: userLoginResult.Id,
             username: userLoginResult.Username,
-            Email: userLoginResult.Email,
+            email: userLoginResult.Email,
           },        
         );         
         callback(null, token);

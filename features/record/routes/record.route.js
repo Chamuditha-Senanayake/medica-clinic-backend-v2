@@ -23,7 +23,7 @@ router.post(
     check("SubBodyPartType").optional({nullable:true}).isString(),
     check("Date").isString().not().isEmpty(),
     check("Diagnosis").isString().not().isEmpty(),
-    check("Notes").isString().not().isEmpty(),
+    check("Notes").optional({nullable:true}).isString(),
     check("UserSaved").isInt().not().isEmpty(),
   ],
   RecordController.savePatientRecord

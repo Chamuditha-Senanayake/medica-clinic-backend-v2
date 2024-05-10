@@ -114,7 +114,6 @@ const PatientController = {
         connection,
       });
 
-      console.log(PatientDiagnosisDocumentSaveResult.recordsets);
       PatientDiagnosisDocumentSaveResult = PatientDiagnosisDocumentSaveResult.recordsets[0][0];
 
       handleResponse(
@@ -156,7 +155,6 @@ const PatientController = {
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
         StringValue({ fieldName: "PatientDisease", value: PatientDisease }),
       ];
-      console.log(params)
 
       let patientDiseaseSaveResult = await executeSp({
         spName: `PatientDiseaseSave`,
@@ -455,7 +453,6 @@ const PatientController = {
         connection,
       });
 
-      console.log(gynoObstetricsHistorySaveResult.recordsets);
       gynoObstetricsHistorySaveResult = gynoObstetricsHistorySaveResult.recordsets[0][0];
 
       handleResponse(
@@ -631,7 +628,6 @@ const PatientController = {
         connection,
       });
 
-      console.log(patientNewFoodAllergySaveResult.recordsets);
       patientNewFoodAllergySaveResult = patientNewFoodAllergySaveResult.recordsets[0][0];
 
       handleResponse(
@@ -2555,8 +2551,6 @@ const PatientController = {
         params: params,
         connection,
       });
-
-      console.log(patientAllergySaveResult)
 
       patientAllergySaveResult = patientAllergySaveResult.recordsets[0][0];
 

@@ -2601,9 +2601,17 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId } = request.body;
+      const { 
+        UserId,
+        Page = 0, 
+        Limit = 0,
+       } = request.body;
 
-      var params = [ EntityId({ fieldName: "UserId", value: UserId }), ];
+      var params = [ 
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Page", value: Page }),
+        EntityId({ fieldName: "Limit", value: Limit }),
+       ];
 
       let patientAllergiesGetResult = await executeSp({
         spName: `PatientAllergiesGet`,

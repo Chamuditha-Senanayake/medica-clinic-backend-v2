@@ -1,18 +1,23 @@
 import express from "express";
 import { check } from "express-validator";
 import RecordController from "../controllers/record.controller.js";
+import { isAuth } from "../../../middleware/auth.middlewarw.js";
 const router = express.Router();
 
 router.post(
   "/RecordGet",
+  isAuth,
   [
     check("UserId").isInt().not().isEmpty(),
+    check("Page").optional({nullable:true}).isInt(),
+    check("Limit").optional({nullable:true}).isInt(),
   ],
   RecordController.getPatientRecords
 );
 
 router.post(
   "/RecordSave",
+  isAuth,
   [
     check("Id").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
@@ -31,6 +36,7 @@ router.post(
 
 router.post(
   "/RecordDelete",
+  isAuth,
   [
     check("UserId").isInt().not().isEmpty(),
     check("Id").isInt().not().isEmpty(),

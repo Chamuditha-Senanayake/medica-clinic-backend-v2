@@ -33,10 +33,17 @@ const RecordController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId } = request.body;
+      const { 
+        UserId,
+        Page = 0, 
+        Limit = 0,
+       } = request.body;
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Page", value: Page }),
+        EntityId({ fieldName: "Limit", value: Limit }),
+
       ];
 
       let RecordGetResult = await executeSp({

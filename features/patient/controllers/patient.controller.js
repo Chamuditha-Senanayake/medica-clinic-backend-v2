@@ -2631,6 +2631,60 @@ const PatientController = {
       next(error);
     }
   },
+
+
+  /**
+   *
+   * Delete patient allergy
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async deletePatientAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, Id } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+
+      ];
+
+     await executeSp({
+        spName: `PatientAllergyDelete`,
+        params: params,
+        connection,
+      });
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Patient allergy deleted successfully",
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
   
   /**
    *

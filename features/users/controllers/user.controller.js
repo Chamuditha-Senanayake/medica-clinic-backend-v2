@@ -1308,8 +1308,6 @@ const UserController = {
                 params: params,
                 connection: connection
             });
-
-            console.log(result);
         }
       }
 

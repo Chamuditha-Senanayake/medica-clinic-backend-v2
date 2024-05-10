@@ -14,7 +14,7 @@ import sql from "mssql";
 const RecordController = {
   /**
    *
-   * get record
+   * Get record
    *
    * @param {request} request object
    * @param {response} response object
@@ -68,7 +68,7 @@ const RecordController = {
 
   /**
    *
-   * save a record
+   * Save a record
    *
    * @param {request} request object
    * @param {response} response object
@@ -131,6 +131,60 @@ const RecordController = {
         "success",
         "Record retrieved successfully",
         recordSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * Delete record
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async deletePatientRecords(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Record.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, Id } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+
+      ];
+
+     await executeSp({
+        spName: `PatientRecordDelete`,
+        params: params,
+        connection,
+      });
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Records deleted successfully",
       );
     } catch (error) {
       handleError(

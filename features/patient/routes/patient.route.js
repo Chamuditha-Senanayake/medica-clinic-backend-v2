@@ -536,6 +536,16 @@ router.post(
 );
 
 router.post(
+  "/PatientAllergyDelete",
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
+
+  ],
+  PatientController.deletePatientAllergy
+);
+
+router.post(
   "/PatientDrugAllergySave",
   [
     check("PatientId").isInt().not().isEmpty(),

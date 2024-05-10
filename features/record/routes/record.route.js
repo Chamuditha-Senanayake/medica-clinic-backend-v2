@@ -29,4 +29,14 @@ router.post(
   RecordController.savePatientRecord
 );
 
+router.post(
+  "/RecordDelete",
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
+
+  ],
+  RecordController.deletePatientRecords
+);
+
 export default router;

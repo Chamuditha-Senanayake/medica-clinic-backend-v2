@@ -1,6 +1,7 @@
 import express from "express";
 import { check } from "express-validator";
 import PatientController from "../controllers/patient.controller.js";
+import { isAuth } from "../../../middleware/auth.middlewarw.js";
 const router = express.Router();
 
 router.post(
@@ -516,6 +517,7 @@ router.post(
 
 router.post(
   "/PatientAllergySave",
+  isAuth,
   [
     check("Id").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
@@ -529,14 +531,18 @@ router.post(
 
 router.post(
   "/PatientAllergyGet",
+  isAuth,
   [
     check("UserId").isInt().not().isEmpty(),
+    check("Page").optional({nullable:true}).isInt(),
+    check("Limit").optional({nullable:true}).isInt(),
   ],
   PatientController.getPatientAllergy
 );
 
 router.post(
   "/PatientAllergyDelete",
+  isAuth,
   [
     check("UserId").isInt().not().isEmpty(),
     check("Id").isInt().not().isEmpty(),

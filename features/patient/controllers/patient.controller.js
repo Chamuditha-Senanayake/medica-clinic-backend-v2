@@ -2613,8 +2613,9 @@ const PatientController = {
         connection,
       });
 
-      patientAllergiesGetResult = patientAllergiesGetResult.recordsets[0];
 
+      //Append patient records and count for pagination
+      patientAllergiesGetResult = [patientAllergiesGetResult.recordsets[0],patientAllergiesGetResult.recordsets[1][0]];
       handleResponse(
         response,
         200,

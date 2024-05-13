@@ -52,7 +52,8 @@ const RecordController = {
         connection,
       });
 
-      RecordGetResult = RecordGetResult.recordsets[0];
+      //Append patient records and count for pagination
+      RecordGetResult = [RecordGetResult.recordsets[0],RecordGetResult.recordsets[1][0]];
 
       handleResponse(
         response,

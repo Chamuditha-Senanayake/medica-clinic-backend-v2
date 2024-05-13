@@ -531,7 +531,7 @@ router.post(
 
 router.post(
   "/PatientAllergyGet",
-  isAuth,
+  // isAuth,
   [
     check("UserId").isInt().not().isEmpty(),
     check("Page").optional({nullable:true}).isInt(),

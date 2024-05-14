@@ -38,7 +38,8 @@ const CaregiverController = {
       const { 
         CaregiverName, 
         CaregiverEmail,
-        Relationship, 
+        Relation,
+        Status 
       } = request.body;
 
       let params1 = [ StringValue({ fieldName: "Email", value: CaregiverEmail }) ];

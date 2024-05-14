@@ -8,6 +8,8 @@ router.post(
   [ 
     check("CaregiverName").not().isEmpty().isString(),
     check("CaregiverEmail").not().isEmpty().isString(),
+    check("Relation").not().isEmpty().isString(),
+
   ],
   CaregiverController.assignCaregiver
 );

@@ -531,11 +531,11 @@ router.post(
 
 router.post(
   "/PatientAllergyGet",
-  // isAuth,
+  isAuth,
   [
     check("UserId").isInt().not().isEmpty(),
-    check("Page").optional({nullable:true}).isInt(),
-    check("Limit").optional({nullable:true}).isInt(),
+    check("Page").isInt().not().isEmpty(),
+    check("Limit").isInt().not().isEmpty(),
   ],
   PatientController.getPatientAllergy
 );

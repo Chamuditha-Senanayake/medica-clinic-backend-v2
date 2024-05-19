@@ -41,7 +41,16 @@ const CaregiverController = {
     } = request.body;
 
     let caregiverInfo;
-    let token;
+    
+    let token = jwtSign(
+      {
+        patientId: request.user.Id,
+        patientName: "John Doe",
+        patientPhoto: "testURL",
+        caregiverEmail: CaregiverEmail,
+      },
+      "7d"
+    );
 
     try {
 
@@ -59,15 +68,7 @@ const CaregiverController = {
         throw Error("User not found");
       }
 
-      let token = jwtSign(
-        {
-          patientId: request.user.Id,
-          patientName: "test name",
-          patientPhoto: "test",
-          caregiverEmail: CaregiverEmail,
-        },
-        "7d"
-      );
+
 
       sendEmailFromCustomAccount({
         to: CaregiverEmail,  
@@ -96,9 +97,8 @@ const CaregiverController = {
       //   "User not registered. Request sent",
       // );
     } finally {
-      console.log("object0")
+
       try {
-          console.log("object1")
 
       let params2 = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -112,7 +112,7 @@ const CaregiverController = {
         params: params2,
         connection,
       });    
-    console.log("object2")
+
       caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
     
       handleResponse(

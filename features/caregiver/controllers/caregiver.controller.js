@@ -3,14 +3,16 @@ import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
+import { sendEmailFromCustomAccount } from "../../../utils/sendMail.js";
+import sql from "mssql";
 import {
   EntityId,
   StringValue,
   SignedInteger,
 } from "../../../utils/type-def.js";
+import jwtSign from "../../../utils/jwtSign.js";
 
 const CaregiverController = {
-
 
   /**
    *
@@ -26,71 +28,98 @@ const CaregiverController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Nurse.VALIDATION_ERROR,
+        message: ResponseMessage.Caregiver.VALIDATION_ERROR,
         data: errors,
       });
     }
 
-    //TODO: PatientCaregiver table - PatientUserId, CaregiverUserId, CaregiverEmail, status(active, disable,..)
+    let connection = request.app.locals.db;
+    const { 
+      Id = 0,
+      CaregiverEmail,
+      Status 
+    } = request.body;
+
+    let caregiverInfo;
+    let token;
 
     try {
-      let connection = request.app.locals.db;
-      const { 
-        CaregiverName, 
-        CaregiverEmail,
-        Relation,
-        Status 
-      } = request.body;
 
-      let params1 = [ StringValue({ fieldName: "Email", value: CaregiverEmail }) ];
+      var params1 = [
+        StringValue({ fieldName: "Email", value: CaregiverEmail }),
+      ];
 
       let caregiverInfo = await executeSp({
         spName: `UserGetByEmail`,
         params: params1,
         connection,
-      });
+      });   
 
-      if(caregiverInfo){
-
-        let params2 = [ StringValue({ fieldName: "Id", value: request.user.userId }) ];
-
-        let patientInfo = await executeSp({
-          spName: `UserGetById`,
-          params: params2,
-          connection,
-        });
-
-        sendEmailFromCustomAccount({
-        to: Email,  
-        subject:"You have assigned as a caregiver",
-        html:`<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/login?caregiver_token=${token}'>${process.env.FRONTEND_URL}/login?token=${token}</a>`
-      })
+      if(!caregiverInfo){
+        throw Error("User not found");
       }
 
-      
+      let token = jwtSign(
+        {
+          patientId: request.user.Id,
+          patientName: "test name",
+          patientPhoto: "test",
+          caregiverEmail: CaregiverEmail,
+        },
+        "7d"
+      );
+
+      sendEmailFromCustomAccount({
+        to: CaregiverEmail,  
+        subject:"You have assigned as a caregiver",
+        html:`<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'>${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}`
+      })
+
+      // handleResponse(
+      //   response,
+      //   200,
+      //   "success",
+      //   "Request sent",
+      // );
+    } catch (error) {
+
+      sendEmailFromCustomAccount({
+        to: CaregiverEmail,  
+        subject:"You have assigned as a caregiver",
+        html:`<h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
+        <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`
+      })
+      // handleResponse(
+      //   response,
+      //   200,
+      //   "success",
+      //   "User not registered. Request sent",
+      // );
+    } finally {
+      console.log("object0")
+      try {
+          console.log("object1")
 
       let params2 = [
-        StringValue({ fieldName: "CaregiverName", value: CaregiverName }),
-        StringValue({ fieldName: "Email", value: CaregiverEmail }),
-        StringValue({ fieldName: "Relationship", value: Relationship }),
-
+        EntityId({ fieldName: "Id", value: Id }),
+        { name: 'PatientUserId', type: sql.Int, value: request.user.userId } ,           
+        { name: 'CaregiverEmail', type: sql.NVarChar, value:CaregiverEmail } ,           
+        { name: 'Status', type: sql.NVarChar, value:Status } ,          
       ];
-
-      console.log(userGetByEmailResult.recordsets[0][0].Email,)
-
+    
       let caregiverAssignResult = await executeSp({
-        spName: `CaregiverAssign`,
+        spName: `PatientCaregiverAssign`,
         params: params2,
         connection,
-      });
-
-      caregiverAssignResult = caregiverAssignResult.recordsets[0];
-
+      });    
+    console.log("object2")
+      caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
+    
       handleResponse(
         response,
         200,
         "success",
-        "Data retrived successfully",
+        "Caregiver assigned successfully",
         caregiverAssignResult
       );
     } catch (error) {
@@ -103,6 +132,122 @@ const CaregiverController = {
       );
       next(error);
     }
+    }
+
+      // try {
+      //   let params1 = [ StringValue({ fieldName: "Email", value: CaregiverEmail }) ];
+        
+      //   caregiverInfo = await executeSp({
+      //     spName: `UserGetByEmail`,
+      //     params: params1,
+      //     connection,
+      //   });
+
+      //   if(caregiverInfo){
+
+      //     sendEmailFromCustomAccount(
+      //       {
+      //         to: CaregiverEmail,  
+      //         subject:"You have assigned as a caregiver(success1)",
+      //         html:`<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/login?caregiver_token=${token}'>${process.env.FRONTEND_URL}/login?token=${token}</a>`
+      //       }
+      //     )  
+          
+      //     handleResponse(
+      //       response,
+      //       100,
+      //       "success",
+      //       "Email sent successfully",
+      //       caregiverAssignResult
+      //     );
+      //   }
+      //   else{
+
+
+      //     sendEmailFromCustomAccount({
+      //       to: CaregiverEmail,  
+      //       subject:"You have assigned as a caregiver1",
+      //       html:`<h2>Verify Your Email</h2><p>Step 1 - Signup (err)</p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a> 
+      //       <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a>`
+      //     })       
+      //   }
+
+      //      handleResponse(
+      //      response,
+      //      101,
+      //      "success",
+      //      "Email sent successfully",
+      //     //  caregiverAssignResult
+      //   );
+      // } catch (error) {
+
+      //   sendEmailFromCustomAccount({
+      //       to: CaregiverEmail,  
+      //       subject:"You have assigned as a caregiver1",
+      //       html:`<h2>Verify Your Email</h2><p>Step 1 - Signup (err)</p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a> 
+      //       <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a>`
+      //     })       
+        
+      //   console.log("catch")
+
+      //      handleResponse(
+      //      response,
+      //      101,
+      //      "success",
+      //      "Email sent successfully",
+      //     //  caregiverAssignResult
+      //   );
+      //   next(error);
+        
+      // }finally{
+      //   console.log("finally")
+      // }
+
+      
+
+      
+      
+      
+      //section 2
+
+    // try {
+      
+    //   console.log("object 2")
+    //   let params2 = [
+    //     EntityId({ fieldName: "Id", value: Id }),
+    //     { name: 'PatientUserId', type: sql.Int, value: request.user.userId } ,           
+    //     { name: 'CaregiverEmail', type: sql.NVarChar, value:CaregiverEmail } ,           
+    //     { name: 'Status', type: sql.NVarChar, value:Status } ,          
+    //   ];
+
+    //   let caregiverAssignResult = await executeSp({
+    //     spName: `PatientCaregiverAssign`,
+    //     params: params2,
+    //     connection,
+    //   });
+
+    //                 console.log("object 4")
+
+
+    //   caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
+
+    //   handleResponse(
+    //     response,
+    //     200,
+    //     "success",
+    //     "Email sent successfully",
+    //     caregiverAssignResult
+    //   );
+    // } catch (error) {
+    //   handleError(
+    //     response,
+    //     500,
+    //     "error",
+    //     error.message,
+    //     "Something went wrong"
+    //   );
+    //   next(error);
+    // }
   },
 
   // /**

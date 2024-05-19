@@ -41,6 +41,9 @@ const ResponseMessages = {
     DELETE: "Nurse deleted!",
     DELETE_FAILED: "Failed to delete nurse!",
   },
+  Caregiver:{
+    VALIDATION_ERROR: "Validation errors",
+  },
   Doctor: {
     VALIDATION_ERROR: "Validation errors",
     LIST_RETRIEVE: "Doctor list retrieved!",

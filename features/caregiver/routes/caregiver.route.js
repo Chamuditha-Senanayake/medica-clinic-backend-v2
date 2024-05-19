@@ -1,15 +1,16 @@
 import express from "express";
 import { check } from "express-validator";
 import CaregiverController from "../controllers/caregiver.controller.js";
+import { isAuth } from "../../../middleware/auth.middlewarw.js";
 const router = express.Router();
 
 router.post(
   "/CaregiverAssign",
+  isAuth,
   [ 
-    check("CaregiverName").not().isEmpty().isString(),
-    check("CaregiverEmail").not().isEmpty().isString(),
-    check("Relation").not().isEmpty().isString(),
-
+    check("Id").not().isEmpty().isInt(),
+    check("CaregiverEmail").optional({nullable:true}).isString(),
+    check("Status").optional({nullable:true}).isString(),
   ],
   CaregiverController.assignCaregiver
 );

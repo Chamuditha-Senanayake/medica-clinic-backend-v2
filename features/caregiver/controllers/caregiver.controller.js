@@ -159,10 +159,6 @@ const CaregiverController = {
       const { Token } = request.body;
 
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
-      // if (Email !== decodedToken.email ){
-      //   throw Error("Unauthorized");
-      // }
-// name, email, photo 
 
       var params1 = [
         EntityId({ fieldName: "Id", value: decodedToken.patientId }),

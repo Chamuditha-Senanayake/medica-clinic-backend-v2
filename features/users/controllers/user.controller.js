@@ -752,20 +752,20 @@ const UserController = {
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
-      let cCRSavesResult = await executeSp({
+      let OCRSavesResult = await executeSp({
         spName: `OCRSaves`,
         params: params,
         connection,
       });
 
-      cCRSavesResult = cCRSavesResult.recordsets;
+      OCRSavesResult = OCRSavesResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
         "OCR saved successfully",
-        cCRSavesResult
+        OCRSavesResult
       );
     } catch (error) {
       handleError(

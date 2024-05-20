@@ -8,21 +8,8 @@ router.post(
   "/CaregiverRequest",
   isAuth,
   [ 
-    check("Id").not().isEmpty().isInt(),
     check("CaregiverEmail").optional({nullable:true}).isString(),
     check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
-
-  ],
-  CaregiverController.assignCaregiver
-);
-
-router.post(
-  "/CaregiverRequest",
-  [ 
-    check("Id").not().isEmpty().isInt(),
-    check("CaregiverEmail").optional({nullable:true}).isString(),
-    check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
-
   ],
   CaregiverController.requestCaregiver
 );
@@ -30,10 +17,23 @@ router.post(
 router.post(
   "/CaregiverTokenValidation",
   [ 
-    check("token").not().isEmpty().isString(),
+    check("Token").not().isEmpty().isString(),
   ],
   CaregiverController.tokenValidation
 );
+
+// router.post(
+//   "/CaregiverRespond",
+//   [ 
+//     check("Id").not().isEmpty().isInt(),
+//     check("CaregiverEmail").optional({nullable:true}).isString(),
+//     check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
+//     check("token").not().isEmpty().isString(),
+//   ],
+//   CaregiverController.respondCaregiver
+// );
+
+
 
 // router.post(
 //   "/NurseGet",

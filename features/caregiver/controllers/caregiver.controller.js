@@ -10,6 +10,7 @@ import {
   StringValue,
   SignedInteger,
 } from "../../../utils/type-def.js";
+import jwt from "jsonwebtoken";
 import jwtSign from "../../../utils/jwtSign.js";
 
 const CaregiverController = {
@@ -42,9 +43,7 @@ const CaregiverController = {
     
     let token = jwtSign(
       {
-        patientId: request.user.Id,
-        patientName: "John Doe",
-        patientPhoto: "testURL",
+        patientId: request.user.userId,
         caregiverEmail: CaregiverEmail,
       },
       "7d"
@@ -163,31 +162,39 @@ const CaregiverController = {
       // if (Email !== decodedToken.email ){
       //   throw Error("Unauthorized");
       // }
+// name, email, photo 
 
+      var params1 = [
+        EntityId({ fieldName: "Id", value: decodedToken.patientId }),
+      ];
 
-      // var params = [
-      //   EntityId({ fieldName: "UserId", value: UserId }),
-      //   EntityId({ fieldName: "Page", value: Page }),
-      //   EntityId({ fieldName: "Limit", value: Limit }),
+      let patientInfo = await executeSp({
+        spName: `UserGetById`,
+        params: params1,
+        connection,
+      }); 
 
-      // ];
+      var params2 = [
+        EntityId({ fieldName: "PatientUserId", value: decodedToken.patientId }),
+        StringValue({ fieldName: "CaregiverEmail", value: decodedToken.caregiverEmail }),
+      ];
 
-      // let RecordGetResult = await executeSp({
-      //   spName: `PatientRecordsGet`,
-      //   params: params,
-      //   connection,
-      // });
+      let PatientCaregiverInfo = await executeSp({
+        spName: `PatientCaregiverGet`,
+        params: params2,
+        connection,
+      }); 
 
-      // //Append patient records and count for pagination
-      // RecordGetResult = [RecordGetResult.recordsets[0],RecordGetResult.recordsets[1][0]];
+      PatientCaregiverInfo = PatientCaregiverInfo.recordsets[0][0]
+      PatientCaregiverInfo.patientInfo = patientInfo.recordsets[0][0]
 
-      // handleResponse(
-      //   response,
-      //   200,
-      //   "success",
-      //   "Records retrived successfully",
-      //   RecordGetResult
-      // );
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Records retrived successfully",
+        PatientCaregiverInfo
+      );
     } catch (error) {
       handleError(
         response,

@@ -23,7 +23,7 @@ const CaregiverController = {
    * @param {next} next - middleware
    * @returns
    */
-  async assignCaregiver(request, response, next) {
+  async requestCaregiver(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -39,8 +39,6 @@ const CaregiverController = {
       CaregiverEmail,
       Status 
     } = request.body;
-
-    let caregiverInfo;
     
     let token = jwtSign(
       {
@@ -68,60 +66,128 @@ const CaregiverController = {
         throw Error("User not found");
       }
 
-
-
       sendEmailFromCustomAccount({
         to: CaregiverEmail,  
         subject:"You have assigned as a caregiver",
         html:`<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'>${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}`
       })
 
-      // handleResponse(
-      //   response,
-      //   200,
-      //   "success",
-      //   "Request sent",
-      // );
     } catch (error) {
+      
+      let errorCode = error.message.split(' ')[0];
 
-      sendEmailFromCustomAccount({
-        to: CaregiverEmail,  
-        subject:"You have assigned as a caregiver",
-        html:`<h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
-        <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`
-      })
-      // handleResponse(
-      //   response,
-      //   200,
-      //   "success",
-      //   "User not registered. Request sent",
-      // );
+      if(errorCode === "29101" || errorCode === "29202"){
+        
+        sendEmailFromCustomAccount({
+          to: CaregiverEmail,  
+          subject:"You have assigned as a caregiver",
+          html:`<h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
+          <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`
+        })
+      }
+
+      else{
+        handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+      }
+      
     } finally {
 
       try {
 
-      let params2 = [
-        EntityId({ fieldName: "Id", value: Id }),
-        { name: 'PatientUserId', type: sql.Int, value: request.user.userId } ,           
-        { name: 'CaregiverEmail', type: sql.NVarChar, value:CaregiverEmail } ,           
-        { name: 'Status', type: sql.NVarChar, value:Status } ,          
-      ];
-    
-      let caregiverAssignResult = await executeSp({
-        spName: `PatientCaregiverAssign`,
-        params: params2,
-        connection,
-      });    
+        let params2 = [
+          EntityId({ fieldName: "Id", value: Id }),
+          { name: 'PatientUserId', type: sql.Int, value: request.user.userId } ,           
+          { name: 'CaregiverEmail', type: sql.NVarChar, value:CaregiverEmail } ,           
+          { name: 'Status', type: sql.NVarChar, value:Status } ,          
+        ];
+      
+        let caregiverAssignResult = await executeSp({
+          spName: `PatientCaregiverAssign`,
+          params: params2,
+          connection,
+        });    
 
-      caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
-    
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Caregiver assigned successfully",
-        caregiverAssignResult
-      );
+        caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
+      
+        handleResponse(
+          response,
+          200,
+          "success",
+          "Caregiver assigned successfully",
+          caregiverAssignResult
+        );
+    } catch (error) {
+        handleError(
+          response,
+          500,
+          "error",
+          error.message,
+          "Something went wrong"
+        );
+        next(error);
+      }
+    }
+  },
+
+  /**
+   *
+   * Caregiver token validation
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async tokenValidation(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Caregiver.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Token } = request.body;
+
+      let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
+      // if (Email !== decodedToken.email ){
+      //   throw Error("Unauthorized");
+      // }
+
+
+      // var params = [
+      //   EntityId({ fieldName: "UserId", value: UserId }),
+      //   EntityId({ fieldName: "Page", value: Page }),
+      //   EntityId({ fieldName: "Limit", value: Limit }),
+
+      // ];
+
+      // let RecordGetResult = await executeSp({
+      //   spName: `PatientRecordsGet`,
+      //   params: params,
+      //   connection,
+      // });
+
+      // //Append patient records and count for pagination
+      // RecordGetResult = [RecordGetResult.recordsets[0],RecordGetResult.recordsets[1][0]];
+
+      // handleResponse(
+      //   response,
+      //   200,
+      //   "success",
+      //   "Records retrived successfully",
+      //   RecordGetResult
+      // );
     } catch (error) {
       handleError(
         response,
@@ -132,122 +198,6 @@ const CaregiverController = {
       );
       next(error);
     }
-    }
-
-      // try {
-      //   let params1 = [ StringValue({ fieldName: "Email", value: CaregiverEmail }) ];
-        
-      //   caregiverInfo = await executeSp({
-      //     spName: `UserGetByEmail`,
-      //     params: params1,
-      //     connection,
-      //   });
-
-      //   if(caregiverInfo){
-
-      //     sendEmailFromCustomAccount(
-      //       {
-      //         to: CaregiverEmail,  
-      //         subject:"You have assigned as a caregiver(success1)",
-      //         html:`<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/login?caregiver_token=${token}'>${process.env.FRONTEND_URL}/login?token=${token}</a>`
-      //       }
-      //     )  
-          
-      //     handleResponse(
-      //       response,
-      //       100,
-      //       "success",
-      //       "Email sent successfully",
-      //       caregiverAssignResult
-      //     );
-      //   }
-      //   else{
-
-
-      //     sendEmailFromCustomAccount({
-      //       to: CaregiverEmail,  
-      //       subject:"You have assigned as a caregiver1",
-      //       html:`<h2>Verify Your Email</h2><p>Step 1 - Signup (err)</p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a> 
-      //       <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a>`
-      //     })       
-      //   }
-
-      //      handleResponse(
-      //      response,
-      //      101,
-      //      "success",
-      //      "Email sent successfully",
-      //     //  caregiverAssignResult
-      //   );
-      // } catch (error) {
-
-      //   sendEmailFromCustomAccount({
-      //       to: CaregiverEmail,  
-      //       subject:"You have assigned as a caregiver1",
-      //       html:`<h2>Verify Your Email</h2><p>Step 1 - Signup (err)</p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a> 
-      //       <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/signup?caregiver_token=${token}'> here</a>`
-      //     })       
-        
-      //   console.log("catch")
-
-      //      handleResponse(
-      //      response,
-      //      101,
-      //      "success",
-      //      "Email sent successfully",
-      //     //  caregiverAssignResult
-      //   );
-      //   next(error);
-        
-      // }finally{
-      //   console.log("finally")
-      // }
-
-      
-
-      
-      
-      
-      //section 2
-
-    // try {
-      
-    //   console.log("object 2")
-    //   let params2 = [
-    //     EntityId({ fieldName: "Id", value: Id }),
-    //     { name: 'PatientUserId', type: sql.Int, value: request.user.userId } ,           
-    //     { name: 'CaregiverEmail', type: sql.NVarChar, value:CaregiverEmail } ,           
-    //     { name: 'Status', type: sql.NVarChar, value:Status } ,          
-    //   ];
-
-    //   let caregiverAssignResult = await executeSp({
-    //     spName: `PatientCaregiverAssign`,
-    //     params: params2,
-    //     connection,
-    //   });
-
-    //                 console.log("object 4")
-
-
-    //   caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
-
-    //   handleResponse(
-    //     response,
-    //     200,
-    //     "success",
-    //     "Email sent successfully",
-    //     caregiverAssignResult
-    //   );
-    // } catch (error) {
-    //   handleError(
-    //     response,
-    //     500,
-    //     "error",
-    //     error.message,
-    //     "Something went wrong"
-    //   );
-    //   next(error);
-    // }
   },
 
   // /**

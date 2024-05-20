@@ -5,14 +5,34 @@ import { isAuth } from "../../../middleware/auth.middlewarw.js";
 const router = express.Router();
 
 router.post(
-  "/CaregiverAssign",
+  "/CaregiverRequest",
   isAuth,
   [ 
     check("Id").not().isEmpty().isInt(),
     check("CaregiverEmail").optional({nullable:true}).isString(),
-    check("Status").optional({nullable:true}).isString(),
+    check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
+
   ],
   CaregiverController.assignCaregiver
+);
+
+router.post(
+  "/CaregiverRequest",
+  [ 
+    check("Id").not().isEmpty().isInt(),
+    check("CaregiverEmail").optional({nullable:true}).isString(),
+    check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
+
+  ],
+  CaregiverController.requestCaregiver
+);
+
+router.post(
+  "/CaregiverTokenValidation",
+  [ 
+    check("token").not().isEmpty().isString(),
+  ],
+  CaregiverController.tokenValidation
 );
 
 // router.post(

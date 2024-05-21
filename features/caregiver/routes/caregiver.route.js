@@ -14,14 +14,14 @@ router.post(
   CaregiverController.requestCaregiver
 );
 
-// router.post(
-//   "/CaregiverRespond",
-//   [ 
-//     check("Status").isIn(["accepted", "rejected"]).optional({nullable:true}).isString(),
-//     check("token").not().isEmpty().isString(),
-//   ],
-//   CaregiverController.respondCaregiver
-// );
+router.post(
+  "/CaregiverRespond",
+  [ 
+    check("Status").isIn(["accepted", "rejected"]).optional({nullable:true}).isString(),
+    check("Token").not().isEmpty().isString(),
+  ],
+  CaregiverController.respondCaregiver
+);
 
 router.post(
   "/CaregiverTokenValidation",

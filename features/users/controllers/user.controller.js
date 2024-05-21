@@ -324,7 +324,7 @@ const UserController = {
           username: userData.recordsets[0][0].Username,
           email: userData.recordsets[0][0].Email,
         },
-        "1h"
+        process.env.VERIFY_EMAIL_TOKEN_EXPIRATION_TIME
       );
 
       sendEmailFromCustomAccount({

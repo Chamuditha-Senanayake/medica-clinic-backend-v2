@@ -2835,6 +2835,70 @@ const PatientController = {
     }
   },
 
+  /**
+   *
+   * Get patient caregivers
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientCaregivers(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+      console.log("object")
+
+    try {
+      let connection = request.app.locals.db;
+
+      const { 
+        Page = 0, 
+        Limit = 0,
+       } = request.body;
+            console.log("object1")
+
+      var params = [
+        EntityId({ fieldName: "PatientUserId", value: request.user.userId }),
+        EntityId({ fieldName: "Page", value: Page }),
+        EntityId({ fieldName: "Limit", value: Limit }),
+      ];
+
+      let patientCaregiversGetResult = await executeSp({
+        spName: `PatientCaregiversGet`,
+        params: params,
+        connection,
+      });
+
+      console.log("object2")
+
+      patientCaregiversGetResult = patientCaregiversGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientCaregiversGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
 };
 
 export default PatientController;

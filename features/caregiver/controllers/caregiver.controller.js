@@ -134,6 +134,7 @@ const CaregiverController = {
       }
     }
   },
+  
 
   /**
    *
@@ -160,7 +161,7 @@ const CaregiverController = {
 
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
 
-      var params1 = [
+      let params1 = [
         EntityId({ fieldName: "Id", value: decodedToken.patientId }),
       ];
 
@@ -170,19 +171,30 @@ const CaregiverController = {
         connection,
       }); 
 
-      var params2 = [
+      let params2 = [
+        StringValue({ fieldName: "Email", value: decodedToken.caregiverEmail }),
+      ];
+
+      let caregiverInfo = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params2,
+        connection,
+      });
+
+      let params3 = [
         EntityId({ fieldName: "PatientUserId", value: decodedToken.patientId }),
         StringValue({ fieldName: "CaregiverEmail", value: decodedToken.caregiverEmail }),
       ];
 
       let PatientCaregiverInfo = await executeSp({
         spName: `PatientCaregiverGet`,
-        params: params2,
+        params: params3,
         connection,
       }); 
 
       PatientCaregiverInfo = PatientCaregiverInfo.recordsets[0][0]
       PatientCaregiverInfo.patientInfo = patientInfo.recordsets[0][0]
+      PatientCaregiverInfo.IsRegisteredCaregiver = caregiverInfo ? true : false;
 
       handleResponse(
         response,

@@ -569,4 +569,14 @@ router.post(
   PatientController.savePatientFoodAllergy
 );
 
+router.post(
+  "/PatientCaregiversGet",
+  isAuth,
+  [
+    check("Page").optional({nullable:true}).isInt(),
+    check("Limit").optional({nullable:true}).isInt(),
+  ],
+  PatientController.getPatientCaregivers
+);
+
 export default router;

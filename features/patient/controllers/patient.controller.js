@@ -2853,7 +2853,6 @@ const PatientController = {
         data: errors,
       });
     }
-      console.log("object")
 
     try {
       let connection = request.app.locals.db;
@@ -2861,8 +2860,7 @@ const PatientController = {
       const { 
         Page = 0, 
         Limit = 0,
-       } = request.body;
-            console.log("object1")
+      } = request.body;
 
       var params = [
         EntityId({ fieldName: "PatientUserId", value: request.user.userId }),
@@ -2876,9 +2874,9 @@ const PatientController = {
         connection,
       });
 
-      console.log("object2")
-
       patientCaregiversGetResult = patientCaregiversGetResult.recordsets;
+
+      console.log(request.user.userId)
 
       handleResponse(
         response,

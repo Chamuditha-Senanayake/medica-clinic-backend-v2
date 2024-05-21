@@ -14,6 +14,15 @@ router.post(
   CaregiverController.requestCaregiver
 );
 
+// router.post(
+//   "/CaregiverRespond",
+//   [ 
+//     check("Status").isIn(["accepted", "rejected"]).optional({nullable:true}).isString(),
+//     check("token").not().isEmpty().isString(),
+//   ],
+//   CaregiverController.respondCaregiver
+// );
+
 router.post(
   "/CaregiverTokenValidation",
   [ 
@@ -22,16 +31,7 @@ router.post(
   CaregiverController.tokenValidation
 );
 
-// router.post(
-//   "/CaregiverRespond",
-//   [ 
-//     check("Id").not().isEmpty().isInt(),
-//     check("CaregiverEmail").optional({nullable:true}).isString(),
-//     check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
-//     check("token").not().isEmpty().isString(),
-//   ],
-//   CaregiverController.respondCaregiver
-// );
+
 
 
 

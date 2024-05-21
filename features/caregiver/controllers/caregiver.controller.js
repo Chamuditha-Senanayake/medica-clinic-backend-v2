@@ -174,9 +174,7 @@ const CaregiverController = {
       let params2 = [
         EntityId({ fieldName: "Id", value: decodedToken.Id }),
         EntityId({ fieldName: "CaregiverUserId", value: caregiverInfo.recordsets[0][0].Id }), 
-        StringValue({ fieldName: "Status", value: Status }),
-       
-        StringValue({ fieldName: "Status", value: Status }),
+        StringValue({ fieldName: "Status", value: Status }),   
       ];
 
       let caregiverAssignResult = await executeSp({

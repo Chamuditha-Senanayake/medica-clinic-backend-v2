@@ -8,8 +8,8 @@ router.post(
   "/CaregiverRequest",
   isAuth,
   [ 
-    check("CaregiverEmail").optional({nullable:true}).isString(),
-    check("Status").isIn(["invited", "disabled", "deleted"]).optional({nullable:true}).isString(),
+    check("CaregiverEmail").not().isEmpty().isString(),
+    check("Status").isIn(["invited", "enabled", "disabled", "deleted"]).optional({nullable:true}).isString(),
   ],
   CaregiverController.requestCaregiver
 );
@@ -17,6 +17,7 @@ router.post(
 router.post(
   "/CaregiverRespond",
   [ 
+    check("CaregiverEmail").not().isEmpty().isString(),
     check("Status").isIn(["accepted", "rejected"]).optional({nullable:true}).isString(),
     check("Token").not().isEmpty().isString(),
   ],

@@ -65,7 +65,7 @@ const CaregiverController = {
             patientId: request.user.userId,
             caregiverEmail: CaregiverEmail,
           },
-          "7d"
+          process.env.CAREGIVER_REQUEST_TOKEN_EXPIRATION_TIME
         );
       
         handleResponse(

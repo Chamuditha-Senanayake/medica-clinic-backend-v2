@@ -2934,8 +2934,8 @@ const PatientController = {
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "UserId", value: UserId }),
-        StringValue({ fieldName: "FirstName", value: FName }),
-        StringValue({ fieldName: "LastName", value: LName }),
+        StringValue({ fieldName: "FName", value: FName }),
+        StringValue({ fieldName: "LName", value: LName }),
         StringValue({ fieldName: "Email", value: Email }),
         StringValue({ fieldName: "ContactNo", value: ContactNo }),
         StringValue({ fieldName: "Relationship", value: Relationship }),

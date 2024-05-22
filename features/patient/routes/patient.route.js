@@ -579,4 +579,43 @@ router.post(
   PatientController.getPatientCaregivers
 );
 
+router.post(
+  "/PatientEmergencyContactSave",
+  isAuth,
+  [
+    check("Id").optional({nullable:true}).isInt(),
+    check("UserId").not().isEmpty().isInt(),
+    check("FName").not().isEmpty().isString(),
+    check("LName").not().isEmpty().isString(),
+    check("Email").not().isEmpty().isString(),
+    check("ContactNo").not().isEmpty().isString(),
+    check("Relationship").not().isEmpty().isString(),    
+  ],
+  PatientController.savePatientEmergencyContact
+);
+
+
+
+router.post(
+  "/PatientEmergencyContactGet",
+  isAuth,
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("Page").isInt().not().isEmpty(),
+    check("Limit").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientEmergencyContacts
+);
+
+router.post(
+  "/PatientEmergencyContactDelete",
+  isAuth,
+  [
+    check("UserId").isInt().not().isEmpty(),
+    check("Id").isInt().not().isEmpty(),
+
+  ],
+  PatientController.deletePatientEmergencyContact
+);
+
 export default router;

@@ -2897,6 +2897,193 @@ const PatientController = {
     }
   },
 
+
+  /**
+   *
+   * Save patient emergency contact
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async savePatientEmergencyContact(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        Id = 0,
+        UserId,
+        FName,
+        LName,
+        Email,
+        ContactNo,
+        Relationship,
+        Status = 1,
+      } = request.body;
+
+      
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+        StringValue({ fieldName: "FirstName", value: FName }),
+        StringValue({ fieldName: "LastName", value: LName }),
+        StringValue({ fieldName: "Email", value: Email }),
+        StringValue({ fieldName: "ContactNo", value: ContactNo }),
+        StringValue({ fieldName: "Relationship", value: Relationship }),
+        SignedInteger({fieldName: "Status", value: Status}),    
+    ];
+
+      let patientEmergencyContactSaveResult = await executeSp({
+        spName: `PatientEmergencyContactSave`,
+        params: params,
+        connection,
+      });
+
+      patientEmergencyContactSaveResult = patientEmergencyContactSaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        patientEmergencyContactSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get patient emergency contacts
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientEmergencyContacts(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { 
+        UserId,
+        Page = 0, 
+        Limit = 0,
+       } = request.body;
+
+      var params = [ 
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Page", value: Page }),
+        EntityId({ fieldName: "Limit", value: Limit }),
+       ];
+
+      let patientEmergencyContactsGetResult = await executeSp({
+        spName: `PatientEmergencyContactsGet`,
+        params: params,
+        connection,
+      });
+
+      //Append emergency contacts and count for pagination
+      patientEmergencyContactsGetResult = [patientEmergencyContactsGetResult.recordsets[0],patientEmergencyContactsGetResult.recordsets[1][0]];
+      
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Emergency contacts retrived successfully",
+        patientEmergencyContactsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+
+  /**
+   *
+   * Delete emergency contact
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async deletePatientEmergencyContact(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, Id } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+
+      ];
+
+     await executeSp({
+        spName: `PatientEmergencyContactDelete`,
+        params: params,
+        connection,
+      });
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Emergency contact deleted successfully",
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
 };
 
 export default PatientController;

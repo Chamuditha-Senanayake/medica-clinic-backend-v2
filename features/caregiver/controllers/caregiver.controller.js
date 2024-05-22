@@ -84,7 +84,10 @@ const CaregiverController = {
           "Something went wrong"
         );
         next(error);
+        
     } finally {
+
+      if(Status === 'invited'){
         try {
 
           let params2 = [
@@ -132,6 +135,8 @@ const CaregiverController = {
           next(error);
           }  
         }
+      }
+        
       
     }
   },

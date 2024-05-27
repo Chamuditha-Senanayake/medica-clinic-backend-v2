@@ -1,14 +1,14 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   DateString,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const PrescriptionController = {
   /**
@@ -35,11 +35,11 @@ const PrescriptionController = {
       const { UserId, DoctorId, DateFrom, DateTo } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        DateString({ fieldName: 'DateFrom', value: DateFrom }),
+        DateString({ fieldName: 'DateTo', value: DateTo }),
+      ];
 
       let prescriptionGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordCountGet`,
@@ -52,17 +52,17 @@ const PrescriptionController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         prescriptionGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -92,11 +92,11 @@ const PrescriptionController = {
       const { UserId, DoctorId, DateFrom, DateTo } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        DateString({ fieldName: 'DateFrom', value: DateFrom }),
+        DateString({ fieldName: 'DateTo', value: DateTo }),
+      ];
 
       let prescriptionRecordDiseaseCountGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordDiseaseCountGet`,
@@ -104,22 +104,23 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionRecordDiseaseCountGetResult = prescriptionRecordDiseaseCountGetResult.recordsets[0][0];
+      prescriptionRecordDiseaseCountGetResult =
+        prescriptionRecordDiseaseCountGetResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         prescriptionRecordDiseaseCountGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -149,11 +150,11 @@ const PrescriptionController = {
       const { UserId, DoctorId, DateFrom, DateTo } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        DateString({ fieldName: 'DateFrom', value: DateFrom }),
+        DateString({ fieldName: 'DateTo', value: DateTo }),
+      ];
 
       let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordDiseaseDetailsGet`,
@@ -161,22 +162,23 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionRecordDiseaseDetailsGetResult = prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+      prescriptionRecordDiseaseDetailsGetResult =
+        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         prescriptionRecordDiseaseDetailsGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -206,11 +208,11 @@ const PrescriptionController = {
       const { UserId, DoctorId, DateFrom, DateTo } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        DateString({ fieldName: 'DateFrom', value: DateFrom }),
+        DateString({ fieldName: 'DateTo', value: DateTo }),
+      ];
 
       let prescriptionRecordDrugCountGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordDrugCountGet`,
@@ -218,27 +220,27 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionRecordDrugCountGetResult = prescriptionRecordDrugCountGetResult.recordsets[0][0];
+      prescriptionRecordDrugCountGetResult =
+        prescriptionRecordDrugCountGetResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         prescriptionRecordDrugCountGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default PrescriptionController;

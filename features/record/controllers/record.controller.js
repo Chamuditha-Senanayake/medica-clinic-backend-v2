@@ -1,15 +1,15 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-  DateString
-} from "../../../utils/type-def.js";
-import sql from "mssql";
+  DateString,
+} from '../../../utils/type-def.js';
+import sql from 'mssql';
 
 const RecordController = {
   /**
@@ -33,17 +33,12 @@ const RecordController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        UserId,
-        Page = 0, 
-        Limit = 0,
-       } = request.body;
+      const { UserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "Page", value: Page }),
-        EntityId({ fieldName: "Limit", value: Limit }),
-
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
       let RecordGetResult = await executeSp({
@@ -53,22 +48,25 @@ const RecordController = {
       });
 
       //Append patient records and count for pagination
-      RecordGetResult = [RecordGetResult.recordsets[0],RecordGetResult.recordsets[1][0]];
+      RecordGetResult = [
+        RecordGetResult.recordsets[0],
+        RecordGetResult.recordsets[1][0],
+      ];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Records retrived successfully",
+        'success',
+        'Records retrived successfully',
         RecordGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -107,22 +105,22 @@ const RecordController = {
         Diagnosis,
         Notes,
         Status = 1,
-        UserSaved
+        UserSaved,
       } = request.body;
 
       var params = [
-          EntityId({ fieldName: "Id", value: Id }),
-          EntityId({ fieldName: "UserId", value: UserId }),
-          EntityId({ fieldName: "DoctorId", value: DoctorId }),
-          StringValue({ fieldName: "RecordType", value: RecordType }),
-          StringValue({ fieldName: "BodyPart", value: BodyPart }),
-          StringValue({ fieldName: "SubBodyPart", value: SubBodyPart }),       
-          { name: "SubBodyPartType", type: sql.NVarChar, value:SubBodyPartType } ,
-          DateString({ fieldName: "Date", value: Date }),
-          StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
-          StringValue({ fieldName: "Notes", value: Notes }),
-          SignedInteger({fieldName: "Status", value: Status}), 
-          EntityId({ fieldName: "UserCreated", value: UserSaved }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        StringValue({ fieldName: 'RecordType', value: RecordType }),
+        StringValue({ fieldName: 'BodyPart', value: BodyPart }),
+        StringValue({ fieldName: 'SubBodyPart', value: SubBodyPart }),
+        { name: 'SubBodyPartType', type: sql.NVarChar, value: SubBodyPartType },
+        DateString({ fieldName: 'Date', value: Date }),
+        StringValue({ fieldName: 'Diagnosis', value: Diagnosis }),
+        StringValue({ fieldName: 'Notes', value: Notes }),
+        SignedInteger({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'UserCreated', value: UserSaved }),
       ];
 
       let recordSaveResult = await executeSp({
@@ -136,22 +134,21 @@ const RecordController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Record retrieved successfully",
+        'success',
+        'Record retrieved successfully',
         recordSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 
   /**
    *
@@ -177,35 +174,28 @@ const RecordController = {
       const { UserId, Id } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "Id", value: Id }),
-
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
       ];
 
-     await executeSp({
+      await executeSp({
         spName: `PatientRecordDelete`,
         params: params,
         connection,
       });
 
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Records deleted successfully",
-      );
+      handleResponse(response, 200, 'success', 'Records deleted successfully');
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default RecordController;

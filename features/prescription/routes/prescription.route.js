@@ -1,48 +1,48 @@
-import express from "express";
-import { check } from "express-validator";
-import PrescriptionController from "../controllers/prescription.controller.js";
+import express from 'express';
+import { check } from 'express-validator';
+import PrescriptionController from '../controllers/prescription.controller.js';
 const router = express.Router();
 
 router.post(
-  "/PrescriptionRecordCountGet",
+  '/PrescriptionRecordCountGet',
   [
-    check("UserId").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    check("DateFrom").not().isEmpty(),
-    check("DateTo").not().isEmpty(),
+    check('UserId').isInt().not().isEmpty(),
+    check('DoctorId').isInt().not().isEmpty(),
+    check('DateFrom').not().isEmpty(),
+    check('DateTo').not().isEmpty(),
   ],
   PrescriptionController.getPrescriptionRecordCount
 );
 
 router.post(
-  "/PrescriptionRecordDiseaseCountGet",
+  '/PrescriptionRecordDiseaseCountGet',
   [
-    check("UserId").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    check("DateFrom").not().isEmpty(),
-    check("DateTo").not().isEmpty(),
+    check('UserId').isInt().not().isEmpty(),
+    check('DoctorId').isInt().not().isEmpty(),
+    check('DateFrom').not().isEmpty(),
+    check('DateTo').not().isEmpty(),
   ],
   PrescriptionController.getPrescriptionRecordDiseaseCount
 );
 
 router.post(
-  "/PrescriptionRecordDiseaseDetailsGet",
+  '/PrescriptionRecordDiseaseDetailsGet',
   [
-    check("UserId").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    check("DateFrom").not().isEmpty(),
-    check("DateTo").not().isEmpty(),
+    check('UserId').isInt().not().isEmpty(),
+    check('DoctorId').isInt().not().isEmpty(),
+    check('DateFrom').not().isEmpty(),
+    check('DateTo').not().isEmpty(),
   ],
   PrescriptionController.getPrescriptionRecordDiseaseDetails
 );
 
 router.post(
-  "/PrescriptionRecordDrugCountGet",
+  '/PrescriptionRecordDrugCountGet',
   [
-    check("UserId").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    check("DateFrom").not().isEmpty(),
-    check("DateTo").not().isEmpty(),
+    check('UserId').isInt().not().isEmpty(),
+    check('DoctorId').isInt().not().isEmpty(),
+    check('DateFrom').not().isEmpty(),
+    check('DateTo').not().isEmpty(),
   ],
   PrescriptionController.getPrescriptionRecordDrugCount
 );

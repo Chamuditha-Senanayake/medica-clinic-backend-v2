@@ -1,17 +1,17 @@
-import express from "express";
-import { check } from "express-validator";
-import CamiosController from "../controllers/camios.controller.js";
+import express from 'express';
+import { check } from 'express-validator';
+import CamiosController from '../controllers/camios.controller.js';
 const router = express.Router();
 
 router.post(
-  "/CamiosRequestGet",
+  '/CamiosRequestGet',
   [
-    check("Id").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    check("SessionId").isInt().not().isEmpty(),
-    check("AppointmentId").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
-    check("UserId").isInt().not().isEmpty(),
+    check('Id').isInt().not().isEmpty(),
+    check('DoctorId').isInt().not().isEmpty(),
+    check('SessionId').isInt().not().isEmpty(),
+    check('AppointmentId').isInt().not().isEmpty(),
+    check('PatientId').isInt().not().isEmpty(),
+    check('UserId').isInt().not().isEmpty(),
   ],
   CamiosController.getCamiosRequest
 );

@@ -1,17 +1,17 @@
-import { validationResult } from "express-validator";
-import sql from "mssql";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import sql from 'mssql';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   DateString,
   DecimalValue,
   EntityId,
   SignedInteger,
   StringValue,
-  TableValueParameters
-} from "../../../utils/type-def.js";
+  TableValueParameters,
+} from '../../../utils/type-def.js';
 
 const BillController = {
   /**
@@ -49,35 +49,38 @@ const BillController = {
         UserSaved = 0,
       } = request.body;
 
-    const BillDataList = [];
-    BillDataSet.forEach((BillData) => {
-    BillDataList.push([BillData.Amount, BillData.FeeType, BillData.ItemName]);
-    });
+      const BillDataList = [];
+      BillDataSet.forEach(BillData => {
+        BillDataList.push([
+          BillData.Amount,
+          BillData.FeeType,
+          BillData.ItemName,
+        ]);
+      });
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
         StringValue({
-          fieldName: "AppointmentNumber",
+          fieldName: 'AppointmentNumber',
           value: AppointmentNumber,
         }),
-        StringValue({ fieldName: "Total", value: Total }),
-        StringValue({ fieldName: "Discount", value: Discount }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-      
+        StringValue({ fieldName: 'Total', value: Total }),
+        StringValue({ fieldName: 'Discount', value: Discount }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+
         TableValueParameters({
-          tableName:"BillDataSet",        
-          columns:
-          [
-            {columnName:"Amount", type: sql.VarChar(15)},
-            {columnName:"FeeType", type: sql.VarChar(20)},
-            {columnName:"ItemName", type: sql.VarChar(15)},
+          tableName: 'BillDataSet',
+          columns: [
+            { columnName: 'Amount', type: sql.VarChar(15) },
+            { columnName: 'FeeType', type: sql.VarChar(20) },
+            { columnName: 'ItemName', type: sql.VarChar(15) },
           ],
-          values:BillDataList
-        })
+          values: BillDataList,
+        }),
       ];
 
       let billSaveResult = await executeSp({
@@ -91,17 +94,17 @@ const BillController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Bill saved successfully",
+        'success',
+        'Bill saved successfully',
         billSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -138,12 +141,12 @@ const BillController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
 
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        EntityId({ fieldName: 'Id', value: Id }),
       ];
 
       let medicalBillGetResult = await executeSp({
@@ -157,17 +160,17 @@ const BillController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Bill data retrieved successfully",
+        'success',
+        'Bill data retrieved successfully',
         medicalBillGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -201,19 +204,19 @@ const BillController = {
         AppointmentSessionId,
         AppointmentStatus,
         PatientId,
-        PatientTitle = "",
-        PatientFirstName = "",
-        PatientMiddleName = "",
-        PatientLastName = "",
-        PatientNIC = "",
-        PatientPassport = "",
-        PatientMobile = "",
-        PatientEmail = "",
+        PatientTitle = '',
+        PatientFirstName = '',
+        PatientMiddleName = '',
+        PatientLastName = '',
+        PatientNIC = '',
+        PatientPassport = '',
+        PatientMobile = '',
+        PatientEmail = '',
         PatientDateOfBirth,
-        PatientGender = "",
+        PatientGender = '',
         PatientParentId = 0,
         PatientPatientTypeId = 0,
-        PatientBloodGroup = "",
+        PatientBloodGroup = '',
         PatientInvalidOTPAttempts = 0,
         PatientStatus = 0,
         HomeAddress,
@@ -228,75 +231,75 @@ const BillController = {
         Id = 0,
       } = request.body;
       var params = [
-        EntityId({ fieldName: "PrescriptionId", value: PrescriptionId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "AppointmentNumber", value: AppointmentNumber }),
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'AppointmentNumber', value: AppointmentNumber }),
         EntityId({
-          fieldName: "AppointmentSessionId",
+          fieldName: 'AppointmentSessionId',
           value: AppointmentSessionId,
         }),
         SignedInteger({
-          fieldName: "AppointmentStatus",
+          fieldName: 'AppointmentStatus',
           value: AppointmentStatus,
         }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
 
-        StringValue({ fieldName: "PatientTitle", value: PatientTitle }),
-        StringValue({ fieldName: "PatientFirstName", value: PatientFirstName }),
+        StringValue({ fieldName: 'PatientTitle', value: PatientTitle }),
+        StringValue({ fieldName: 'PatientFirstName', value: PatientFirstName }),
         StringValue({
-          fieldName: "PatientMiddleName",
+          fieldName: 'PatientMiddleName',
           value: PatientMiddleName,
         }),
-        StringValue({ fieldName: "PatientLastName", value: PatientLastName }),
-        StringValue({ fieldName: "PatientNIC", value: PatientNIC }),
-        StringValue({ fieldName: "PatientPassport", value: PatientPassport }),
-        StringValue({ fieldName: "PatientMobile", value: PatientMobile }),
-        StringValue({ fieldName: "PatientEmail", value: PatientEmail }),
+        StringValue({ fieldName: 'PatientLastName', value: PatientLastName }),
+        StringValue({ fieldName: 'PatientNIC', value: PatientNIC }),
+        StringValue({ fieldName: 'PatientPassport', value: PatientPassport }),
+        StringValue({ fieldName: 'PatientMobile', value: PatientMobile }),
+        StringValue({ fieldName: 'PatientEmail', value: PatientEmail }),
 
         DateString({
-          fieldName: "PatientDateOfBirth",
+          fieldName: 'PatientDateOfBirth',
           value: PatientDateOfBirth,
         }),
-        StringValue({ fieldName: "PatientGender", value: PatientGender }),
+        StringValue({ fieldName: 'PatientGender', value: PatientGender }),
 
-        EntityId({ fieldName: "PatientParentId", value: PatientParentId }),
+        EntityId({ fieldName: 'PatientParentId', value: PatientParentId }),
         EntityId({
-          fieldName: "PatientPatientTypeId",
+          fieldName: 'PatientPatientTypeId',
           value: PatientPatientTypeId,
         }),
         StringValue({
-          fieldName: "PatientBloodGroup",
+          fieldName: 'PatientBloodGroup',
           value: PatientBloodGroup,
         }),
 
         EntityId({
-          fieldName: "PatientInvalidOTPAttempts",
+          fieldName: 'PatientInvalidOTPAttempts',
           value: PatientInvalidOTPAttempts,
         }),
 
         SignedInteger({
-          fieldName: "PatientStatus",
+          fieldName: 'PatientStatus',
           value: PatientStatus,
         }),
-        StringValue({ fieldName: "HomeAddress", value: HomeAddress }),
-        StringValue({ fieldName: "OfficeAddress", value: OfficeAddress }),
-        DecimalValue({ fieldName: "ChargesForDrugs", value: ChargesForDrugs }),
+        StringValue({ fieldName: 'HomeAddress', value: HomeAddress }),
+        StringValue({ fieldName: 'OfficeAddress', value: OfficeAddress }),
+        DecimalValue({ fieldName: 'ChargesForDrugs', value: ChargesForDrugs }),
         DecimalValue({
-          fieldName: "ChargesForDoctor",
+          fieldName: 'ChargesForDoctor',
           value: ChargesForDoctor,
         }),
         DecimalValue({
-          fieldName: "ChargesForInvestigations",
+          fieldName: 'ChargesForInvestigations',
           value: ChargesForInvestigations,
         }),
-        DecimalValue({ fieldName: "ChargesForOther", value: ChargesForOther }),
-        DateString({ fieldName: "IssuingDate", value: IssuingDate }),
+        DecimalValue({ fieldName: 'ChargesForOther', value: ChargesForOther }),
+        DateString({ fieldName: 'IssuingDate', value: IssuingDate }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+        EntityId({ fieldName: 'Id', value: Id }),
       ];
 
       let medicalBillSaveResult = await executeSp({
@@ -310,17 +313,17 @@ const BillController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Bill data retrived successfully",
+        'success',
+        'Bill data retrived successfully',
         medicalBillSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }

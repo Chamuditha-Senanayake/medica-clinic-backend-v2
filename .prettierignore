@@ -1,0 +1,15 @@
+# Ignore artifacts:
+build
+coverage
+dist
+node_modules
+
+# Ignore all HTML files
+*.html
+
+# Ignore minified files
+*.min.js
+
+# Ignore specific directories
+logs
+temp

@@ -21,7 +21,8 @@ router.post(
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
-    check('DoctorId').isInt().not().isEmpty(),
+    check('DoctorUserId').optional({ nullable: true }).isInt(),
+    check('DoctorName').optional({ nullable: true }).isString(),
     check('RecordType')
       .isIn(['journal', 'medical', 'clinical'])
       .not()
@@ -30,7 +31,7 @@ router.post(
     check('SubBodyPart').isString().not().isEmpty(),
     check('SubBodyPartType').optional({ nullable: true }).isString(),
     check('Date').isString().not().isEmpty(),
-    check('Diagnosis').isString().not().isEmpty(),
+    check('Symptoms').isString().not().isEmpty(),
     check('Notes').optional({ nullable: true }).isString(),
     check('UserSaved').isInt().not().isEmpty(),
   ],

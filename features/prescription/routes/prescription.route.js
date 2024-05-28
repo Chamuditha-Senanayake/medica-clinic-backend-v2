@@ -4,6 +4,21 @@ import PrescriptionController from '../controllers/prescription.controller.js';
 const router = express.Router();
 
 router.post(
+  '/PrescriptionSave',
+  [
+    check('Id').isInt().not().isEmpty(),
+    check('PatientUserId').isInt().not().isEmpty(),
+    check('DoctorUserId').optional({ nullable: true }).isInt(),
+    check('DoctorName').optional({ nullable: true }).isString(),
+    check('PrescriptionName').optional({ nullable: true }).isString(),
+    check('PrescriptionDate').isDate().not().isEmpty(),
+    check('ExpirationDate').isDate().not().isEmpty(),
+    check('UserCreated').isInt().not().isEmpty(),
+  ],
+  PrescriptionController.savePrescription
+);
+
+router.post(
   '/PrescriptionRecordCountGet',
   [
     check('UserId').isInt().not().isEmpty(),

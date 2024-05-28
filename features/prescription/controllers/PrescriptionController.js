@@ -6,12 +6,10 @@ import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   DateString,
-  StringValue,
   SignedInteger,
 } from '../../../utils/type-def.js';
-import sql from 'mssql';
 
-const PrescriptionController = {
+export const PrescriptionController = {
   /**
    *
    * Save prescription
@@ -319,5 +317,3 @@ const PrescriptionController = {
     }
   },
 };
-
-export default PrescriptionController;

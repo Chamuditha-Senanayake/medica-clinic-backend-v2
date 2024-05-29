@@ -14,6 +14,7 @@ router.post(
     check('PrescriptionDate').isDate().not().isEmpty(),
     check('ExpirationDate').isDate().not().isEmpty(),
     check('UserCreated').isInt().not().isEmpty(),
+    check('DrugDataSet').isArray().not().isEmpty(),
   ],
   PrescriptionController.savePrescription
 );

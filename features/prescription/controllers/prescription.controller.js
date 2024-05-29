@@ -8,6 +8,7 @@ import {
   DateString,
   StringValue,
   SignedInteger,
+  TableValueParameters,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
 
@@ -41,9 +42,23 @@ const PrescriptionController = {
         PrescriptionName,
         PrescriptionDate,
         ExpirationDate,
+        DrugDataSet,
         Status = 1,
         UserCreated,
       } = request.body;
+
+      const DrugDataList = [];
+      DrugDataSet.forEach(DrugData => {
+        DrugDataList.push([
+          DrugData.DrugName,
+          DrugData.Frequency,
+          DrugData.Dosage,
+          DrugData.DosageUnit,
+          DrugData.Duration,
+          DrugData.DurationUnit,
+          DrugData.Instructions,
+        ]);
+      });
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
@@ -59,6 +74,19 @@ const PrescriptionController = {
         DateString({ fieldName: 'ExpirationDate', value: ExpirationDate }),
         SignedInteger({ fieldName: 'Status', value: Status }),
         EntityId({ fieldName: 'UserCreated', value: UserCreated }),
+        TableValueParameters({
+          tableName: 'DrugDataSet',
+          columns: [
+            { columnName: 'DrugName', type: sql.NVarChar(50) },
+            { columnName: 'Frequency', type: sql.NVarChar(30) },
+            { columnName: 'Dosage', type: sql.Int },
+            { columnName: 'DosageUnit', type: sql.NVarChar(30) },
+            { columnName: 'Duration', type: sql.NVarChar(30) },
+            { columnName: 'DurationUnit', type: sql.NVarChar(30) },
+            { columnName: 'Instructions', type: sql.NVarChar(20) },
+          ],
+          values: DrugDataList,
+        }),
       ];
 
       let prescriptionSaveResult = await executeSp({

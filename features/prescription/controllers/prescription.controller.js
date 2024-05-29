@@ -6,7 +6,6 @@ import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   DateString,
-  StringValue,
   SignedInteger,
   TableValueParameters,
 } from '../../../utils/type-def.js';
@@ -95,7 +94,7 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionSaveResult = prescriptionSaveResult.recordsets[0][0];
+      prescriptionSaveResult = prescriptionSaveResult.recordsets;
 
       handleResponse(
         response,

@@ -14,6 +14,66 @@ import sql from 'mssql';
 const PrescriptionController = {
   /**
    *
+   * Get record
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientPrescriptions(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
+      ];
+
+      let PrescriptionGetResult = await executeSp({
+        spName: `PrescriptionGet`,
+        params: params,
+        connection,
+      });
+
+      //Append patient prescriptions and count for pagination
+      PrescriptionGetResult = [
+        PrescriptionGetResult.recordsets[0],
+        PrescriptionGetResult.recordsets[1][0],
+      ];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Prescriptions retrived successfully',
+        PrescriptionGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * Save prescription
    *
    * @param {request} request object
@@ -21,7 +81,7 @@ const PrescriptionController = {
    * @param {next} next - middleware
    * @returns
    */
-  async savePrescription(request, response, next) {
+  async savePatientPrescription(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -89,7 +149,7 @@ const PrescriptionController = {
       ];
 
       let prescriptionSaveResult = await executeSp({
-        spName: `SavePrescription`,
+        spName: `PrescriptionSave`,
         params: params,
         connection,
       });

@@ -130,7 +130,11 @@ const PrescriptionController = {
           value: PrescriptionName,
         },
         DateString({ fieldName: 'PrescriptionDate', value: PrescriptionDate }),
-        DateString({ fieldName: 'ExpirationDate', value: ExpirationDate }),
+        {
+          name: 'ExpirationDate',
+          type: sql.DateTime,
+          value: ExpirationDate,
+        },
         SignedInteger({ fieldName: 'Status', value: Status }),
         EntityId({ fieldName: 'UserCreated', value: UserCreated }),
         TableValueParameters({

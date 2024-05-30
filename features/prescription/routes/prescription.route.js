@@ -33,6 +33,17 @@ router.post(
 );
 
 router.post(
+  '/PrescriptionDrugsGet',
+  isAuth,
+  [
+    check('PrescriptionId').isInt().not().isEmpty(),
+    check('Page').optional({ nullable: true }).isInt(),
+    check('Limit').optional({ nullable: true }).isInt(),
+  ],
+  PrescriptionController.getPatientPrescriptionDrugs
+);
+
+router.post(
   '/PrescriptionRecordCountGet',
   [
     check('UserId').isInt().not().isEmpty(),

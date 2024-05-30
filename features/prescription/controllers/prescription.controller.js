@@ -14,7 +14,7 @@ import sql from 'mssql';
 const PrescriptionController = {
   /**
    *
-   * Get record
+   * Get prescriptions
    *
    * @param {request} request object
    * @param {response} response object
@@ -166,6 +166,70 @@ const PrescriptionController = {
         'success',
         'Data retrived successfully',
         prescriptionSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get prescription drugs
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientPrescriptionDrugs(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { PrescriptionId, Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
+        { name: 'Page', type: sql.Int, value: Page },
+        { name: 'Limit', type: sql.Int, value: Limit },
+      ];
+
+      let PrescriptionDrugsGetResult = await executeSp({
+        spName: `PrescriptionDrugsGet`,
+        params: params,
+        connection,
+      });
+
+      if (Limit == 0 || Limit == null) {
+        PrescriptionDrugsGetResult = PrescriptionDrugsGetResult.recordsets;
+      } else {
+        //Append patient prescriptions and count for pagination
+        PrescriptionDrugsGetResult = [
+          PrescriptionDrugsGetResult.recordsets[0],
+          PrescriptionDrugsGetResult.recordsets[1][0],
+        ];
+      }
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Drugs retrived successfully',
+        PrescriptionDrugsGetResult
       );
     } catch (error) {
       handleError(

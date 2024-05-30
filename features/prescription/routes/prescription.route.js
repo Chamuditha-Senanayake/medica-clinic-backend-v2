@@ -33,6 +33,13 @@ router.post(
 );
 
 router.post(
+  '/PrescriptionDelete',
+  isAuth,
+  [check('PrescriptionId').isInt().not().isEmpty()],
+  PrescriptionController.deletePatientPrescription
+);
+
+router.post(
   '/PrescriptionDrugsGet',
   isAuth,
   [
@@ -41,50 +48,6 @@ router.post(
     check('Limit').optional({ nullable: true }).isInt(),
   ],
   PrescriptionController.getPatientPrescriptionDrugs
-);
-
-router.post(
-  '/PrescriptionRecordCountGet',
-  [
-    check('UserId').isInt().not().isEmpty(),
-    check('DoctorId').isInt().not().isEmpty(),
-    check('DateFrom').not().isEmpty(),
-    check('DateTo').not().isEmpty(),
-  ],
-  PrescriptionController.getPrescriptionRecordCount
-);
-
-router.post(
-  '/PrescriptionRecordDiseaseCountGet',
-  [
-    check('UserId').isInt().not().isEmpty(),
-    check('DoctorId').isInt().not().isEmpty(),
-    check('DateFrom').not().isEmpty(),
-    check('DateTo').not().isEmpty(),
-  ],
-  PrescriptionController.getPrescriptionRecordDiseaseCount
-);
-
-router.post(
-  '/PrescriptionRecordDiseaseDetailsGet',
-  [
-    check('UserId').isInt().not().isEmpty(),
-    check('DoctorId').isInt().not().isEmpty(),
-    check('DateFrom').not().isEmpty(),
-    check('DateTo').not().isEmpty(),
-  ],
-  PrescriptionController.getPrescriptionRecordDiseaseDetails
-);
-
-router.post(
-  '/PrescriptionRecordDrugCountGet',
-  [
-    check('UserId').isInt().not().isEmpty(),
-    check('DoctorId').isInt().not().isEmpty(),
-    check('DateFrom').not().isEmpty(),
-    check('DateTo').not().isEmpty(),
-  ],
-  PrescriptionController.getPrescriptionRecordDrugCount
 );
 
 export default router;

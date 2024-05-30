@@ -17,6 +17,7 @@ router.post(
 
 router.post(
   '/PrescriptionSave',
+  isAuth,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientUserId').isInt().not().isEmpty(),

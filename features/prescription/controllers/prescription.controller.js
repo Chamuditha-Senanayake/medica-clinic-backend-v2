@@ -144,7 +144,7 @@ const PrescriptionController = {
             { columnName: 'Frequency', type: sql.NVarChar(30) },
             { columnName: 'Dosage', type: sql.Int },
             { columnName: 'DosageUnit', type: sql.NVarChar(30) },
-            { columnName: 'Duration', type: sql.NVarChar(30) },
+            { columnName: 'Duration', type: sql.Int },
             { columnName: 'DurationUnit', type: sql.NVarChar(30) },
             { columnName: 'Instructions', type: sql.NVarChar(20) },
           ],

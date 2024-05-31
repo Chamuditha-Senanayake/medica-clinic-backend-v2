@@ -181,7 +181,7 @@ const PrescriptionController = {
 
   /**
    *
-   * Delete record
+   * Delete prescription
    *
    * @param {request} request object
    * @param {response} response object

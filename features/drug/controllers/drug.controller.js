@@ -10,8 +10,75 @@ import {
   DateString,
   FloatValue,
 } from '../../../utils/type-def.js';
+import sql from 'mssql';
 
 const DrugController = {
+  /**
+   *
+   * get drugs by name
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getDrugsByName(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Drug.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { DrugName, Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        { name: 'DrugName', type: sql.NVarChar, value: DrugName },
+        { name: 'Page', type: sql.Int, value: Page },
+        { name: 'Limit', type: sql.Int, value: Limit },
+      ];
+
+      let drugsGetByNameResult = await executeSp({
+        spName: `DrugsGetByName`,
+        params: params,
+        connection,
+      });
+
+      if (DrugName == '' || Limit == 0 || Limit == null) {
+        drugsGetByNameResult = drugsGetByNameResult.recordsets;
+        console.log('object');
+      } else {
+        //Append patient prescriptions and count for pagination
+        drugsGetByNameResult = [
+          drugsGetByNameResult.recordsets[0],
+          drugsGetByNameResult.recordsets[1][0],
+        ];
+      }
+      // drugsGetByNameResult = drugsGetByNameResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Drugs retrived successfully',
+        drugsGetByNameResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
   /**
    *
    * get drug allergy by [Id, UserId]

@@ -49,4 +49,11 @@ router.post(
   RecordController.deletePatientRecords
 );
 
+router.post(
+  '/RecordBodyPartsGet',
+  isAuth,
+  [check('UserId').isInt().not().isEmpty()],
+  RecordController.getPatientRecordBodyParts
+);
+
 export default router;

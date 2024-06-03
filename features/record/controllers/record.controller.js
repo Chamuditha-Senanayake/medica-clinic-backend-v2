@@ -200,6 +200,59 @@ const RecordController = {
       next(error);
     }
   },
+
+  /**
+   *
+   * Get record body parts
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientRecordBodyParts(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Record.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId } = request.body;
+
+      var params = [EntityId({ fieldName: 'UserId', value: UserId })];
+
+      let RecordGetResult = await executeSp({
+        spName: `PatientRecordBodyPartsGet`,
+        params: params,
+        connection,
+      });
+
+      //Append patient records and count for pagination
+      RecordGetResult = RecordGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Records retrived successfully',
+        RecordGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
 };
 
 export default RecordController;

@@ -6,21 +6,22 @@ import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   DateString,
-  StringValue,
   SignedInteger,
+  TableValueParameters,
 } from '../../../utils/type-def.js';
+import sql from 'mssql';
 
 const PrescriptionController = {
   /**
    *
-   * get prescription record count
+   * Get prescriptions
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordCount(request, response, next) {
+  async getPatientPrescriptions(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -32,29 +33,32 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { UserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
         EntityId({ fieldName: 'UserId', value: UserId }),
-        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
-        DateString({ fieldName: 'DateFrom', value: DateFrom }),
-        DateString({ fieldName: 'DateTo', value: DateTo }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
-      let prescriptionGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordCountGet`,
+      let PrescriptionGetResult = await executeSp({
+        spName: `PrescriptionGet`,
         params: params,
         connection,
       });
 
-      prescriptionGetResult = prescriptionGetResult.recordsets[0][0];
+      //Append patient prescriptions and count for pagination
+      PrescriptionGetResult = [
+        PrescriptionGetResult.recordsets[0],
+        PrescriptionGetResult.recordsets[1][0],
+      ];
 
       handleResponse(
         response,
         200,
         'success',
-        'Data retrived successfully',
-        prescriptionGetResult
+        'Prescriptions retrived successfully',
+        PrescriptionGetResult
       );
     } catch (error) {
       handleError(
@@ -70,14 +74,14 @@ const PrescriptionController = {
 
   /**
    *
-   * get prescription record disease count
+   * Save prescription
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDiseaseCount(request, response, next) {
+  async savePatientPrescription(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -89,30 +93,79 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const {
+        Id = 0,
+        PatientUserId,
+        DoctorUserId,
+        DoctorName,
+        PrescriptionName,
+        PrescriptionDate,
+        ExpirationDate,
+        DrugDataSet,
+        Status = 1,
+        UserCreated,
+      } = request.body;
+
+      const DrugDataList = [];
+      DrugDataSet.forEach(DrugData => {
+        DrugDataList.push([
+          DrugData.DrugName,
+          DrugData.Frequency,
+          DrugData.Dosage,
+          DrugData.DosageUnit,
+          DrugData.Duration,
+          DrugData.DurationUnit,
+          DrugData.Instructions,
+        ]);
+      });
 
       var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
-        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
-        DateString({ fieldName: 'DateFrom', value: DateFrom }),
-        DateString({ fieldName: 'DateTo', value: DateTo }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
+        { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
+        { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
+        {
+          name: 'PrescriptionName',
+          type: sql.NVarChar,
+          value: PrescriptionName,
+        },
+        DateString({ fieldName: 'PrescriptionDate', value: PrescriptionDate }),
+        {
+          name: 'ExpirationDate',
+          type: sql.DateTime,
+          value: ExpirationDate,
+        },
+        SignedInteger({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'UserCreated', value: UserCreated }),
+        TableValueParameters({
+          tableName: 'DrugDataSet',
+          columns: [
+            { columnName: 'DrugName', type: sql.NVarChar(50) },
+            { columnName: 'Frequency', type: sql.NVarChar(30) },
+            { columnName: 'Dosage', type: sql.Int },
+            { columnName: 'DosageUnit', type: sql.NVarChar(30) },
+            { columnName: 'Duration', type: sql.Int },
+            { columnName: 'DurationUnit', type: sql.NVarChar(30) },
+            { columnName: 'Instructions', type: sql.NVarChar(20) },
+          ],
+          values: DrugDataList,
+        }),
       ];
 
-      let prescriptionRecordDiseaseCountGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDiseaseCountGet`,
+      let prescriptionSaveResult = await executeSp({
+        spName: `PrescriptionSave`,
         params: params,
         connection,
       });
 
-      prescriptionRecordDiseaseCountGetResult =
-        prescriptionRecordDiseaseCountGetResult.recordsets[0][0];
+      prescriptionSaveResult = prescriptionSaveResult.recordsets;
 
       handleResponse(
         response,
         200,
         'success',
         'Data retrived successfully',
-        prescriptionRecordDiseaseCountGetResult
+        prescriptionSaveResult
       );
     } catch (error) {
       handleError(
@@ -128,14 +181,14 @@ const PrescriptionController = {
 
   /**
    *
-   * get prescription record disease details
+   * Delete prescription
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDiseaseDetails(request, response, next) {
+  async deletePatientPrescription(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -147,30 +200,23 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { PrescriptionId } = request.body;
 
       var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
-        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
-        DateString({ fieldName: 'DateFrom', value: DateFrom }),
-        DateString({ fieldName: 'DateTo', value: DateTo }),
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
       ];
 
-      let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDiseaseDetailsGet`,
+      await executeSp({
+        spName: `PrescriptionDelete`,
         params: params,
         connection,
       });
-
-      prescriptionRecordDiseaseDetailsGetResult =
-        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
         'success',
-        'Data retrived successfully',
-        prescriptionRecordDiseaseDetailsGetResult
+        'Prescription deleted successfully'
       );
     } catch (error) {
       handleError(
@@ -186,14 +232,14 @@ const PrescriptionController = {
 
   /**
    *
-   * get prescription record drug count
+   * Get prescription drugs
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDrugCount(request, response, next) {
+  async getPatientPrescriptionDrugs(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -205,30 +251,36 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { PrescriptionId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
-        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
-        DateString({ fieldName: 'DateFrom', value: DateFrom }),
-        DateString({ fieldName: 'DateTo', value: DateTo }),
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
+        { name: 'Page', type: sql.Int, value: Page },
+        { name: 'Limit', type: sql.Int, value: Limit },
       ];
 
-      let prescriptionRecordDrugCountGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDrugCountGet`,
+      let PrescriptionDrugsGetResult = await executeSp({
+        spName: `PrescriptionDrugsGet`,
         params: params,
         connection,
       });
 
-      prescriptionRecordDrugCountGetResult =
-        prescriptionRecordDrugCountGetResult.recordsets[0][0];
+      if (Limit == 0 || Limit == null) {
+        PrescriptionDrugsGetResult = PrescriptionDrugsGetResult.recordsets;
+      } else {
+        //Append patient prescriptions and count for pagination
+        PrescriptionDrugsGetResult = [
+          PrescriptionDrugsGetResult.recordsets[0],
+          PrescriptionDrugsGetResult.recordsets[1][0],
+        ];
+      }
 
       handleResponse(
         response,
         200,
         'success',
-        'Data retrived successfully',
-        prescriptionRecordDrugCountGetResult
+        'Drugs retrived successfully',
+        PrescriptionDrugsGetResult
       );
     } catch (error) {
       handleError(

@@ -1,15 +1,15 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
   TableValueParameters,
-} from "../../../utils/type-def.js";
-import sql from "mssql";
+} from '../../../utils/type-def.js';
+import sql from 'mssql';
 
 const InstituteController = {
   /**
@@ -36,9 +36,9 @@ const InstituteController = {
       const { Id, InstituteBranchId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'InstituteBranchId', value: InstituteBranchId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let instituteBranchDoctorGetResult = await executeSp({
@@ -47,22 +47,23 @@ const InstituteController = {
         connection,
       });
 
-      instituteBranchDoctorGetResult = instituteBranchDoctorGetResult.recordsets[0];
+      instituteBranchDoctorGetResult =
+        instituteBranchDoctorGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         instituteBranchDoctorGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -89,22 +90,16 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        InstituteBranchId,
-        DoctorId,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, InstituteBranchId, DoctorId, Status, UserSaved } =
+        request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-      EntityId({ fieldName: "DoctorId", value: DoctorId }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'InstituteBranchId', value: InstituteBranchId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let instituteBranchDoctorSaveResult = await executeSp({
         spName: `InstituteBranchDoctorSave`,
@@ -113,28 +108,28 @@ const InstituteController = {
       });
 
       console.log(instituteBranchDoctorSaveResult.recordsets);
-      instituteBranchDoctorSaveResult = instituteBranchDoctorSaveResult.recordsets[0][0];
+      instituteBranchDoctorSaveResult =
+        instituteBranchDoctorSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         instituteBranchDoctorSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
 
-  
   // save a Institute Branch
 
   async getInstituteBranch(request, response, next) {
@@ -152,10 +147,10 @@ const InstituteController = {
       const { Id, DoctorId, InstituteId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "InstituteId", value: InstituteId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'InstituteId', value: InstituteId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let instituteBranchGetResult = await executeSp({
@@ -169,17 +164,17 @@ const InstituteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         instituteBranchGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -218,36 +213,35 @@ const InstituteController = {
         ContactNumbers,
       } = request.body;
 
-    const ContactNumberList = [];
-    ContactNumbers.forEach((phoneNumber) => {
-      ContactNumberList.push([null, phoneNumber, 1]);
-    });
+      const ContactNumberList = [];
+      ContactNumbers.forEach(phoneNumber => {
+        ContactNumberList.push([null, phoneNumber, 1]);
+      });
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "InstituteId", value: InstituteId }),
-      StringValue({ fieldName: "Name", value: Name }),
-      EntityId({ fieldName: "AddressId", value: AddressId }),
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'InstituteId', value: InstituteId }),
+        StringValue({ fieldName: 'Name', value: Name }),
+        EntityId({ fieldName: 'AddressId', value: AddressId }),
 
-      StringValue({ fieldName: "Email", value: Email }),
-      StringValue({ fieldName: "Website", value: Website }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        StringValue({ fieldName: 'Email', value: Email }),
+        StringValue({ fieldName: 'Website', value: Website }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
 
-      TableValueParameters({
-        tableName:"ContactNumbers",        
-        columns:
-        [
-          {columnName:"Id", type: sql.Int},
-          {columnName:"Number", type: sql.VarChar(15)},
-          {columnName:"Status", type: sql.TinyInt},
-        ],
-        values:ContactNumberList
-      })
-    ];
+        TableValueParameters({
+          tableName: 'ContactNumbers',
+          columns: [
+            { columnName: 'Id', type: sql.Int },
+            { columnName: 'Number', type: sql.VarChar(15) },
+            { columnName: 'Status', type: sql.TinyInt },
+          ],
+          values: ContactNumberList,
+        }),
+      ];
 
       let instituteBranchSaveResult = await executeSp({
         spName: `InstituteBranchSave`,
@@ -261,23 +255,23 @@ const InstituteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         instituteBranchSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
 
-// get a Institute Doctor
+  // get a Institute Doctor
 
   async getInstituteDoctor(request, response, next) {
     const errors = validationResult(request);
@@ -294,8 +288,8 @@ const InstituteController = {
       const { InstituteId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "InstituteId", value: InstituteId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'InstituteId', value: InstituteId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let instituteDoctorGetResult = await executeSp({
@@ -309,22 +303,21 @@ const InstituteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         instituteDoctorGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 
   // get a Institute
 
@@ -343,8 +336,8 @@ const InstituteController = {
       const { Id, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let instituteGetResult = await executeSp({
@@ -358,22 +351,21 @@ const InstituteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Institutes retrived successfully",
+        'success',
+        'Institutes retrived successfully',
         instituteGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 
   /**
    *
@@ -396,26 +388,19 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        Name,
-        Email,
-        Website,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, Name, Email, Website, Status, UserSaved } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'Id', value: Id }),
 
-        StringValue({ fieldName: "Name", value: Name }),
-        StringValue({ fieldName: "Email", value: Email }),
-        StringValue({ fieldName: "Website", value: Website }),
+        StringValue({ fieldName: 'Name', value: Name }),
+        StringValue({ fieldName: 'Email', value: Email }),
+        StringValue({ fieldName: 'Website', value: Website }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
       ];
 
       let instituteSaveResult = await executeSp({
@@ -430,22 +415,21 @@ const InstituteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Institue retrieved successfully",
+        'success',
+        'Institue retrieved successfully',
         instituteSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default InstituteController;

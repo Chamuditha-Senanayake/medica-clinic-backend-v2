@@ -1,5 +1,21 @@
+// {
+//     "editor.formatOnPaste": true,
+//     "editor.formatOnSave": true,
+//     "editor.defaultFormatter": "esbenp.prettier-vscode"
+// }
+// {
+//     "editor.formatOnSave": true,
+//     "editor.codeActionsOnSave": {
+//         "source.fixAll.eslint": "explicit"
+//     },
+//     "[javascript]": {
+//         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+//     },
+//     "[typescript]": {
+//         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+//     }
+// }
 {
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }

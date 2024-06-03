@@ -1,4 +1,4 @@
-import sql from "mssql";
+import sql from 'mssql';
 
 export default async function executeSp({ spName, params, connection }) {
   return new Promise(async (resolve, reject) => {
@@ -6,7 +6,7 @@ export default async function executeSp({ spName, params, connection }) {
       var request = new sql.Request(connection);
       try {
         if (params != undefined) {
-          params.map((param) => {
+          params.map(param => {
             request.input(param.name, param.type, param.value);
           });
         }

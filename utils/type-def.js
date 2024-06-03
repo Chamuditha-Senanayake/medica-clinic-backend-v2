@@ -1,6 +1,6 @@
-import { StandardValidation } from "express-validator/src/context-items/standard-validation.js";
-import Validation from "./validation.js";
-import sql from "mssql";
+import { StandardValidation } from 'express-validator/src/context-items/standard-validation.js';
+import Validation from './validation.js';
+import sql from 'mssql';
 const {
   Int,
   NVarChar,
@@ -160,10 +160,10 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
    * ]
    */
 
-   values.map((value) => {
-      table.rows.add(...value);
-    });
-      
+  values.map(value => {
+    table.rows.add(...value);
+  });
+
   return {
     name: tableName,
     type: sql.TVP(table),

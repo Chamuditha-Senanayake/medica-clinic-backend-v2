@@ -31,6 +31,7 @@ router.post(
     check('SubBodyPart').isString().not().isEmpty(),
     check('SubBodyPartType').optional({ nullable: true }).isString(),
     check('Date').isString().not().isEmpty(),
+    check('Diagnosis').optional({ nullable: true }).isString(),
     check('Symptoms').isString().not().isEmpty(),
     check('Notes').optional({ nullable: true }).isString(),
     check('UserSaved').isInt().not().isEmpty(),

@@ -41,16 +41,16 @@ const RecordController = {
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
-      let RecordGetResult = await executeSp({
+      let recordsGetResult = await executeSp({
         spName: `PatientRecordsGet`,
         params: params,
         connection,
       });
 
       //Append patient records and count for pagination
-      RecordGetResult = [
-        RecordGetResult.recordsets[0],
-        RecordGetResult.recordsets[1][0],
+      recordsGetResult = [
+        recordsGetResult.recordsets[0],
+        recordsGetResult.recordsets[1][0],
       ];
 
       handleResponse(
@@ -58,7 +58,7 @@ const RecordController = {
         200,
         'success',
         'Records retrived successfully',
-        RecordGetResult
+        recordsGetResult
       );
     } catch (error) {
       handleError(
@@ -226,21 +226,21 @@ const RecordController = {
 
       var params = [EntityId({ fieldName: 'UserId', value: UserId })];
 
-      let RecordGetResult = await executeSp({
+      let patientRecordBodyPartsGetResult = await executeSp({
         spName: `PatientRecordBodyPartsGet`,
         params: params,
         connection,
       });
 
-      //Append patient records and count for pagination
-      RecordGetResult = RecordGetResult.recordsets[0];
+      patientRecordBodyPartsGetResult =
+        patientRecordBodyPartsGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
         'success',
-        'Records retrived successfully',
-        RecordGetResult
+        'Data retrived successfully',
+        recordGetResult
       );
     } catch (error) {
       handleError(

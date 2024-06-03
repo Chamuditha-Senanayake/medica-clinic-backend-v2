@@ -4,6 +4,12 @@ import DrugController from '../controllers/drug.controller.js';
 const router = express.Router();
 
 router.post(
+  '/DrugsGetByName',
+  check('DrugName').optional({ nullable: true }).isString(),
+  DrugController.getDrugsByName
+);
+
+router.post(
   '/DrugAllergyGet',
   [check('Id').isInt().not().isEmpty(), check('UserId').not().isEmpty()],
   DrugController.getDrugAllergy

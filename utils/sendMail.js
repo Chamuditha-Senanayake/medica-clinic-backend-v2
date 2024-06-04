@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 export const sendEmailFromCustomAccount = ({
   emailUser = process.env.EMAIL_USER,
@@ -10,13 +10,13 @@ export const sendEmailFromCustomAccount = ({
 }) => {
   return new Promise(async (resolve, reject) => {
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'gmail',
       auth: {
         user: emailUser,
         pass: emailPassword,
       },
     });
- 
+
     let mailOptions = {
       from: emailUser,
       to: to,
@@ -24,12 +24,12 @@ export const sendEmailFromCustomAccount = ({
       html: html,
       attachments,
     };
- 
+
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         reject(error);
       } else {
-        resolve("Email sent");
+        resolve('Email sent');
       }
     });
   });

@@ -1,20 +1,19 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
-import { sendEmailFromCustomAccount } from "../../../utils/sendMail.js";
-import sql from "mssql";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
+import { sendEmailFromCustomAccount } from '../../../utils/sendMail.js';
+import sql from 'mssql';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
-import jwt from "jsonwebtoken";
-import jwtSign from "../../../utils/jwtSign.js";
+} from '../../../utils/type-def.js';
+import jwt from 'jsonwebtoken';
+import jwtSign from '../../../utils/jwtSign.js';
 
 const CaregiverController = {
-
   /**
    *
    * Request caregiver by patient
@@ -35,110 +34,101 @@ const CaregiverController = {
     }
 
     let connection = request.app.locals.db;
-    const { 
-      Id = 0,
-      CaregiverEmail,
-      Status 
-    } = request.body;
-    
+    const { Id = 0, CaregiverEmail, Status } = request.body;
+
     let token;
 
     try {
+      let params1 = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        { name: 'PatientUserId', type: sql.Int, value: request.user.userId },
+        { name: 'CaregiverEmail', type: sql.NVarChar, value: CaregiverEmail },
+        { name: 'Status', type: sql.NVarChar, value: Status },
+      ];
 
-        let params1 = [
-          EntityId({ fieldName: "Id", value: Id }),
-          { name: 'PatientUserId', type: sql.Int, value: request.user.userId } ,           
-          { name: 'CaregiverEmail', type: sql.NVarChar, value:CaregiverEmail } ,           
-          { name: 'Status', type: sql.NVarChar, value:Status } ,          
-        ];
-      
-        let caregiverAssignResult = await executeSp({
-          spName: `PatientCaregiverAssign`,
-          params: params1,
-          connection,
-        });    
+      let caregiverAssignResult = await executeSp({
+        spName: `PatientCaregiverAssign`,
+        params: params1,
+        connection,
+      });
 
-        caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
+      caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
 
-        token = jwtSign({
-            Id:caregiverAssignResult.Id,
-            patientId: request.user.userId,
-            caregiverEmail: CaregiverEmail,
-          },
-          process.env.CAREGIVER_REQUEST_TOKEN_EXPIRATION_TIME
-        );
-      
-        handleResponse(
-          response,
-          200,
-          "success",
-          "Caregiver assigned successfully",
-          caregiverAssignResult
-        );
+      token = jwtSign(
+        {
+          Id: caregiverAssignResult.Id,
+          patientId: request.user.userId,
+          caregiverEmail: CaregiverEmail,
+        },
+        process.env.CAREGIVER_REQUEST_TOKEN_EXPIRATION_TIME
+      );
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Caregiver assigned successfully',
+        caregiverAssignResult
+      );
     } catch (error) {
-        handleError(
-          response,
-          500,
-          "error",
-          error.message,
-          "Something went wrong"
-        );
-        next(error);
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
     } finally {
+      if (Status === 'invited') {
         try {
-
           let params2 = [
-            StringValue({ fieldName: "Email", value: CaregiverEmail }),
+            StringValue({ fieldName: 'Email', value: CaregiverEmail }),
           ];
 
           let caregiverInfo = await executeSp({
             spName: `UserGetByEmail`,
             params: params2,
             connection,
-          });   
-        
-          if(!caregiverInfo){
-            throw Error("User not found");
-          }
-        
-          sendEmailFromCustomAccount({
-            to: CaregiverEmail,  
-            subject:"You have assigned as a caregiver",
-            html:`<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'>${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}`
-          })
+          });
 
+          if (!caregiverInfo) {
+            throw Error('User not found');
+          }
+
+          sendEmailFromCustomAccount({
+            to: CaregiverEmail,
+            subject: 'You have assigned as a caregiver',
+            html: `<h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'>${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}`,
+          });
         } catch (error) {
-      
           let errorCode = error.message.split(' ')[0];
 
-          if(errorCode === "29101" || errorCode === "29202"){
-
+          if (errorCode === '29101' || errorCode === '29202') {
             sendEmailFromCustomAccount({
-              to: CaregiverEmail,  
-              subject:"You have assigned as a caregiver",
-              html:`<h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
-              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`
-            })
-          }
-
-          else{
+              to: CaregiverEmail,
+              subject: 'You have assigned as a caregiver',
+              html: `<h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
+              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`,
+            });
+          } else {
             handleError(
-            response,
-            500,
-            "error",
-            error.message,
-            "Something went wrong"
-          );
-          next(error);
-          }  
+              response,
+              500,
+              'error',
+              error.message,
+              'Something went wrong'
+            );
+            next(error);
+          }
         }
-      
+      }
     }
   },
 
   /**
    *
-   * Response by caregiver 
+   * Response by caregiver
    *
    * @param {request} request object
    * @param {response} response object
@@ -162,7 +152,7 @@ const CaregiverController = {
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
 
       let params1 = [
-        StringValue({ fieldName: "Email", value: decodedToken.caregiverEmail }),
+        StringValue({ fieldName: 'Email', value: decodedToken.caregiverEmail }),
       ];
 
       let caregiverInfo = await executeSp({
@@ -172,40 +162,40 @@ const CaregiverController = {
       });
 
       let params2 = [
-        EntityId({ fieldName: "Id", value: decodedToken.Id }),
-        EntityId({ fieldName: "CaregiverUserId", value: caregiverInfo.recordsets[0][0].Id }), 
-        StringValue({ fieldName: "Status", value: Status }),
-       
-        StringValue({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: 'Id', value: decodedToken.Id }),
+        EntityId({
+          fieldName: 'CaregiverUserId',
+          value: caregiverInfo.recordsets[0][0].Id,
+        }),
+        StringValue({ fieldName: 'Status', value: Status }),
       ];
 
       let caregiverAssignResult = await executeSp({
-          spName: `PatientCaregiverAssign`,
-          params: params2,
-          connection,
-      });    
+        spName: `PatientCaregiverAssign`,
+        params: params2,
+        connection,
+      });
 
-      caregiverAssignResult = caregiverAssignResult.recordsets[0][0]; 
+      caregiverAssignResult = caregiverAssignResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         caregiverAssignResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-  
 
   /**
    *
@@ -233,17 +223,17 @@ const CaregiverController = {
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
 
       let params1 = [
-        EntityId({ fieldName: "Id", value: decodedToken.patientId }),
+        EntityId({ fieldName: 'Id', value: decodedToken.patientId }),
       ];
 
       let patientInfo = await executeSp({
         spName: `UserGetById`,
         params: params1,
         connection,
-      }); 
+      });
 
       let params2 = [
-        StringValue({ fieldName: "Email", value: decodedToken.caregiverEmail }),
+        StringValue({ fieldName: 'Email', value: decodedToken.caregiverEmail }),
       ];
 
       let caregiverInfo = await executeSp({
@@ -252,34 +242,32 @@ const CaregiverController = {
         connection,
       });
 
-      let params3 = [
-        EntityId({ fieldName: "Id", value: decodedToken.Id })
-      ];
+      let params3 = [EntityId({ fieldName: 'Id', value: decodedToken.Id })];
 
       let PatientCaregiverInfo = await executeSp({
         spName: `PatientCaregiverGet`,
         params: params3,
         connection,
-      }); 
+      });
 
-      PatientCaregiverInfo = PatientCaregiverInfo.recordsets[0][0]
-      PatientCaregiverInfo.patientInfo = patientInfo.recordsets[0][0]
+      PatientCaregiverInfo = PatientCaregiverInfo.recordsets[0][0];
+      PatientCaregiverInfo.patientInfo = patientInfo.recordsets[0][0];
       PatientCaregiverInfo.IsRegisteredCaregiver = caregiverInfo ? true : false;
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         PatientCaregiverInfo
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -534,7 +522,6 @@ const CaregiverController = {
   //     next(error);
   //   }
   // },
-
 };
 
 export default CaregiverController;

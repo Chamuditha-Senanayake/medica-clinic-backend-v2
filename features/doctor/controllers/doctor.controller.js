@@ -1,9 +1,9 @@
-import { validationResult } from "express-validator";
-import sql from "mssql";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import sql from 'mssql';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   DateString,
   EntityId,
@@ -11,8 +11,7 @@ import {
   StringValue,
   TableValueParameters,
   FloatValue,
-
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 const {
   Int,
   NVarChar,
@@ -53,9 +52,9 @@ const DoctorController = {
 
       // convert the request body value into a type
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "DoctorUserId", value: DoctorUserId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'DoctorUserId', value: DoctorUserId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       // executes the given stored procedure
@@ -70,17 +69,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Doctor data retrived successfully",
+        'success',
+        'Doctor data retrived successfully',
         doctorGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -128,50 +127,49 @@ const DoctorController = {
         OtherFee,
       } = request.body;
 
-    const ContactNumberList = [];
-    ContactNumbers.forEach((phoneNumber) => {
-      ContactNumberList.push([null, phoneNumber, 1]);
-    });
+      const ContactNumberList = [];
+      ContactNumbers.forEach(phoneNumber => {
+        ContactNumberList.push([null, phoneNumber, 1]);
+      });
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        StringValue({ fieldName: "FirstName", value: FirstName }),
-        StringValue({ fieldName: "MiddleName", value: MiddleName }),
-        StringValue({ fieldName: "LastName", value: LastName }),
-        StringValue({ fieldName: "Email", value: Email }),
-        StringValue({ fieldName: "NIC", value: NIC }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({ fieldName: 'FirstName', value: FirstName }),
+        StringValue({ fieldName: 'MiddleName', value: MiddleName }),
+        StringValue({ fieldName: 'LastName', value: LastName }),
+        StringValue({ fieldName: 'Email', value: Email }),
+        StringValue({ fieldName: 'NIC', value: NIC }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),       
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
         StringValue({
-          fieldName: "RegistrationNumber",
+          fieldName: 'RegistrationNumber',
           value: RegistrationNumber,
         }),
-        DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
-        StringValue({ fieldName: "Title", value: Title }),
-        StringValue({ fieldName: "ZoomEmail", value: ZoomEmail }),
+        DateString({ fieldName: 'DateOfBirth', value: DateOfBirth }),
+        StringValue({ fieldName: 'Title', value: Title }),
+        StringValue({ fieldName: 'ZoomEmail', value: ZoomEmail }),
         ZoomPassword
           ? StringValue({
-              fieldName: "ZoomPassword",
+              fieldName: 'ZoomPassword',
               value: ZoomPassword,
             })
-          : null,        
-        EntityId({ fieldName: "BranchId", value: BranchId }),
-        FloatValue({ fieldName: "DoctorFee", value: DoctorFee }),
-        FloatValue({ fieldName: "HospitalFee", value: HospitalFee }),
-        FloatValue({ fieldName: "OtherFee", value: OtherFee }),
+          : null,
+        EntityId({ fieldName: 'BranchId', value: BranchId }),
+        FloatValue({ fieldName: 'DoctorFee', value: DoctorFee }),
+        FloatValue({ fieldName: 'HospitalFee', value: HospitalFee }),
+        FloatValue({ fieldName: 'OtherFee', value: OtherFee }),
 
         TableValueParameters({
-          tableName:"ContactNumbers",        
-          columns:
-          [
-            {columnName:"Id", type: sql.Int},
-            {columnName:"Number", type: sql.VarChar(15)},
-            {columnName:"Status", type: sql.TinyInt},
+          tableName: 'ContactNumbers',
+          columns: [
+            { columnName: 'Id', type: sql.Int },
+            { columnName: 'Number', type: sql.VarChar(15) },
+            { columnName: 'Status', type: sql.TinyInt },
           ],
-          values:ContactNumberList
+          values: ContactNumberList,
         }),
       ];
 
@@ -187,17 +185,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         doctorSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -226,8 +224,8 @@ const DoctorController = {
       let connection = request.app.locals.db;
       const { DoctorId = 0, Id = 0 } = request.body;
       var params = [
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'Id', value: Id }),
       ];
 
       let doctorSpecializationsGetResult = await executeSp({
@@ -243,17 +241,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         doctorSpecializationsGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -289,14 +287,14 @@ const DoctorController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "SpecializationId", value: SpecializationId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'SpecializationId', value: SpecializationId }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+        EntityId({ fieldName: 'Id', value: Id }),
       ];
 
       let doctorSpecializationsSaveResult = await executeSp({
@@ -312,17 +310,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         doctorSpecializationsSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -357,11 +355,11 @@ const DoctorController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
       ];
 
       let doctorChannelingStatusGetResult = await executeSp({
@@ -370,22 +368,23 @@ const DoctorController = {
         connection,
       });
 
-      doctorChannelingStatusGetResult = doctorChannelingStatusGetResult.recordsets;
+      doctorChannelingStatusGetResult =
+        doctorChannelingStatusGetResult.recordsets;
 
       handleResponse(
         response,
         200,
-        "success",
-        "Channeling data retrieved successfully",
+        'success',
+        'Channeling data retrieved successfully',
         doctorChannelingStatusGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -418,18 +417,18 @@ const DoctorController = {
         AppointmentId,
         UserSaved,
         Id = 0,
-        DoctorStatus = "",
-        ChanalingStatus = "",
+        DoctorStatus = '',
+        ChanalingStatus = '',
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        EntityId({ fieldName: "Id", value: Id }),
-        StringValue({ fieldName: "DoctorStatus", value: DoctorStatus }),
-        StringValue({ fieldName: "ChanalingStatus", value: ChanalingStatus }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({ fieldName: 'DoctorStatus', value: DoctorStatus }),
+        StringValue({ fieldName: 'ChanalingStatus', value: ChanalingStatus }),
       ];
 
       let doctorChannelingStatusSaveResult = await executeSp({
@@ -444,17 +443,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Channeling status created successfully",
+        'success',
+        'Channeling status created successfully',
         doctorChannelingStatusSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -481,13 +480,13 @@ const DoctorController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id = 0, DoctorId = 0, ContactNumber = "", UserId } = request.body;
+      const { Id = 0, DoctorId = 0, ContactNumber = '', UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        StringValue({ fieldName: "ContactNumber", value: ContactNumber }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        StringValue({ fieldName: 'ContactNumber', value: ContactNumber }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let doctorContactNumberGetResult = await executeSp({
@@ -501,17 +500,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Contact numbers retrieved successfully",
+        'success',
+        'Contact numbers retrieved successfully',
         doctorContactNumberGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -541,8 +540,8 @@ const DoctorController = {
       const { UserId, PatientId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
       ];
 
       let doctorDispositionReminderGetResult = await executeSp({
@@ -557,17 +556,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         doctorDispositionReminderGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -601,31 +600,31 @@ const DoctorController = {
         AppointmentId = 0,
         PatientId = 0,
         RemindOn = 0,
-        RemindFromDate = "",
-        RemindType = "",
-        Message = "",
+        RemindFromDate = '',
+        RemindType = '',
+        Message = '',
         Status = 0,
         UserSaved = 0,
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'Id', value: Id }),
         EntityId({
-          fieldName: "PrescriptionRecordId",
+          fieldName: 'PrescriptionRecordId',
           value: PrescriptionRecordId,
         }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
         SignedInteger({
-          fieldName: "RemindOn",
+          fieldName: 'RemindOn',
           value: RemindOn,
         }),
-        DateString({ fieldName: "RemindFromDate", value: RemindFromDate }),
-        StringValue({ fieldName: "RemindType", value: RemindType }),
-        StringValue({ fieldName: "Message", value: Message }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        DateString({ fieldName: 'RemindFromDate', value: RemindFromDate }),
+        StringValue({ fieldName: 'RemindType', value: RemindType }),
+        StringValue({ fieldName: 'Message', value: Message }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
       ];
@@ -642,17 +641,17 @@ const DoctorController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Reminder saved successfully",
+        'success',
+        'Reminder saved successfully',
         doctorDispositionReminderSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }

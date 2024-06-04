@@ -1,14 +1,14 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
   DateString,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const DispositionController = {
   /**
@@ -35,20 +35,20 @@ const DispositionController = {
       const {
         PatientId = 0,
         PrescriptionRecordId = 0,
-        Disposition = "",
+        Disposition = '',
         UserSaved = 0,
-        CurrentDate = "",
+        CurrentDate = '',
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
         EntityId({
-          fieldName: "PrescriptionRecordId",
+          fieldName: 'PrescriptionRecordId',
           value: PrescriptionRecordId,
         }),
-        StringValue({ fieldName: "Disposition", value: Disposition }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        DateString({ fieldName: "CurrentDate", value: CurrentDate }),
+        StringValue({ fieldName: 'Disposition', value: Disposition }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+        DateString({ fieldName: 'CurrentDate', value: CurrentDate }),
       ];
 
       let DispositionNotificationScheduleCreate = await executeSp({
@@ -64,17 +64,17 @@ const DispositionController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Disposition notification schedule successfully created",
+        'success',
+        'Disposition notification schedule successfully created',
         DispositionNotificationScheduleCreate
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -111,15 +111,15 @@ const DispositionController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
         EntityId({
-          fieldName: "PrescriptionRecordId",
+          fieldName: 'PrescriptionRecordId',
           value: PrescriptionRecordId,
         }),
-        DateString({ fieldName: "DateOfSending", value: DateOfSending }),
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        DateString({ fieldName: 'DateOfSending', value: DateOfSending }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let dispositionNotificationScheduleGet = await executeSp({
@@ -134,17 +134,17 @@ const DispositionController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         dispositionNotificationScheduleGet
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -182,19 +182,19 @@ const DispositionController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
         EntityId({
-          fieldName: "PrescriptionRecordId",
+          fieldName: 'PrescriptionRecordId',
           value: PrescriptionRecordId,
         }),
         EntityId({
-          fieldName: "DispositionNotificationScheduleId",
+          fieldName: 'DispositionNotificationScheduleId',
           value: DispositionNotificationScheduleId,
         }),
-        DateString({ fieldName: "DateOfSending", value: DateOfSending }),
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        DateString({ fieldName: 'DateOfSending', value: DateOfSending }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let dispositionNotificationScheduleLogGetResult = await executeSp({
@@ -209,17 +209,17 @@ const DispositionController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Disposition Notification Schedule log retrieved successfully",
+        'success',
+        'Disposition Notification Schedule log retrieved successfully',
         dispositionNotificationScheduleLogGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -251,17 +251,17 @@ const DispositionController = {
         PatientId = 0,
         PrescriptionRecordId = 0,
         DispositionNotificationScheduleId = 0,
-        Disposition = "",
-        PatientSMS = "",
-        PatientEmail = "",
-        PatientSMSData = "",
-        PatientEmailData = "",
+        Disposition = '',
+        PatientSMS = '',
+        PatientEmail = '',
+        PatientSMSData = '',
+        PatientEmailData = '',
         PatientSMSStatus = 0,
         PatientEmailStatus = 0,
-        DoctorSMS = "",
-        DoctorEmail = "",
-        DoctorSMSData = "",
-        DoctorEmailData = "",
+        DoctorSMS = '',
+        DoctorEmail = '',
+        DoctorSMSData = '',
+        DoctorEmailData = '',
         DoctorSMSStatus = 0,
         DoctorEmailStatus = 0,
         DateOfSending,
@@ -270,48 +270,48 @@ const DispositionController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
         EntityId({
-          fieldName: "PrescriptionRecordId",
+          fieldName: 'PrescriptionRecordId',
           value: PrescriptionRecordId,
         }),
         EntityId({
-          fieldName: "DispositionNotificationScheduleId",
+          fieldName: 'DispositionNotificationScheduleId',
           value: DispositionNotificationScheduleId,
         }),
-        StringValue({ fieldName: "Disposition", value: Disposition }),
-        StringValue({ fieldName: "PatientSMS", value: PatientSMS }),
-        StringValue({ fieldName: "PatientEmail", value: PatientEmail }),
-        StringValue({ fieldName: "PatientSMSData", value: PatientSMSData }),
-        StringValue({ fieldName: "PatientEmailData", value: PatientEmailData }),
+        StringValue({ fieldName: 'Disposition', value: Disposition }),
+        StringValue({ fieldName: 'PatientSMS', value: PatientSMS }),
+        StringValue({ fieldName: 'PatientEmail', value: PatientEmail }),
+        StringValue({ fieldName: 'PatientSMSData', value: PatientSMSData }),
+        StringValue({ fieldName: 'PatientEmailData', value: PatientEmailData }),
         SignedInteger({
-          fieldName: "PatientSMSStatus",
+          fieldName: 'PatientSMSStatus',
           value: PatientSMSStatus,
         }),
         SignedInteger({
-          fieldName: "PatientEmailStatus",
+          fieldName: 'PatientEmailStatus',
           value: PatientEmailStatus,
         }),
-        StringValue({ fieldName: "DoctorSMS", value: DoctorSMS }),
-        StringValue({ fieldName: "DoctorEmail", value: DoctorEmail }),
-        StringValue({ fieldName: "DoctorSMSData", value: DoctorSMSData }),
-        StringValue({ fieldName: "DoctorEmailData", value: DoctorEmailData }),
+        StringValue({ fieldName: 'DoctorSMS', value: DoctorSMS }),
+        StringValue({ fieldName: 'DoctorEmail', value: DoctorEmail }),
+        StringValue({ fieldName: 'DoctorSMSData', value: DoctorSMSData }),
+        StringValue({ fieldName: 'DoctorEmailData', value: DoctorEmailData }),
         SignedInteger({
-          fieldName: "DoctorSMSStatus",
+          fieldName: 'DoctorSMSStatus',
           value: DoctorSMSStatus,
         }),
         SignedInteger({
-          fieldName: "DoctorEmailStatus",
+          fieldName: 'DoctorEmailStatus',
           value: DoctorEmailStatus,
         }),
-        DateString({ fieldName: "DateOfSending", value: DateOfSending }),
+        DateString({ fieldName: 'DateOfSending', value: DateOfSending }),
         EntityId({
-          fieldName: "UserSaved",
+          fieldName: 'UserSaved',
           value: UserSaved,
         }),
         EntityId({
-          fieldName: "Id",
+          fieldName: 'Id',
           value: Id,
         }),
       ];
@@ -328,18 +328,18 @@ const DispositionController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Disposition notification schedule log saved successfully",
+        'success',
+        'Disposition notification schedule log saved successfully',
         dispositionNotificationScheduleLogSaveResult
       );
     } catch (error) {
-      console.log("errors", error);
+      console.log('errors', error);
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -369,11 +369,11 @@ const DispositionController = {
       const {
         PatientDispositionId = 0,
         ScheduledTime,
-        ContactType = "",
+        ContactType = '',
         RecipientID = 0,
-        ContactNumber = "",
-        MessageMedium = "",
-        Message = "",
+        ContactNumber = '',
+        MessageMedium = '',
+        Message = '',
         Status,
         UserSaved,
         Id = 0,
@@ -382,20 +382,20 @@ const DispositionController = {
 
       var params = [
         EntityId({
-          fieldName: "PatientDispositionId",
+          fieldName: 'PatientDispositionId',
           value: PatientDispositionId,
         }),
-        DateString({ fieldName: "ScheduledTime", value: ScheduledTime }),
-        StringValue({ fieldName: "ContactType", value: ContactType }),
-        EntityId({ fieldName: "RecipientID", value: RecipientID }),
-        StringValue({ fieldName: "ContactNumber", value: ContactNumber }),
-        StringValue({ fieldName: "MessageMedium", value: MessageMedium }),
-        StringValue({ fieldName: "Message", value: Message }),
-        EntityId({ fieldName: "Status", value: Status }),
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        DateString({ fieldName: 'ScheduledTime', value: ScheduledTime }),
+        StringValue({ fieldName: 'ContactType', value: ContactType }),
+        EntityId({ fieldName: 'RecipientID', value: RecipientID }),
+        StringValue({ fieldName: 'ContactNumber', value: ContactNumber }),
+        StringValue({ fieldName: 'MessageMedium', value: MessageMedium }),
+        StringValue({ fieldName: 'Message', value: Message }),
+        EntityId({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
         EntityId({
-          fieldName: "UserSaved",
+          fieldName: 'UserSaved',
           value: UserSaved,
         }),
       ];
@@ -410,17 +410,17 @@ const DispositionController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Disposition schedule created successfully",
+        'success',
+        'Disposition schedule created successfully',
         dispositionScheduleSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }

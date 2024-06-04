@@ -1,13 +1,13 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const NotificationScheduleController = {
   /**
@@ -30,7 +30,7 @@ const NotificationScheduleController = {
     }
 
     try {
-      let connection = request.app.locals.db;      
+      let connection = request.app.locals.db;
 
       var params = [];
 
@@ -45,17 +45,17 @@ const NotificationScheduleController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Notification schedule retrived successfully",
+        'success',
+        'Notification schedule retrived successfully',
         notificationScheduleGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -82,17 +82,13 @@ const NotificationScheduleController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Status,
-        ScheduleId,
-        MediumId,
-      } = request.body;
+      const { Status, ScheduleId, MediumId } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "ScheduleId", value: ScheduleId }),
-      EntityId({ fieldName: "MediumId", value: MediumId }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'ScheduleId', value: ScheduleId }),
+        EntityId({ fieldName: 'MediumId', value: MediumId }),
+      ];
 
       let notificationScheduleUpdateResult = await executeSp({
         spName: `NotificationScheduleUpdate`,
@@ -101,27 +97,27 @@ const NotificationScheduleController = {
       });
 
       console.log(notificationScheduleUpdateResult.recordsets);
-      notificationScheduleUpdateResult = notificationScheduleUpdateResult.recordsets;
+      notificationScheduleUpdateResult =
+        notificationScheduleUpdateResult.recordsets;
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         notificationScheduleUpdateResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default NotificationScheduleController;

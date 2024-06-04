@@ -1,7 +1,7 @@
-import sql from "mssql";
-import { errorWithData, info } from "./config/logger.js";
+import sql from 'mssql';
+import { errorWithData, info } from './config/logger.js';
 
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -26,20 +26,20 @@ const config = {
 
 export default async function getConnection() {
   try {
-    info("Database connection establishment started");
+    info('Database connection establishment started');
     const connection = await new sql.connect(config);
     return new Promise(async (resolve, reject) => {
       try {
         await connection.connect();
-        info("Database connection establishment success");
+        info('Database connection establishment success');
         resolve(connection);
       } catch (error) {
-        errorWithData("Database connection establishment failure", { error });
+        errorWithData('Database connection establishment failure', { error });
         reject(error);
       }
     });
   } catch (error) {
-    errorWithData("Database connection establishment failure", { error });
+    errorWithData('Database connection establishment failure', { error });
     return error;
   }
 }

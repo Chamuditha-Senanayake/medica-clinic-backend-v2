@@ -21,6 +21,7 @@ router.post(
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientUserId').isInt().not().isEmpty(),
+    check('RecordId').optional({ nullable: true }).isInt(),
     check('DoctorUserId').optional({ nullable: true }).isInt(),
     check('DoctorName').optional({ nullable: true }).isString(),
     check('PrescriptionName').optional({ nullable: true }).isString(),

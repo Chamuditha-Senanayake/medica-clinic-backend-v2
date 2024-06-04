@@ -240,7 +240,7 @@ const RecordController = {
         200,
         'success',
         'Data retrived successfully',
-        recordGetResult
+        patientRecordBodyPartsGetResult
       );
     } catch (error) {
       handleError(

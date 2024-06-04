@@ -74,6 +74,58 @@ const LabController = {
 
   /**
    *
+   * Get lab report by Id
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientLabReportById(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.LabReport.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id } = request.body;
+
+      var params = [EntityId({ fieldName: 'Id', value: Id })];
+
+      let labReportGetByIdResult = await executeSp({
+        spName: `LabReportGetById`,
+        params: params,
+        connection,
+      });
+
+      labReportGetByIdResult = labReportGetByIdResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        labReportGetByIdResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * Save a patient lab report
    *
    * @param {request} request object

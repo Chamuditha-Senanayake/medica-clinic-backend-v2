@@ -96,6 +96,7 @@ const PrescriptionController = {
       const {
         Id = 0,
         PatientUserId,
+        RecordId,
         DoctorUserId,
         DoctorName,
         PrescriptionName,
@@ -122,6 +123,7 @@ const PrescriptionController = {
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
         EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
+        { name: 'RecordId', type: sql.Numeric, value: RecordId },
         { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
         {

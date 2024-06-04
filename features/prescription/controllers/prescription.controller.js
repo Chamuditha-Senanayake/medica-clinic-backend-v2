@@ -74,6 +74,58 @@ const PrescriptionController = {
 
   /**
    *
+   * Get prescription by Id
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientPrescriptionById(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id } = request.body;
+
+      var params = [EntityId({ fieldName: 'Id', value: Id })];
+
+      let prescriptionGetByIdResult = await executeSp({
+        spName: `PrescriptionGetById`,
+        params: params,
+        connection,
+      });
+
+      prescriptionGetByIdResult = prescriptionGetByIdResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        prescriptionGetByIdResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * Save prescription
    *
    * @param {request} request object

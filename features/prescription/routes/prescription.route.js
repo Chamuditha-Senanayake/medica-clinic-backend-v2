@@ -16,6 +16,13 @@ router.post(
 );
 
 router.post(
+  '/PrescriptionGetById',
+  isAuth,
+  [check('Id').isInt().not().isEmpty()],
+  PrescriptionController.getPatientPrescriptionById
+);
+
+router.post(
   '/PrescriptionSave',
   isAuth,
   [

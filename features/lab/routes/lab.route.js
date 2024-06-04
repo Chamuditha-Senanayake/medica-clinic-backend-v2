@@ -5,7 +5,7 @@ import { isAuth } from '../../../middleware/auth.middlewarw.js';
 const router = express.Router();
 
 router.post(
-  '/LabReportGet',
+  '/LabReportsGet',
   isAuth,
   [
     check('PatientUserId').isInt().not().isEmpty(),
@@ -13,6 +13,13 @@ router.post(
     check('Limit').isInt().not().isEmpty(),
   ],
   LabController.getPatientLabReports
+);
+
+router.post(
+  '/LabReportGetById',
+  isAuth,
+  [check('Id').isInt().not().isEmpty()],
+  LabController.getPatientLabReportById
 );
 
 router.post(

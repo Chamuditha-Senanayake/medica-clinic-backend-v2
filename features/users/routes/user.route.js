@@ -3,7 +3,7 @@ import { check } from 'express-validator';
 import UserController from '../controllers/user.controller.js';
 import AppConstants from '../../../config/constants.js';
 import ResponseMessages from '../../../config/messages.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 
 const router = express.Router();
 

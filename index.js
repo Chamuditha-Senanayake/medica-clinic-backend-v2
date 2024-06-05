@@ -32,6 +32,7 @@ import camiosRouter from './features/camios/routes/camios.route.js';
 import recordRouter from './features/record/routes/record.route.js';
 import caregiverRouter from './features/caregiver/routes/caregiver.route.js';
 import labRouter from './features/lab/routes/lab.route.js';
+import fileUploadRouter from './features/fileHandler/routes/fileHandler.route.js';
 import cookieSession from 'cookie-session';
 
 dotenv.config();
@@ -89,6 +90,7 @@ app.use(`/api/v1`, camiosRouter);
 app.use(`/api/v1`, recordRouter);
 app.use(`/api/v1`, caregiverRouter);
 app.use(`/api/v1`, labRouter);
+app.use(`/api/v1`, fileUploadRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

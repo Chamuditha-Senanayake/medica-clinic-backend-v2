@@ -35,6 +35,7 @@ router.post(
     check('Symptoms').isString().not().isEmpty(),
     check('Notes').optional({ nullable: true }).isString(),
     check('UserSaved').isInt().not().isEmpty(),
+    check('Files').optional({ nullable: true }).isArray(),
   ],
   RecordController.savePatientRecord
 );

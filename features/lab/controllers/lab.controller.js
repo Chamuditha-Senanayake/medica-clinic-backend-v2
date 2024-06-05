@@ -11,54 +11,54 @@ import {
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
 
-const RecordController = {
+const LabController = {
   /**
    *
-   * Get record
+   * Get patient lab reports
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPatientRecords(request, response, next) {
+  async getPatientLabReports(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Record.VALIDATION_ERROR,
+        message: ResponseMessage.LabReport.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, Page = 0, Limit = 0 } = request.body;
+      const { PatientUserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
         EntityId({ fieldName: 'Page', value: Page }),
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
-      let recordsGetResult = await executeSp({
-        spName: `PatientRecordsGet`,
+      let labReportsGetResult = await executeSp({
+        spName: `LabReportsGet`,
         params: params,
         connection,
       });
 
       //Append patient records and count for pagination
-      recordsGetResult = [
-        recordsGetResult.recordsets[0],
-        recordsGetResult.recordsets[1][0],
+      labReportsGetResult = [
+        labReportsGetResult.recordsets[0],
+        labReportsGetResult.recordsets[1][0],
       ];
 
       handleResponse(
         response,
         200,
         'success',
-        'Records retrived successfully',
-        recordsGetResult
+        'Lab reports retrived successfully',
+        labReportsGetResult
       );
     } catch (error) {
       handleError(
@@ -74,19 +74,71 @@ const RecordController = {
 
   /**
    *
-   * Save a record
+   * Get lab report by Id
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientLabReportById(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.LabReport.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id } = request.body;
+
+      var params = [EntityId({ fieldName: 'Id', value: Id })];
+
+      let labReportGetByIdResult = await executeSp({
+        spName: `LabReportGetById`,
+        params: params,
+        connection,
+      });
+
+      labReportGetByIdResult = labReportGetByIdResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        labReportGetByIdResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Save a patient lab report
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next function
    * @returns
    */
-  async savePatientRecord(request, response, next) {
+  async savePatientLabReports(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Record.VALIDATION_ERROR,
+        message: ResponseMessage.LabReport.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -94,53 +146,46 @@ const RecordController = {
     try {
       let connection = request.app.locals.db;
       const {
-        Id,
-        UserId,
+        Id = 0,
+        PatientUserId,
+        RecordId,
         DoctorUserId,
         DoctorName,
-        RecordType,
-        BodyPart,
-        SubBodyPart,
-        SubBodyPartType,
-        Date,
+        TestType,
+        Laboratory,
         Diagnosis,
-        Symptoms,
-        Notes,
+        Description,
         Status = 1,
-        UserSaved,
       } = request.body;
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
-        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
+        EntityId({ fieldName: 'RecordId', value: RecordId }),
         { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
-        StringValue({ fieldName: 'RecordType', value: RecordType }),
-        StringValue({ fieldName: 'BodyPart', value: BodyPart }),
-        StringValue({ fieldName: 'SubBodyPart', value: SubBodyPart }),
-        { name: 'SubBodyPartType', type: sql.NVarChar, value: SubBodyPartType },
-        DateString({ fieldName: 'Date', value: Date }),
-        { name: 'Diagnosis', type: sql.NVarChar, value: Diagnosis },
-        StringValue({ fieldName: 'Symptoms', value: Symptoms }),
-        StringValue({ fieldName: 'Notes', value: Notes }),
+        StringValue({ fieldName: 'TestType', value: TestType }),
+        StringValue({ fieldName: 'Laboratory', value: Laboratory }),
+        StringValue({ fieldName: 'Diagnosis', value: Diagnosis }),
+        { name: 'Description', type: sql.NVarChar, value: Description },
         SignedInteger({ fieldName: 'Status', value: Status }),
-        EntityId({ fieldName: 'UserCreated', value: UserSaved }),
+        EntityId({ fieldName: 'UserCreated', value: request.user.userId }),
       ];
 
-      let recordSaveResult = await executeSp({
-        spName: `PatientRecordSave`,
+      let labReportSaveResult = await executeSp({
+        spName: `LabReportSave`,
         params: params,
         connection,
       });
 
-      recordSaveResult = recordSaveResult.recordsets[0][0];
+      labReportSaveResult = labReportSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         'success',
-        'Record retrieved successfully',
-        recordSaveResult
+        'Lab report retrieved successfully',
+        labReportSaveResult
       );
     } catch (error) {
       handleError(
@@ -156,92 +201,36 @@ const RecordController = {
 
   /**
    *
-   * Delete record
+   * Delete patient lab report
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async deletePatientRecords(request, response, next) {
+  async deletePatientLabReports(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Record.VALIDATION_ERROR,
+        message: ResponseMessage.LabReport.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, Id } = request.body;
+      const { Id } = request.body;
 
-      var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
-        EntityId({ fieldName: 'Id', value: Id }),
-      ];
+      var params = [EntityId({ fieldName: 'Id', value: Id })];
 
       await executeSp({
-        spName: `PatientRecordDelete`,
+        spName: `LabReportDelete`,
         params: params,
         connection,
       });
 
-      handleResponse(response, 200, 'success', 'Records deleted successfully');
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        'error',
-        error.message,
-        'Something went wrong'
-      );
-      next(error);
-    }
-  },
-
-  /**
-   *
-   * Get record body parts
-   *
-   * @param {request} request object
-   * @param {response} response object
-   * @param {next} next - middleware
-   * @returns
-   */
-  async getPatientRecordBodyParts(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.Record.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
-
-    try {
-      let connection = request.app.locals.db;
-      const { UserId } = request.body;
-
-      var params = [EntityId({ fieldName: 'UserId', value: UserId })];
-
-      let patientRecordBodyPartsGetResult = await executeSp({
-        spName: `PatientRecordBodyPartsGet`,
-        params: params,
-        connection,
-      });
-
-      patientRecordBodyPartsGetResult =
-        patientRecordBodyPartsGetResult.recordsets[0];
-
-      handleResponse(
-        response,
-        200,
-        'success',
-        'Data retrived successfully',
-        patientRecordBodyPartsGetResult
-      );
+      handleResponse(response, 200, 'success', 'Report deleted successfully');
     } catch (error) {
       handleError(
         response,
@@ -255,4 +244,4 @@ const RecordController = {
   },
 };
 
-export default RecordController;
+export default LabController;

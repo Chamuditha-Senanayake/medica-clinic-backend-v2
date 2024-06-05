@@ -1,7 +1,7 @@
 import express from 'express';
 import { check } from 'express-validator';
 import RecordController from '../controllers/record.controller.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(

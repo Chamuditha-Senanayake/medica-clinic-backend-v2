@@ -8,7 +8,12 @@ import passport from 'passport';
 import { errorWithData, info } from './config/logger.js';
 import getConnection from './db_init.js';
 import loggerMiddleware from './middleware/logger.middleware.js';
+import { isAuth } from './middleware/auth.middleware.js';
 import './utils/passport.js';
+import path from 'path';
+import cookieSession from 'cookie-session';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 // Import Routes
 import authRouter from './features/auth/auth.route.js';
@@ -25,13 +30,17 @@ import appointmentRouter from './features/appointment/routes/appointment.route.j
 import notificationScheduleRouter from './features/notificationSchedule/routes/notificationSchedule.route.js';
 import billRouter from './features/bill/routes/bill.route.js';
 import dispositionRouter from './features/disposition/routes/disposition.route.js';
-import UserRouter from './features/users/routes/user.route.js';
+import userRouter from './features/users/routes/user.route.js';
 import analyticsRouter from './features/analytics/routes/analytics.route.js';
 import medicalCertificateRouter from './features/medicalCertificate/routes/medicalCertificate.route.js';
 import camiosRouter from './features/camios/routes/camios.route.js';
 import recordRouter from './features/record/routes/record.route.js';
 import caregiverRouter from './features/caregiver/routes/caregiver.route.js';
-import cookieSession from 'cookie-session';
+import labRouter from './features/lab/routes/lab.route.js';
+import fileUploadRouter from './features/fileHandler/routes/fileHandler.route.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -81,12 +90,19 @@ app.use(`/api/v1`, appointmentRouter);
 app.use(`/api/v1`, notificationScheduleRouter);
 app.use(`/api/v1`, billRouter);
 app.use(`/api/v1`, dispositionRouter);
-app.use(`/api/v1`, UserRouter);
+app.use(`/api/v1`, userRouter);
 app.use(`/api/v1`, analyticsRouter);
 app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
 app.use(`/api/v1`, recordRouter);
 app.use(`/api/v1`, caregiverRouter);
+app.use(`/api/v1`, labRouter);
+app.use(`/api/v1`, fileUploadRouter);
+
+app.use('/api/v1/GetFile', [
+  isAuth,
+  express.static(path.join(__dirname, 'uploads')),
+]);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

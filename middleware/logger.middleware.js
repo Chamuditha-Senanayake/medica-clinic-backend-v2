@@ -1,4 +1,4 @@
-import { info } from "../config/logger.js";
+import { info } from '../config/logger.js';
 
 export default function loggerMiddleware(request, response, next) {
   info(`Start processing the request(loggerMiddleware)`);

@@ -1,13 +1,13 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const EmployeeController = {
   /**
@@ -34,9 +34,9 @@ const EmployeeController = {
       const { Id, InstituteBranchId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'InstituteBranchId', value: InstituteBranchId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let employeeBranchGetResult = await executeSp({
@@ -50,17 +50,17 @@ const EmployeeController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Employee data retrived successfully",
+        'success',
+        'Employee data retrived successfully',
         employeeBranchGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -87,24 +87,19 @@ const EmployeeController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        InstituteBranchId,
-        EmployeeId,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, InstituteBranchId, EmployeeId, Status, UserSaved } =
+        request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-      EntityId({ fieldName: "EmployeeId", value: EmployeeId }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'InstituteBranchId', value: InstituteBranchId }),
+        EntityId({ fieldName: 'EmployeeId', value: EmployeeId }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let employeeBranchSaveResult = await executeSp({
         spName: `EmployeeBranchSave`,
@@ -118,17 +113,17 @@ const EmployeeController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Employee data retrieved successfully",
+        'success',
+        'Employee data retrieved successfully',
         employeeBranchSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -158,8 +153,8 @@ const EmployeeController = {
       const { Id, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let employeeInstituteBranchGetResult = await executeSp({
@@ -168,22 +163,23 @@ const EmployeeController = {
         connection,
       });
 
-      employeeInstituteBranchGetResult = employeeInstituteBranchGetResult.recordsets;
+      employeeInstituteBranchGetResult =
+        employeeInstituteBranchGetResult.recordsets;
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         employeeInstituteBranchGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -218,22 +214,22 @@ const EmployeeController = {
         NIC,
         Email,
         Status,
-        UserSaved
+        UserSaved,
       } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "FirstName", value: FirstName }),
-      StringValue({ fieldName: "MiddleName", value: MiddleName }),
-      StringValue({ fieldName: "LastName", value: LastName }),
-      StringValue({ fieldName: "NIC", value: NIC }),
-      StringValue({ fieldName: "Email", value: Email }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({ fieldName: 'FirstName', value: FirstName }),
+        StringValue({ fieldName: 'MiddleName', value: MiddleName }),
+        StringValue({ fieldName: 'LastName', value: LastName }),
+        StringValue({ fieldName: 'NIC', value: NIC }),
+        StringValue({ fieldName: 'Email', value: Email }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let employeeSaveResult = await executeSp({
         spName: `EmployeeSave`,
@@ -247,22 +243,21 @@ const EmployeeController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Employee data retrieved successfully",
+        'success',
+        'Employee data retrieved successfully',
         employeeSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default EmployeeController;

@@ -1,28 +1,28 @@
-import express from "express";
-import { check } from "express-validator";
-import NoteController from "../controllers/note.controller.js";
+import express from 'express';
+import { check } from 'express-validator';
+import NoteController from '../controllers/note.controller.js';
 const router = express.Router();
 
 router.post(
-  "/NoteGet",
+  '/NoteGet',
   [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
-    check("UserId").not().isEmpty(),
+    check('Id').isInt().not().isEmpty(),
+    check('PatientId').isInt().not().isEmpty(),
+    check('UserId').not().isEmpty(),
   ],
   NoteController.getNote
 );
 
 router.post(
-  "/NoteSave",
+  '/NoteSave',
   [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
-    check("Note").not().isEmpty(),
-    check("AgeYears").isInt().not().isEmpty(),
-    check("AgeMonths").isInt().not().isEmpty(),
-    check("Status").isInt().not().isEmpty(),
-    check("UserSaved").isInt().not().isEmpty(),
+    check('Id').isInt().not().isEmpty(),
+    check('PatientId').isInt().not().isEmpty(),
+    check('Note').not().isEmpty(),
+    check('AgeYears').isInt().not().isEmpty(),
+    check('AgeMonths').isInt().not().isEmpty(),
+    check('Status').isInt().not().isEmpty(),
+    check('UserSaved').isInt().not().isEmpty(),
   ],
   NoteController.saveNote
 );

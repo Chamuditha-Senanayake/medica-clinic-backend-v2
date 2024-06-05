@@ -1,6 +1,6 @@
 const AppConstants = {
-    //constants
+  //constants
+  Providers: ['google', 'apple', 'microsoft'],
+};
 
-}
-
-module.exports = AppConstants;
+export default AppConstants;

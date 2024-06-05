@@ -3,6 +3,12 @@ import { check } from 'express-validator';
 // import FileHandlerController from '../controllers/fileHandler.controller.js';
 import upload from '../../../middleware/upload.middleware.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const router = express.Router();
 
 // router.post(
@@ -15,7 +21,6 @@ const router = express.Router();
 //   NoteController.getNote
 // );
 
-// Route to handle file uploads
 router.post('/FileUpload', isAuth, upload.single('File'), (req, res) => {
   try {
     const resourceName = req.ResourceName;

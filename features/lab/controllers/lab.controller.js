@@ -7,9 +7,10 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
-  DateString,
+  TableValueParameters,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const LabController = {
   /**
@@ -47,9 +48,14 @@ const LabController = {
         connection,
       });
 
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
+        labReportsGetResult.recordsets[0]
+      );
+
       //Append patient records and count for pagination
       labReportsGetResult = [
-        labReportsGetResult.recordsets[0],
+        transformedResponse,
         labReportsGetResult.recordsets[1][0],
       ];
 
@@ -155,8 +161,14 @@ const LabController = {
         Laboratory,
         Diagnosis,
         Description,
+        Files = [],
         Status = 1,
       } = request.body;
+
+      const FilesList = [];
+      Files.forEach(File => {
+        FilesList.push([File.Path, File.FileType]);
+      });
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
@@ -170,6 +182,14 @@ const LabController = {
         { name: 'Description', type: sql.NVarChar, value: Description },
         SignedInteger({ fieldName: 'Status', value: Status }),
         EntityId({ fieldName: 'UserCreated', value: request.user.userId }),
+        TableValueParameters({
+          tableName: 'FileData',
+          columns: [
+            { columnName: 'Path', type: sql.NVarChar },
+            { columnName: 'FileType', type: sql.NVarChar(20) },
+          ],
+          values: FilesList,
+        }),
       ];
 
       let labReportSaveResult = await executeSp({
@@ -178,7 +198,7 @@ const LabController = {
         connection,
       });
 
-      labReportSaveResult = labReportSaveResult.recordsets[0][0];
+      labReportSaveResult = labReportSaveResult.recordsets;
 
       handleResponse(
         response,

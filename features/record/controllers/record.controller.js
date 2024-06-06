@@ -113,7 +113,7 @@ const RecordController = {
         Diagnosis,
         Symptoms,
         Notes,
-        Files,
+        Files = [],
         Status = 1,
         UserSaved,
       } = request.body;

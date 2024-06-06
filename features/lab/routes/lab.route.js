@@ -27,7 +27,7 @@ router.post(
   isAuth,
   [
     check('PatientUserId').isInt().not().isEmpty(),
-    check('RecordId').isInt().not().isEmpty(),
+    check('RecordId').optional({ nullable: true }).isInt(),
     check('DoctorUserId').optional({ nullable: true }).isInt(),
     check('DoctorName').optional({ nullable: true }).isString(),
     check('TestType').isString().not().isEmpty(),

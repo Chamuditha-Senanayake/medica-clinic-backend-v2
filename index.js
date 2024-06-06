@@ -8,7 +8,12 @@ import passport from 'passport';
 import { errorWithData, info } from './config/logger.js';
 import getConnection from './db_init.js';
 import loggerMiddleware from './middleware/logger.middleware.js';
+import { isAuth } from './middleware/auth.middleware.js';
 import './utils/passport.js';
+import path from 'path';
+import cookieSession from 'cookie-session';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 // Import Routes
 import authRouter from './features/auth/auth.route.js';
@@ -32,7 +37,10 @@ import camiosRouter from './features/camios/routes/camios.route.js';
 import recordRouter from './features/record/routes/record.route.js';
 import caregiverRouter from './features/caregiver/routes/caregiver.route.js';
 import labRouter from './features/lab/routes/lab.route.js';
-import cookieSession from 'cookie-session';
+import fileUploadRouter from './features/fileHandler/routes/fileHandler.route.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -89,6 +97,12 @@ app.use(`/api/v1`, camiosRouter);
 app.use(`/api/v1`, recordRouter);
 app.use(`/api/v1`, caregiverRouter);
 app.use(`/api/v1`, labRouter);
+app.use(`/api/v1`, fileUploadRouter);
+
+app.use('/api/v1/GetFile', [
+  isAuth,
+  express.static(path.join(__dirname, 'uploads')),
+]);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

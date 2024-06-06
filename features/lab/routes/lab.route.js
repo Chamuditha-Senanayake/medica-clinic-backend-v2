@@ -1,7 +1,7 @@
 import express from 'express';
 import { check } from 'express-validator';
 import LabController from '../controllers/lab.controller.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(

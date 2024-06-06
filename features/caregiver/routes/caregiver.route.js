@@ -1,7 +1,7 @@
 import express from 'express';
 import { check } from 'express-validator';
 import CaregiverController from '../controllers/caregiver.controller.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -9,7 +9,7 @@ router.post(
   isAuth,
   [
     check('CaregiverEmail').not().isEmpty().isString(),
-    check('CaregiverName').not().isEmpty().isString(),
+    check('CaregiverName').optional({ nullable: true }).isString(),
     check('Status')
       .isIn(['invited', 'enabled', 'disabled', 'deleted'])
       .optional({ nullable: true })

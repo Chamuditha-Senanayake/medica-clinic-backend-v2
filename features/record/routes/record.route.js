@@ -1,7 +1,7 @@
 import express from 'express';
 import { check } from 'express-validator';
 import RecordController from '../controllers/record.controller.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -31,9 +31,11 @@ router.post(
     check('SubBodyPart').isString().not().isEmpty(),
     check('SubBodyPartType').optional({ nullable: true }).isString(),
     check('Date').isString().not().isEmpty(),
+    check('Diagnosis').optional({ nullable: true }).isString(),
     check('Symptoms').isString().not().isEmpty(),
     check('Notes').optional({ nullable: true }).isString(),
     check('UserSaved').isInt().not().isEmpty(),
+    check('Files').optional({ nullable: true }).isArray(),
   ],
   RecordController.savePatientRecord
 );

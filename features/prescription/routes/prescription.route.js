@@ -1,7 +1,7 @@
 import express from 'express';
 import { check } from 'express-validator';
 import PrescriptionController from '../controllers/prescription.controller.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -16,11 +16,19 @@ router.post(
 );
 
 router.post(
+  '/PrescriptionGetById',
+  isAuth,
+  [check('Id').isInt().not().isEmpty()],
+  PrescriptionController.getPatientPrescriptionById
+);
+
+router.post(
   '/PrescriptionSave',
   isAuth,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientUserId').isInt().not().isEmpty(),
+    check('RecordId').optional({ nullable: true }).isInt(),
     check('DoctorUserId').optional({ nullable: true }).isInt(),
     check('DoctorName').optional({ nullable: true }).isString(),
     check('PrescriptionName').optional({ nullable: true }).isString(),

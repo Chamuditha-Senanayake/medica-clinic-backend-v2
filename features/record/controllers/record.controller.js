@@ -4,12 +4,14 @@ import executeSp from '../../../utils/exeSp.js';
 import handleError from '../../../utils/handleError.js';
 import handleResponse from '../../../utils/handleResponse.js';
 import {
+  TableValueParameters,
   EntityId,
   StringValue,
   SignedInteger,
   DateString,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const RecordController = {
   /**
@@ -41,16 +43,21 @@ const RecordController = {
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
-      let RecordGetResult = await executeSp({
+      let recordsGetResult = await executeSp({
         spName: `PatientRecordsGet`,
         params: params,
         connection,
       });
 
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
+        recordsGetResult.recordsets[0]
+      );
+
       //Append patient records and count for pagination
-      RecordGetResult = [
-        RecordGetResult.recordsets[0],
-        RecordGetResult.recordsets[1][0],
+      recordsGetResult = [
+        transformedResponse,
+        recordsGetResult.recordsets[1][0],
       ];
 
       handleResponse(
@@ -58,7 +65,7 @@ const RecordController = {
         200,
         'success',
         'Records retrived successfully',
-        RecordGetResult
+        recordsGetResult
       );
     } catch (error) {
       handleError(
@@ -103,11 +110,18 @@ const RecordController = {
         SubBodyPart,
         SubBodyPartType,
         Date,
+        Diagnosis,
         Symptoms,
         Notes,
+        Files = [],
         Status = 1,
         UserSaved,
       } = request.body;
+
+      const FilesList = [];
+      Files.forEach(File => {
+        FilesList.push([File.Path, File.FileType]);
+      });
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
@@ -119,10 +133,19 @@ const RecordController = {
         StringValue({ fieldName: 'SubBodyPart', value: SubBodyPart }),
         { name: 'SubBodyPartType', type: sql.NVarChar, value: SubBodyPartType },
         DateString({ fieldName: 'Date', value: Date }),
+        { name: 'Diagnosis', type: sql.NVarChar, value: Diagnosis },
         StringValue({ fieldName: 'Symptoms', value: Symptoms }),
         StringValue({ fieldName: 'Notes', value: Notes }),
         SignedInteger({ fieldName: 'Status', value: Status }),
         EntityId({ fieldName: 'UserCreated', value: UserSaved }),
+        TableValueParameters({
+          tableName: 'FileData',
+          columns: [
+            { columnName: 'Path', type: sql.NVarChar },
+            { columnName: 'FileType', type: sql.NVarChar(20) },
+          ],
+          values: FilesList,
+        }),
       ];
 
       let recordSaveResult = await executeSp({
@@ -131,7 +154,7 @@ const RecordController = {
         connection,
       });
 
-      recordSaveResult = recordSaveResult.recordsets[0][0];
+      recordSaveResult = recordSaveResult.recordsets;
 
       handleResponse(
         response,
@@ -224,21 +247,21 @@ const RecordController = {
 
       var params = [EntityId({ fieldName: 'UserId', value: UserId })];
 
-      let RecordGetResult = await executeSp({
+      let patientRecordBodyPartsGetResult = await executeSp({
         spName: `PatientRecordBodyPartsGet`,
         params: params,
         connection,
       });
 
-      //Append patient records and count for pagination
-      RecordGetResult = RecordGetResult.recordsets[0];
+      patientRecordBodyPartsGetResult =
+        patientRecordBodyPartsGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
         'success',
-        'Records retrived successfully',
-        RecordGetResult
+        'Data retrived successfully',
+        patientRecordBodyPartsGetResult
       );
     } catch (error) {
       handleError(

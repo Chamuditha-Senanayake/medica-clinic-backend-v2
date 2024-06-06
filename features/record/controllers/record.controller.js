@@ -11,7 +11,7 @@ import {
   DateString,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
-import transformCurrentResponse from '../../../utils/transformResponse.js';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const RecordController = {
   /**
@@ -49,9 +49,8 @@ const RecordController = {
         connection,
       });
 
-      // console.log(recordsGetResult.recordsets[0]);
-
-      const transformedResponse = transformCurrentResponse(
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
         recordsGetResult.recordsets[0]
       );
 

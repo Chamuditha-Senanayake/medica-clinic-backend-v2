@@ -34,6 +34,7 @@ router.post(
     check('Laboratory').isString().not().isEmpty(),
     check('Diagnosis').isString().not().isEmpty(),
     check('Description').optional({ nullable: true }).isString(),
+    check('Files').optional({ nullable: true }).isArray(),
   ],
   LabController.savePatientLabReports
 );

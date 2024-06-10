@@ -273,6 +273,33 @@ const CaregiverController = {
     }
   },
 
+  /**
+   *
+   * Caregiver token validation
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @returns
+   */
+  async issueCaregiverPatientToken(request, response) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Caregiver.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    let token = jwtSign({
+      PatientId: request.body.PatientId,
+    });
+
+    handleResponse(response, 200, 'success', 'Data retrived successfully', {
+      token,
+    });
+  },
+
   // /**
   //  *
   //  * get nurse by [Id, NurseUserId, UserId]

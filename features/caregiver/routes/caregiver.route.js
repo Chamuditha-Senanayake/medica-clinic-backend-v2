@@ -2,6 +2,7 @@ import express from 'express';
 import { check } from 'express-validator';
 import CaregiverController from '../controllers/caregiver.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isCaregiver } from '../../../middleware/caregiver.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -35,6 +36,14 @@ router.post(
   '/CaregiverTokenValidation',
   [check('Token').not().isEmpty().isString()],
   CaregiverController.tokenValidation
+);
+
+router.post(
+  '/CaregiverRequestPatientAccess',
+  isAuth,
+  isCaregiver,
+  [check('PatientId').isInt().not().isEmpty()],
+  CaregiverController.issueCaregiverPatientToken
 );
 
 export default router;

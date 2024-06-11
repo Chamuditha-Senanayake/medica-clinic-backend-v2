@@ -4,12 +4,14 @@ import executeSp from '../../../utils/exeSp.js';
 import handleError from '../../../utils/handleError.js';
 import handleResponse from '../../../utils/handleResponse.js';
 import {
+  TableValueParameters,
   EntityId,
   StringValue,
   SignedInteger,
   DateString,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const RecordController = {
   /**
@@ -47,9 +49,14 @@ const RecordController = {
         connection,
       });
 
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
+        recordsGetResult.recordsets[0]
+      );
+
       //Append patient records and count for pagination
       recordsGetResult = [
-        recordsGetResult.recordsets[0],
+        transformedResponse,
         recordsGetResult.recordsets[1][0],
       ];
 
@@ -106,9 +113,15 @@ const RecordController = {
         Diagnosis,
         Symptoms,
         Notes,
+        Files = [],
         Status = 1,
         UserSaved,
       } = request.body;
+
+      const FilesList = [];
+      Files.forEach(File => {
+        FilesList.push([File.Path, File.FileType]);
+      });
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
@@ -125,6 +138,14 @@ const RecordController = {
         StringValue({ fieldName: 'Notes', value: Notes }),
         SignedInteger({ fieldName: 'Status', value: Status }),
         EntityId({ fieldName: 'UserCreated', value: UserSaved }),
+        TableValueParameters({
+          tableName: 'FileData',
+          columns: [
+            { columnName: 'Path', type: sql.NVarChar },
+            { columnName: 'FileType', type: sql.NVarChar(20) },
+          ],
+          values: FilesList,
+        }),
       ];
 
       let recordSaveResult = await executeSp({
@@ -133,7 +154,7 @@ const RecordController = {
         connection,
       });
 
-      recordSaveResult = recordSaveResult.recordsets[0][0];
+      recordSaveResult = recordSaveResult.recordsets;
 
       handleResponse(
         response,

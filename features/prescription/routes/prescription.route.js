@@ -1,7 +1,7 @@
 import express from 'express';
 import { check } from 'express-validator';
 import PrescriptionController from '../controllers/prescription.controller.js';
-import { isAuth } from '../../../middleware/auth.middlewarw.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -13,6 +13,13 @@ router.post(
     check('Limit').isInt().not().isEmpty(),
   ],
   PrescriptionController.getPatientPrescriptions
+);
+
+router.post(
+  '/PrescriptionGetById',
+  isAuth,
+  [check('Id').isInt().not().isEmpty()],
+  PrescriptionController.getPatientPrescriptionById
 );
 
 router.post(
@@ -29,6 +36,7 @@ router.post(
     check('ExpirationDate').optional({ nullable: true }).isDate(),
     check('UserCreated').isInt().not().isEmpty(),
     check('DrugDataSet').isArray().not().isEmpty(),
+    check('Files').optional({ nullable: true }).isArray(),
   ],
   PrescriptionController.savePatientPrescription
 );

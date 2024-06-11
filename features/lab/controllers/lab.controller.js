@@ -7,9 +7,10 @@ import {
   EntityId,
   StringValue,
   SignedInteger,
-  DateString,
+  TableValueParameters,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const LabController = {
   /**
@@ -47,9 +48,14 @@ const LabController = {
         connection,
       });
 
-      //Append patient records and count for pagination
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
+        labReportsGetResult.recordsets[0]
+      );
+
+      //Append patient labreports and count for pagination
       labReportsGetResult = [
-        labReportsGetResult.recordsets[0],
+        transformedResponse,
         labReportsGetResult.recordsets[1][0],
       ];
 
@@ -59,6 +65,58 @@ const LabController = {
         'success',
         'Lab reports retrived successfully',
         labReportsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get lab report by Id
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientLabReportById(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.LabReport.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id } = request.body;
+
+      var params = [EntityId({ fieldName: 'Id', value: Id })];
+
+      let labReportGetByIdResult = await executeSp({
+        spName: `LabReportGetById`,
+        params: params,
+        connection,
+      });
+
+      labReportGetByIdResult = labReportGetByIdResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        labReportGetByIdResult
       );
     } catch (error) {
       handleError(
@@ -103,13 +161,19 @@ const LabController = {
         Laboratory,
         Diagnosis,
         Description,
+        Files = [],
         Status = 1,
       } = request.body;
+
+      const FilesList = [];
+      Files.forEach(File => {
+        FilesList.push([File.Path, File.FileType]);
+      });
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
         EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
-        EntityId({ fieldName: 'RecordId', value: RecordId }),
+        { name: 'RecordId', type: sql.Numeric, value: RecordId },
         { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
         StringValue({ fieldName: 'TestType', value: TestType }),
@@ -118,6 +182,14 @@ const LabController = {
         { name: 'Description', type: sql.NVarChar, value: Description },
         SignedInteger({ fieldName: 'Status', value: Status }),
         EntityId({ fieldName: 'UserCreated', value: request.user.userId }),
+        TableValueParameters({
+          tableName: 'FileData',
+          columns: [
+            { columnName: 'Path', type: sql.NVarChar },
+            { columnName: 'FileType', type: sql.NVarChar(20) },
+          ],
+          values: FilesList,
+        }),
       ];
 
       let labReportSaveResult = await executeSp({
@@ -126,7 +198,7 @@ const LabController = {
         connection,
       });
 
-      labReportSaveResult = labReportSaveResult.recordsets[0][0];
+      labReportSaveResult = labReportSaveResult.recordsets;
 
       handleResponse(
         response,

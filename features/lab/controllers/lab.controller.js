@@ -173,7 +173,7 @@ const LabController = {
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
         EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
-        EntityId({ fieldName: 'RecordId', value: RecordId }),
+        { name: 'RecordId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
         StringValue({ fieldName: 'TestType', value: TestType }),

@@ -36,6 +36,7 @@ router.post(
     check('ExpirationDate').optional({ nullable: true }).isDate(),
     check('UserCreated').isInt().not().isEmpty(),
     check('DrugDataSet').isArray().not().isEmpty(),
+    check('Files').optional({ nullable: true }).isArray(),
   ],
   PrescriptionController.savePatientPrescription
 );

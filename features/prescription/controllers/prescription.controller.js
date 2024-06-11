@@ -10,6 +10,7 @@ import {
   TableValueParameters,
 } from '../../../utils/type-def.js';
 import sql from 'mssql';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const PrescriptionController = {
   /**
@@ -41,16 +42,21 @@ const PrescriptionController = {
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
-      let PrescriptionGetResult = await executeSp({
+      let prescriptionGetResult = await executeSp({
         spName: `PrescriptionGet`,
         params: params,
         connection,
       });
 
-      //Append patient prescriptions and count for pagination
-      PrescriptionGetResult = [
-        PrescriptionGetResult.recordsets[0],
-        PrescriptionGetResult.recordsets[1][0],
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
+        prescriptionGetResult.recordsets[0]
+      );
+
+      //Append patient prescription and count for pagination
+      prescriptionGetResult = [
+        transformedResponse,
+        prescriptionGetResult.recordsets[1][0],
       ];
 
       handleResponse(
@@ -58,7 +64,7 @@ const PrescriptionController = {
         200,
         'success',
         'Prescriptions retrived successfully',
-        PrescriptionGetResult
+        prescriptionGetResult
       );
     } catch (error) {
       handleError(
@@ -103,7 +109,7 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionGetByIdResult = prescriptionGetByIdResult.recordsets[0];
+      prescriptionGetByIdResult = prescriptionGetByIdResult.recordsets;
 
       handleResponse(
         response,
@@ -155,6 +161,7 @@ const PrescriptionController = {
         PrescriptionDate,
         ExpirationDate,
         DrugDataSet,
+        Files = [],
         Status = 1,
         UserCreated,
       } = request.body;
@@ -170,6 +177,11 @@ const PrescriptionController = {
           DrugData.DurationUnit,
           DrugData.Instructions,
         ]);
+      });
+
+      const FilesList = [];
+      Files.forEach(File => {
+        FilesList.push([File.Path, File.FileType]);
       });
 
       var params = [
@@ -203,6 +215,14 @@ const PrescriptionController = {
             { columnName: 'Instructions', type: sql.NVarChar(20) },
           ],
           values: DrugDataList,
+        }),
+        TableValueParameters({
+          tableName: 'FileData',
+          columns: [
+            { columnName: 'Path', type: sql.NVarChar },
+            { columnName: 'FileType', type: sql.NVarChar(20) },
+          ],
+          values: FilesList,
         }),
       ];
 
@@ -313,19 +333,19 @@ const PrescriptionController = {
         { name: 'Limit', type: sql.Int, value: Limit },
       ];
 
-      let PrescriptionDrugsGetResult = await executeSp({
+      let prescriptionDrugsGetResult = await executeSp({
         spName: `PrescriptionDrugsGet`,
         params: params,
         connection,
       });
 
       if (Limit == 0 || Limit == null) {
-        PrescriptionDrugsGetResult = PrescriptionDrugsGetResult.recordsets;
+        prescriptionDrugsGetResult = prescriptionDrugsGetResult.recordsets;
       } else {
         //Append patient prescriptions and count for pagination
-        PrescriptionDrugsGetResult = [
-          PrescriptionDrugsGetResult.recordsets[0],
-          PrescriptionDrugsGetResult.recordsets[1][0],
+        prescriptionDrugsGetResult = [
+          prescriptionDrugsGetResult.recordsets[0],
+          prescriptionDrugsGetResult.recordsets[1][0],
         ];
       }
 
@@ -334,7 +354,7 @@ const PrescriptionController = {
         200,
         'success',
         'Drugs retrived successfully',
-        PrescriptionDrugsGetResult
+        prescriptionDrugsGetResult
       );
     } catch (error) {
       handleError(

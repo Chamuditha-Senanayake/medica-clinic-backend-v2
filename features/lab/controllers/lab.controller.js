@@ -53,7 +53,7 @@ const LabController = {
         labReportsGetResult.recordsets[0]
       );
 
-      //Append patient records and count for pagination
+      //Append patient labreports and count for pagination
       labReportsGetResult = [
         transformedResponse,
         labReportsGetResult.recordsets[1][0],
@@ -109,7 +109,7 @@ const LabController = {
         connection,
       });
 
-      labReportGetByIdResult = labReportGetByIdResult.recordsets[0];
+      labReportGetByIdResult = labReportGetByIdResult.recordsets;
 
       handleResponse(
         response,
@@ -173,7 +173,7 @@ const LabController = {
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
         EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
-        { name: 'RecordId', type: sql.Numeric, value: DoctorUserId },
+        { name: 'RecordId', type: sql.Numeric, value: RecordId },
         { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
         StringValue({ fieldName: 'TestType', value: TestType }),

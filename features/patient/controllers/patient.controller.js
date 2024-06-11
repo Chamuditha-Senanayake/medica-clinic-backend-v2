@@ -2919,8 +2919,6 @@ const PatientController = {
 
       patientCaregiversGetResult = patientCaregiversGetResult.recordsets;
 
-      console.log(request.user.userId);
-
       handleResponse(
         response,
         200,

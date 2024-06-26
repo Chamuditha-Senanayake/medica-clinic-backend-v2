@@ -50,7 +50,6 @@ const DrugController = {
 
       if (DrugName == '' || Limit == 0 || Limit == null) {
         drugsGetByNameResult = drugsGetByNameResult.recordsets;
-        console.log('object');
       } else {
         //Append patient prescriptions and count for pagination
         drugsGetByNameResult = [

@@ -2,6 +2,7 @@ import express from 'express';
 import { check } from 'express-validator';
 import PatientController from '../controllers/patient.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isAuthorizedCaregiver } from '../../../middleware/caregiver.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -528,6 +529,7 @@ router.post(
 router.post(
   '/PatientAllergyGet',
   isAuth,
+  isAuthorizedCaregiver,
   [
     check('UserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),

@@ -206,13 +206,13 @@ const PrescriptionController = {
         TableValueParameters({
           tableName: 'DrugDataSet',
           columns: [
-            { columnName: 'DrugName', type: sql.NVarChar(50) },
-            { columnName: 'Frequency', type: sql.NVarChar(30) },
+            { columnName: 'DrugName', type: sql.NVarChar },
+            { columnName: 'Frequency', type: sql.NVarChar(60) },
             { columnName: 'Dosage', type: sql.Int },
             { columnName: 'DosageUnit', type: sql.NVarChar(30) },
             { columnName: 'Duration', type: sql.Int },
             { columnName: 'DurationUnit', type: sql.NVarChar(30) },
-            { columnName: 'Instructions', type: sql.NVarChar(20) },
+            { columnName: 'Instructions', type: sql.NVarChar },
           ],
           values: DrugDataList,
         }),

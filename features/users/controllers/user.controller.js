@@ -1361,7 +1361,14 @@ const UserController = {
     try {
       let connection = request.app.locals.db;
 
-      let params = [EntityId({ fieldName: 'Id', value: request.user.userId })];
+      const { UserId } = request.body;
+
+      let params = [
+        EntityId({
+          fieldName: 'Id',
+          value: UserId ? UserId : request.user.userId,
+        }),
+      ];
 
       let getUserProfileInfoResult = await executeSp({
         spName: `BasicProfileInfoGet`,

@@ -46,4 +46,14 @@ router.post(
   CaregiverController.issueCaregiverPatientToken
 );
 
+router.post(
+  '/CaregiverPatientsGet',
+  isAuth,
+  [
+    check('Page').optional({ nullable: true }).isInt(),
+    check('Limit').optional({ nullable: true }).isInt(),
+  ],
+  CaregiverController.getCaregiverPatients
+);
+
 export default router;

@@ -275,7 +275,7 @@ const CaregiverController = {
 
   /**
    *
-   * Caregiver token validation
+   * Create caregiver token
    *
    * @param {request} request object
    * @param {response} response object
@@ -298,6 +298,67 @@ const CaregiverController = {
     handleResponse(response, 200, 'success', 'Data retrived successfully', {
       token,
     });
+  },
+
+  /**
+   *
+   * Get caregiver patients
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getCaregiverPatients(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Caregiver.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+
+      const { Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'CaregiverUserId', value: request.user.userId }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
+      ];
+
+      let caregiverPatientsGetResult = await executeSp({
+        spName: `CaregiverPatientsGet`,
+        params: params,
+        connection,
+      });
+
+      //Append caregiver patients and count for pagination
+      caregiverPatientsGetResult = [
+        caregiverPatientsGetResult.recordsets[0],
+        caregiverPatientsGetResult.recordsets[1][0],
+      ];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        caregiverPatientsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
   },
 
   // /**

@@ -2917,9 +2917,11 @@ const PatientController = {
         connection,
       });
 
-      patientCaregiversGetResult = patientCaregiversGetResult.recordsets;
-
-      console.log(request.user.userId);
+      //Append patient caregivers records and count for pagination
+      patientCaregiversGetResult = [
+        patientCaregiversGetResult.recordsets[0],
+        patientCaregiversGetResult.recordsets[1][0],
+      ];
 
       handleResponse(
         response,

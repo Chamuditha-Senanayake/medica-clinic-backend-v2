@@ -1032,6 +1032,87 @@ const UserController = {
 
   /**
    *
+   * Rest Password
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async userChangePassword(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Password } = request.body;
+
+      let userPasswordResetResult;
+
+      try {
+        let params = [
+          StringValue({ fieldName: 'Email', value: request.user.email }),
+        ];
+
+        let User = await executeSp({
+          spName: `UserGetByEmail`,
+          params: params,
+          connection,
+        });
+
+        params = [
+          StringValue({
+            fieldName: 'Username',
+            value: User.recordsets[0][0].Username,
+          }),
+          StringValue({ fieldName: 'Password', value: Password }),
+        ];
+
+        userPasswordResetResult = await executeSp({
+          spName: `UserResetPassword`,
+          params: params,
+          connection,
+        });
+      } catch (error) {
+        handleError(
+          response,
+          500,
+          'error',
+          error.message,
+          'Something went wrong'
+        );
+        next(error);
+      }
+
+      userPasswordResetResult = userPasswordResetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Password changed successfully',
+        userPasswordResetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        401,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * Get profile
    *
    * @param {request} request object

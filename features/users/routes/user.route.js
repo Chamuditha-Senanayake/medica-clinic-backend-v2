@@ -177,6 +177,13 @@ router.post(
   UserController.userResetPassword
 );
 
+router.post(
+  '/PasswordChange',
+  isAuth,
+  [check('Password').notEmpty().isString()],
+  UserController.userChangePassword
+);
+
 router.post('/ProfileGet', isAuth, UserController.getProfile);
 
 router.post(

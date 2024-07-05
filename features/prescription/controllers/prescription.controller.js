@@ -53,11 +53,31 @@ const PrescriptionController = {
         prescriptionGetResult.recordsets[0]
       );
 
-      //Append patient prescription and count for pagination
-      prescriptionGetResult = [
-        transformedResponse,
-        prescriptionGetResult.recordsets[1][0],
-      ];
+      // TODO: Populating drugs
+
+      const final = await Promise.all(
+        transformedResponse?.map(async prescription => {
+          var drugParams = [
+            EntityId({ fieldName: 'PrescriptionId', value: prescription?.Id }),
+            { name: 'Page', type: sql.Int, value: 0 },
+            { name: 'Limit', type: sql.Int, value: null },
+          ];
+          let prescriptionDrugsGetResult = await executeSp({
+            spName: `PrescriptionDrugsGet`,
+            params: drugParams,
+            connection,
+          });
+
+          return {
+            ...prescription,
+            Drugs: prescriptionDrugsGetResult.recordsets[0],
+          };
+        })
+      );
+
+      prescriptionGetResult = [final, prescriptionGetResult.recordsets[1][0]];
+
+      // ----
 
       handleResponse(
         response,

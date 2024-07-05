@@ -9,28 +9,28 @@ import jwtSign from '../../../utils/jwtSign.js';
 import { sendEmailFromCustomAccount } from '../../../utils/sendMail.js';
 import { EntityId, StringValue } from '../../../utils/type-def.js';
 
-const DoctorController = {
+const HelperController = {
   /**
    *
-   * Request doctor by patient
+   * Request helper by patient
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async requestDoctor(request, response, next) {
+  async requestHelper(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Helper.VALIDATION_ERROR,
         data: errors,
       });
     }
 
     let connection = request.app.locals.db;
-    const { Id = 0, DoctorEmail, DoctorName, Status } = request.body;
+    const { Id = 0, HelperEmail, HelperName, Status } = request.body;
 
     let token;
 
@@ -38,25 +38,25 @@ const DoctorController = {
       let params1 = [
         EntityId({ fieldName: 'Id', value: Id }),
         { name: 'PatientUserId', type: sql.Int, value: request.user.userId },
-        { name: 'DoctorEmail', type: sql.NVarChar, value: DoctorEmail },
+        { name: 'HelperEmail', type: sql.NVarChar, value: HelperEmail },
         { name: 'Status', type: sql.NVarChar, value: Status },
       ];
 
-      let doctorAssignResult = await executeSp({
-        spName: `PatientDoctorAssign`,
+      let helperAssignResult = await executeSp({
+        spName: `PatientHelperAssign`,
         params: params1,
         connection,
       });
 
-      doctorAssignResult = doctorAssignResult.recordsets[0][0];
+      helperAssignResult = helperAssignResult.recordsets[0][0];
 
       token = jwtSign(
         {
-          Id: doctorAssignResult.Id,
+          Id: helperAssignResult.Id,
           patientId: request.user.userId,
-          helperEmail: DoctorEmail,
+          helperEmail: HelperEmail,
         },
-        process.env.DOCTOR_REQUEST_TOKEN_EXPIRATION_TIME
+        process.env.HELPER_REQUEST_TOKEN_EXPIRATION_TIME
       );
 
       handleResponse(
@@ -64,7 +64,7 @@ const DoctorController = {
         200,
         'success',
         'Helper assigned successfully',
-        doctorAssignResult
+        helperAssignResult
       );
     } catch (error) {
       handleError(
@@ -79,7 +79,7 @@ const DoctorController = {
       if (Status === 'invited') {
         try {
           let params2 = [
-            StringValue({ fieldName: 'Email', value: DoctorEmail }),
+            StringValue({ fieldName: 'Email', value: HelperEmail }),
           ];
 
           let helperInfo = await executeSp({
@@ -93,19 +93,19 @@ const DoctorController = {
           }
 
           sendEmailFromCustomAccount({
-            to: DoctorEmail,
-            subject: 'You have assigned as a doctor',
-            html: `<p>Hello ${DoctorName},</p><h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/doctor?token=${token}'>${process.env.FRONTEND_URL}/invitation/doctor?token=${token}`,
+            to: HelperEmail,
+            subject: 'You have assigned as a helper',
+            html: `<p>Hello ${HelperName},</p><h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/helper?token=${token}'>${process.env.FRONTEND_URL}/invitation/helper?token=${token}`,
           });
         } catch (error) {
           let errorCode = error.message.split(' ')[0];
 
           if (errorCode === '29101' || errorCode === '29202') {
             sendEmailFromCustomAccount({
-              to: DoctorEmail,
-              subject: 'You have assigned as a doctor',
-              html: `<p>Hello ${DoctorName},</p><h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
-              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/doctor?token=${token}'> ${process.env.FRONTEND_URL}/invitation/doctor?token=${token}</a>`,
+              to: HelperEmail,
+              subject: 'You have assigned as a helper',
+              html: `<p>Hello ${HelperName},</p><h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
+              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/helper?token=${token}'> ${process.env.FRONTEND_URL}/invitation/helper?token=${token}</a>`,
             });
           } else {
             handleError(
@@ -124,19 +124,19 @@ const DoctorController = {
 
   /**
    *
-   * Response by doctor
+   * Response by helper
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async respondDoctor(request, response, next) {
+  async respondHelper(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Helper.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -148,10 +148,10 @@ const DoctorController = {
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
 
       let params1 = [
-        StringValue({ fieldName: 'Email', value: decodedToken.doctorEmail }),
+        StringValue({ fieldName: 'Email', value: decodedToken.helperEmail }),
       ];
 
-      let doctorInfo = await executeSp({
+      let helperInfo = await executeSp({
         spName: `UserGetByEmail`,
         params: params1,
         connection,
@@ -160,26 +160,26 @@ const DoctorController = {
       let params2 = [
         EntityId({ fieldName: 'Id', value: decodedToken.Id }),
         EntityId({
-          fieldName: 'DoctorUserId',
-          value: doctorInfo.recordsets[0][0].Id,
+          fieldName: 'HelperUserId',
+          value: helperInfo.recordsets[0][0].Id,
         }),
         StringValue({ fieldName: 'Status', value: Status }),
       ];
 
-      let doctorAssignResult = await executeSp({
-        spName: `PatientDoctorAssign`,
+      let helperAssignResult = await executeSp({
+        spName: `PatientHelperAssign`,
         params: params2,
         connection,
       });
 
-      doctorAssignResult = doctorAssignResult.recordsets[0][0];
+      helperAssignResult = helperAssignResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         'success',
         'Data retrived successfully',
-        doctorAssignResult
+        helperAssignResult
       );
     } catch (error) {
       handleError(
@@ -195,7 +195,7 @@ const DoctorController = {
 
   /**
    *
-   * Doctor token validation
+   * Helper token validation
    *
    * @param {request} request object
    * @param {response} response object
@@ -207,7 +207,7 @@ const DoctorController = {
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Helper.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -229,7 +229,7 @@ const DoctorController = {
       });
 
       let params2 = [
-        StringValue({ fieldName: 'Email', value: decodedToken.doctorEmail }),
+        StringValue({ fieldName: 'Email', value: decodedToken.helperEmail }),
       ];
 
       let helperInfo = await executeSp({
@@ -240,22 +240,22 @@ const DoctorController = {
 
       let params3 = [EntityId({ fieldName: 'Id', value: decodedToken.Id })];
 
-      let patientDoctorInfo = await executeSp({
-        spName: `PatientDoctorGet`,
+      let patientHelperInfo = await executeSp({
+        spName: `PatientHelperGet`,
         params: params3,
         connection,
       });
 
-      patientDoctorInfo = patientDoctorInfo.recordsets[0][0];
-      patientDoctorInfo.doctorInfo = patientInfo.recordsets[0][0];
-      patientDoctorInfo.IsRegisteredDoctor = helperInfo ? true : false;
+      patientHelperInfo = patientHelperInfo.recordsets[0][0];
+      patientHelperInfo.helperInfo = patientInfo.recordsets[0][0];
+      patientHelperInfo.IsRegisteredHelper = helperInfo ? true : false;
 
       handleResponse(
         response,
         200,
         'success',
         'Data retrived successfully',
-        patientDoctorInfo
+        patientHelperInfo
       );
     } catch (error) {
       handleError(
@@ -271,18 +271,18 @@ const DoctorController = {
 
   /**
    *
-   * Create doctor token
+   * Create helper token
    *
    * @param {request} request object
    * @param {response} response object
    * @returns
    */
-  async issueDoctorPatientToken(request, response) {
+  async issueHelperPatientToken(request, response) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Helper.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -298,19 +298,19 @@ const DoctorController = {
 
   /**
    *
-   * Get doctor patients
+   * Get helper patients
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getDoctorPatients(request, response, next) {
+  async getHelperPatients(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
         error: true,
-        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        message: ResponseMessage.Helper.VALIDATION_ERROR,
         data: errors,
       });
     }
@@ -321,22 +321,22 @@ const DoctorController = {
       const { Page = 0, Limit = 0 } = request.body;
 
       var params = [
-        EntityId({ fieldName: 'DoctorUserId', value: request.user.userId }),
+        EntityId({ fieldName: 'HelperUserId', value: request.user.userId }),
         EntityId({ fieldName: 'Page', value: Page }),
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];
 
-      let doctorPatientsGetResult = await executeSp({
-        spName: `DoctorPatientsGet`,
+      let helperPatientsGetResult = await executeSp({
+        spName: `HelperPatientsGet`,
         params: params,
         connection,
       });
 
       //Append helper patients and count for pagination
 
-      doctorPatientsGetResult = [
-        doctorPatientsGetResult.recordsets[0],
-        doctorPatientsGetResult.recordsets[1][0],
+      helperPatientsGetResult = [
+        helperPatientsGetResult.recordsets[0],
+        helperPatientsGetResult.recordsets[1][0],
       ];
 
       handleResponse(
@@ -344,7 +344,7 @@ const DoctorController = {
         200,
         'success',
         'Data retrived successfully',
-        doctorPatientsGetResult
+        helperPatientsGetResult
       );
     } catch (error) {
       handleError(
@@ -359,4 +359,4 @@ const DoctorController = {
   },
 };
 
-export default DoctorController;
+export default HelperController;

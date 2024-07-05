@@ -1,59 +1,59 @@
 import express from 'express';
 import { check } from 'express-validator';
-import DoctorController from '../controllers/doctor.controller.js';
+import HelperController from '../controllers/helper.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
-import { isDoctor } from '../../../middleware/doctor.middleware.js';
+import { isHelper } from '../../../middleware/helper.middleware.js';
 const router = express.Router();
 
 router.post(
-  '/DoctorRequest',
+  '/HelperRequest',
   isAuth,
   [
-    check('DoctorEmail').not().isEmpty().isString(),
-    check('DoctorName').optional({ nullable: true }).isString(),
+    check('HelperEmail').not().isEmpty().isString(),
+    check('HelperName').optional({ nullable: true }).isString(),
     check('Status')
       .isIn(['invited', 'enabled', 'disabled', 'deleted'])
       .optional({ nullable: true })
       .isString(),
   ],
-  DoctorController.requestDoctor
+  HelperController.requestHelper
 );
 
 router.post(
-  '/DoctorRespond',
+  '/HelperRespond',
   [
-    check('DoctorEmail').not().isEmpty().isString(),
+    check('HelperEmail').not().isEmpty().isString(),
     check('Status')
       .isIn(['accepted', 'rejected'])
       .optional({ nullable: true })
       .isString(),
     check('Token').not().isEmpty().isString(),
   ],
-  DoctorController.respondDoctor
+  HelperController.respondHelper
 );
 
 router.post(
-  '/DoctorTokenValidation',
+  '/HelperTokenValidation',
   [check('Token').not().isEmpty().isString()],
-  DoctorController.tokenValidation
+  HelperController.tokenValidation
 );
 
 router.post(
-  '/DoctorRequestPatientAccess',
+  '/HelperRequestPatientAccess',
   isAuth,
-  isDoctor,
+  isHelper,
   [check('PatientId').isInt().not().isEmpty()],
-  DoctorController.issueDoctorPatientToken
+  HelperController.issueHelperPatientToken
 );
 
 router.post(
-  '/DoctorPatientsGet',
+  '/HelperPatientsGet',
   isAuth,
   [
     check('Page').optional({ nullable: true }).isInt(),
     check('Limit').optional({ nullable: true }).isInt(),
   ],
-  DoctorController.getDoctorPatients
+  HelperController.getHelperPatients
 );
 
 export default router;

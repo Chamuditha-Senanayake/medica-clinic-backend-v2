@@ -17,7 +17,6 @@ import { dirname } from 'path';
 
 // Import Routes
 import authRouter from './features/auth/auth.route.js';
-import doctorRouter from './features/doctor/routes/doctor.route.js';
 import nurseRouter from './features/nurse/routes/nurse.route.js';
 import employeeRouter from './features/employee/routes/employee.route.js';
 import prescriptionRouter from './features/prescription/routes/prescription.route.js';
@@ -36,6 +35,8 @@ import medicalCertificateRouter from './features/medicalCertificate/routes/medic
 import camiosRouter from './features/camios/routes/camios.route.js';
 import recordRouter from './features/record/routes/record.route.js';
 import caregiverRouter from './features/caregiver/routes/caregiver.route.js';
+import doctorRouter from './features/doctor/routes/doctor.route.js';
+import helperRouter from './features/helper/routes/helper.route.js';
 import labRouter from './features/lab/routes/lab.route.js';
 import fileUploadRouter from './features/fileHandler/routes/fileHandler.route.js';
 
@@ -45,9 +46,6 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const app = express();
-
-//DB connection
-//
 
 app.use(
   cookieSession({
@@ -77,7 +75,6 @@ app.get('/', (req, res) => {
 });
 
 app.use(`/api/v1/auth`, authRouter);
-app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);
 app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, diseaseRouter);
@@ -96,6 +93,8 @@ app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
 app.use(`/api/v1`, recordRouter);
 app.use(`/api/v1`, caregiverRouter);
+app.use(`/api/v1`, doctorRouter);
+app.use(`/api/v1`, helperRouter);
 app.use(`/api/v1`, labRouter);
 app.use(`/api/v1`, fileUploadRouter);
 

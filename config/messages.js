@@ -44,6 +44,9 @@ const ResponseMessages = {
   Caregiver: {
     VALIDATION_ERROR: 'Validation errors',
   },
+  Helper: {
+    VALIDATION_ERROR: 'Validation errors',
+  },
   Doctor: {
     VALIDATION_ERROR: 'Validation errors',
     LIST_RETRIEVE: 'Doctor list retrieved!',

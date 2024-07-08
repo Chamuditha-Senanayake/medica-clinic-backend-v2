@@ -54,7 +54,7 @@ const DoctorController = {
         {
           Id: doctorAssignResult.Id,
           patientId: request.user.userId,
-          helperEmail: DoctorEmail,
+          doctorEmail: DoctorEmail,
         },
         process.env.DOCTOR_REQUEST_TOKEN_EXPIRATION_TIME
       );

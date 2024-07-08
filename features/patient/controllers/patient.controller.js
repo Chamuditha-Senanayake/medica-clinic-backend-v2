@@ -2944,6 +2944,128 @@ const PatientController = {
 
   /**
    *
+   * Get patient helpers
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientHelpers(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+
+      const { Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'PatientUserId', value: request.user.userId }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
+      ];
+
+      let patientHelpersGetResult = await executeSp({
+        spName: `PatientHelpersGet`,
+        params: params,
+        connection,
+      });
+
+      //Append patient helpers records and count for pagination
+      patientHelpersGetResult = [
+        patientHelpersGetResult.recordsets[0],
+        patientHelpersGetResult.recordsets[1][0],
+      ];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        patientHelpersGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get patient doctors
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientDoctors(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+
+      const { Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'PatientUserId', value: request.user.userId }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
+      ];
+
+      let patientDoctorsGetResult = await executeSp({
+        spName: `PatientDoctorsGet`,
+        params: params,
+        connection,
+      });
+
+      //Append patient doctors records and count for pagination
+      patientDoctorsGetResult = [
+        patientDoctorsGetResult.recordsets[0],
+        patientDoctorsGetResult.recordsets[1][0],
+      ];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        patientDoctorsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * Save patient emergency contact
    *
    * @param {request} request object

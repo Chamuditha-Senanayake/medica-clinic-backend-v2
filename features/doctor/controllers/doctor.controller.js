@@ -63,7 +63,7 @@ const DoctorController = {
         response,
         200,
         'success',
-        'Helper assigned successfully',
+        'Doctor assigned successfully',
         doctorAssignResult
       );
     } catch (error) {
@@ -82,13 +82,13 @@ const DoctorController = {
             StringValue({ fieldName: 'Email', value: DoctorEmail }),
           ];
 
-          let helperInfo = await executeSp({
+          let doctorInfo = await executeSp({
             spName: `UserGetByEmail`,
             params: params2,
             connection,
           });
 
-          if (!helperInfo) {
+          if (!doctorInfo) {
             throw Error('User not found');
           }
 
@@ -232,7 +232,7 @@ const DoctorController = {
         StringValue({ fieldName: 'Email', value: decodedToken.doctorEmail }),
       ];
 
-      let helperInfo = await executeSp({
+      let doctorInfo = await executeSp({
         spName: `UserGetByEmail`,
         params: params2,
         connection,
@@ -248,7 +248,7 @@ const DoctorController = {
 
       patientDoctorInfo = patientDoctorInfo.recordsets[0][0];
       patientDoctorInfo.doctorInfo = patientInfo.recordsets[0][0];
-      patientDoctorInfo.IsRegisteredDoctor = helperInfo ? true : false;
+      patientDoctorInfo.IsRegisteredDoctor = doctorInfo ? true : false;
 
       handleResponse(
         response,
@@ -332,7 +332,7 @@ const DoctorController = {
         connection,
       });
 
-      //Append helper patients and count for pagination
+      //Append doctor patients and count for pagination
 
       doctorPatientsGetResult = [
         doctorPatientsGetResult.recordsets[0],

@@ -15,35 +15,52 @@ export const isAuthorizedCaregiver = (req, res, next) => {
       } else {
         let connection = req.app.locals.db;
 
-        let params = [
-          EntityId({
-            fieldName: 'PatientUserId',
-            value: req.body.UserId,
-          }),
-          EntityId({
-            fieldName: 'CaregiverUserId',
-            value: req.user.PatientUserId,
-          }),
-        ];
-
+        var params1 = [StringValue({ fieldName: 'Email', value: Email })];
         try {
-          let PatientCaregiverInfo = await executeSp({
-            spName: `PatientCaregiverGet`,
-            params: params,
+          let userData = await executeSp({
+            spName: `UserGetByEmail`,
+            params: params1,
             connection,
           });
 
-          if (!PatientCaregiverInfo) {
-            res
-              .status(401)
-              .send({ message: 'You are not allowed to perform this action' });
+          if (!userData) {
+            throw Error('User not found');
+          } else if (userData.recordsets[0][0].IsCaregiver === true) {
+            let params2 = [
+              EntityId({
+                fieldName: 'PatientUserId',
+                value: req.body.PatientUserId,
+              }),
+              EntityId({
+                fieldName: 'CaregiverUserId',
+                value: req.user.UserId,
+              }),
+            ];
+
+            try {
+              let PatientCaregiverInfo = await executeSp({
+                spName: `PatientCaregiverGet`,
+                params: params2,
+                connection,
+              });
+
+              if (!PatientCaregiverInfo) {
+                res.status(401).send({
+                  message: 'You are not allowed to perform this action',
+                });
+              } else {
+                next();
+              }
+            } catch (error) {
+              res.status(401).send({
+                message: 'You are not allowed to perform this action',
+              });
+            }
           } else {
             next();
           }
         } catch (error) {
-          res
-            .status(401)
-            .send({ message: 'You are not allowed to perform this action' });
+          res.status(401).send({ message: 'Failed to perform this action' });
         }
       }
     }

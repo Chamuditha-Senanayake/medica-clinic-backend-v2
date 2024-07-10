@@ -577,6 +577,26 @@ router.post(
 );
 
 router.post(
+  '/PatientHelpersGet',
+  isAuth,
+  [
+    check('Page').optional({ nullable: true }).isInt(),
+    check('Limit').optional({ nullable: true }).isInt(),
+  ],
+  PatientController.getPatientHelpers
+);
+
+router.post(
+  '/PatientDoctorsGet',
+  isAuth,
+  [
+    check('Page').optional({ nullable: true }).isInt(),
+    check('Limit').optional({ nullable: true }).isInt(),
+  ],
+  PatientController.getPatientDoctors
+);
+
+router.post(
   '/PatientEmergencyContactSave',
   isAuth,
   [

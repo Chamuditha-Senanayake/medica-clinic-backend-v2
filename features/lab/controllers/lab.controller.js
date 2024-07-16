@@ -34,9 +34,10 @@ const LabController = {
 
     try {
       let connection = request.app.locals.db;
-      const { PatientUserId, Page = 0, Limit = 0 } = request.body;
+      const { SearchBy, PatientUserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
+        { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },
         EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
         EntityId({ fieldName: 'Page', value: Page }),
         EntityId({ fieldName: 'Limit', value: Limit }),

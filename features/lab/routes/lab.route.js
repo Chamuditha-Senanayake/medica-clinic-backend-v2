@@ -8,6 +8,7 @@ router.post(
   '/LabReportsGet',
   isAuth,
   [
+    check('SearchBy').optional({ nullable: true }).isString(),
     check('PatientUserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
     check('Limit').isInt().not().isEmpty(),

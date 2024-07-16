@@ -318,9 +318,10 @@ const HelperController = {
     try {
       let connection = request.app.locals.db;
 
-      const { Page = 0, Limit = 0 } = request.body;
+      const { SearchBy, Page = 0, Limit = 0 } = request.body;
 
       var params = [
+        { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },
         EntityId({ fieldName: 'HelperUserId', value: request.user.userId }),
         EntityId({ fieldName: 'Page', value: Page }),
         EntityId({ fieldName: 'Limit', value: Limit }),

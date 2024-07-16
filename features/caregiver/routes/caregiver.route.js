@@ -50,6 +50,7 @@ router.post(
   '/CaregiverPatientsGet',
   isAuth,
   [
+    check('SearchBy').optional({ nullable: true }).isString(),
     check('Page').optional({ nullable: true }).isInt(),
     check('Limit').optional({ nullable: true }).isInt(),
   ],

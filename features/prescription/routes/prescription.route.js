@@ -8,6 +8,7 @@ router.post(
   '/PrescriptionGet',
   isAuth,
   [
+    check('SearchBy').optional({ nullable: true }).isString(),
     check('UserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
     check('Limit').isInt().not().isEmpty(),

@@ -95,7 +95,7 @@ const DoctorController = {
           sendEmailFromCustomAccount({
             to: DoctorEmail,
             subject: 'You have assigned as a doctor',
-            html: `<p>Hello ${DoctorName},</p><h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/doctor?token=${token}'>${process.env.FRONTEND_URL}/invitation/doctor?token=${token}`,
+            html: `<p>Hello ${DoctorName},</p><h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/doctor?token=${token}' target='_blank'>${process.env.FRONTEND_URL}/invitation/doctor?token=${token}`,
           });
         } catch (error) {
           let errorCode = error.message.split(' ')[0];
@@ -104,8 +104,8 @@ const DoctorController = {
             sendEmailFromCustomAccount({
               to: DoctorEmail,
               subject: 'You have assigned as a doctor',
-              html: `<p>Hello ${DoctorName},</p><h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup'> here</a> 
-              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/doctor?token=${token}'> ${process.env.FRONTEND_URL}/invitation/doctor?token=${token}</a>`,
+              html: `<p>Hello ${DoctorName},</p><h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup' target='_blank'> here</a> 
+              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/doctor?token=${token}' target='_blank'> ${process.env.FRONTEND_URL}/invitation/doctor?token=${token}</a>`,
             });
           } else {
             handleError(

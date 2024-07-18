@@ -99,7 +99,7 @@ const CaregiverController = {
           sendEmailFromCustomAccount({
             to: CaregiverEmail,
             subject: 'You have assigned as a caregiver',
-            html: `<p>Hello ${CaregiverName},</p><h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'>${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}`,
+            html: `<p>Hello ${CaregiverName},</p><h2>Verify Your Email</h2><p>Click the link below to proceed:</p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}' target='_blank'>${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}`,
           });
         } catch (error) {
           let errorCode = error.message.split(' ')[0];
@@ -109,7 +109,7 @@ const CaregiverController = {
               to: CaregiverEmail,
               subject: 'You have assigned as a caregiver',
               html: `<p>Hello ${CaregiverName},</p><h2>Verify Your Email</h2><p>Step 1 - Signup </p><a href='${process.env.FRONTEND_URL}/signup' target='_blank'> here</a> 
-              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`,
+              <p>Step 2 - Accept invitation </p><a href='${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}' target='_blank'> ${process.env.FRONTEND_URL}/invitation/caregiver?token=${token}</a>`,
             });
           } else {
             handleError(

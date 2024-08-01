@@ -230,4 +230,14 @@ router.post(
 
 router.post('/UserProfileInfoGet', isAuth, UserController.getUserProfileInfo);
 
+router.post(
+  '/UsersGet',
+  isAuth,
+  [
+    check('Page').isInt().not().isEmpty(),
+    check('Limit').isInt().not().isEmpty(),
+  ],
+  UserController.getUsers
+);
+
 export default router;

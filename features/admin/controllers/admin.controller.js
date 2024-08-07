@@ -39,7 +39,7 @@ const AdminController = {
       var params = [
         EntityId({ fieldName: 'UserId', value: request.user.userId }),
         { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },
-        // { name: 'FilterBy', type: sql.NVarChar, value: FilterBy },
+        { name: 'FilterBy', type: sql.NVarChar, value: FilterBy },
         { name: 'Page', type: sql.Int, value: Page },
         { name: 'Limit', type: sql.Int, value: Limit },
       ];
@@ -60,6 +60,68 @@ const AdminController = {
         'success',
         'Data retrived successfully',
         usersGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get Analytics
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getAnalytics(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Admin.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+
+      var params = [
+        EntityId({ fieldName: 'UserId', value: request.user.userId }),
+      ];
+
+      let analyticsGetResult = await executeSp({
+        spName: `AnalyticsGet`,
+        params: params,
+        connection,
+      });
+
+      analyticsGetResult = [
+        {
+          PatientCount: analyticsGetResult.recordsets[0][0].PatientCount,
+          CaregiverCount: analyticsGetResult.recordsets[1][0].CaregiverCount,
+          HelperCount: analyticsGetResult.recordsets[2][0].HelperCount,
+          DoctorCount: analyticsGetResult.recordsets[3][0].DoctorCount,
+          UserCount: analyticsGetResult.recordsets[4][0].UserCount,
+          AdminUserCount: analyticsGetResult.recordsets[5][0].AdminUserCount,
+        },
+      ];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        analyticsGetResult[0]
       );
     } catch (error) {
       handleError(

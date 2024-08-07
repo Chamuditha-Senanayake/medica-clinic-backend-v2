@@ -16,4 +16,6 @@ router.post(
   AdminController.getUsers
 );
 
+router.post('/AnalyticsGet', isAuth, AdminController.getAnalytics);
+
 export default router;

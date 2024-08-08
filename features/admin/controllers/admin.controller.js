@@ -36,7 +36,7 @@ const AdminController = {
 
       const { SearchBy, FilterBy, Page = 0, Limit = 0 } = request.body;
 
-      var params = [
+      const params = [
         EntityId({ fieldName: 'UserId', value: request.user.userId }),
         { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },
         { name: 'FilterBy', type: sql.NVarChar, value: FilterBy },
@@ -45,20 +45,27 @@ const AdminController = {
       ];
 
       let usersGetResult = await executeSp({
-        spName: `UsersGet`,
+        spName: `UserDetailsGet`,
         params: params,
         connection,
       });
 
-      usersGetResult = [
-        usersGetResult.recordsets[0],
-        usersGetResult.recordsets[1][0],
-      ];
+      // Process the users' data
+      const users = usersGetResult.recordsets[0].map(user => {
+        return {
+          ...user,
+          profiles: JSON.parse(`[${user.profiles}]`),
+          Address: JSON.parse(`${user.Address}`),
+        };
+      });
+
+      usersGetResult = [users, usersGetResult.recordsets[1][0]];
+
       handleResponse(
         response,
         200,
         'success',
-        'Data retrived successfully',
+        'Data retrieved successfully',
         usersGetResult
       );
     } catch (error) {

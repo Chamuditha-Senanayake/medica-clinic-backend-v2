@@ -82,6 +82,68 @@ const AdminController = {
 
   /**
    *
+   * Update user role
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async updateUserRole(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Admin.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+
+      const { UserId, Status } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'AdminUserId', value: request.user.userId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        StringValue({ fieldName: 'Status', value: Status }),
+      ];
+
+      let userRoleUpdateResult = await executeSp({
+        spName: `UserRoleUpdate`,
+        params: params,
+        connection,
+      });
+
+      //Append helper patients and count for pagination
+
+      // userRoleUpdateResult = [
+      //   helperPatientsGetResult.recordsets[0],
+      //   helperPatientsGetResult.recordsets[1][0],
+      // ];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        userRoleUpdateResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * Get Analytics
    *
    * @param {request} request object

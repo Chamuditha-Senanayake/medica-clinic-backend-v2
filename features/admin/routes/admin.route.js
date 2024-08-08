@@ -16,6 +16,16 @@ router.post(
   AdminController.getUsers
 );
 
+router.post(
+  '/UserRoleUpdate',
+  isAuth,
+  [
+    check('UserId').isInt().not().isEmpty(),
+    check('Status').isString().not().isEmpty(),
+  ],
+  AdminController.updateUserRole
+);
+
 router.post('/AnalyticsGet', isAuth, AdminController.getAnalytics);
 
 export default router;

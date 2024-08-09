@@ -4,6 +4,7 @@ import UserController from '../controllers/user.controller.js';
 import AppConstants from '../../../config/constants.js';
 import ResponseMessages from '../../../config/messages.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 
 const router = express.Router();
 
@@ -77,6 +78,8 @@ router.post(
 
 router.post(
   '/AddressGet',
+  isAuth,
+  isActiveUser,
   [check('UserId').notEmpty().isInt(), check('Id').notEmpty().isInt()],
   UserController.getAddress
 );

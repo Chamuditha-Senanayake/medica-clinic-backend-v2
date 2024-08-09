@@ -21,9 +21,19 @@ router.post(
   isAuth,
   [
     check('UserId').isInt().not().isEmpty(),
-    check('Status').isString().not().isEmpty(),
+    check('UserRoleId').isInt().not().isEmpty(),
   ],
   AdminController.updateUserRole
+);
+
+router.post(
+  '/UserStatusUpdate',
+  isAuth,
+  [
+    check('UserId').isInt().not().isEmpty(),
+    check('UserStatus').isString().not().isEmpty(),
+  ],
+  AdminController.updateUserStatus
 );
 
 router.post('/AnalyticsGet', isAuth, AdminController.getAnalytics);

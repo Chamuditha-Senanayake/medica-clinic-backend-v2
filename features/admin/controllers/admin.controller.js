@@ -102,12 +102,12 @@ const AdminController = {
     try {
       let connection = request.app.locals.db;
 
-      const { UserId, Status } = request.body;
+      const { UserId, UserRoleId } = request.body;
 
       var params = [
         EntityId({ fieldName: 'AdminUserId', value: request.user.userId }),
         EntityId({ fieldName: 'UserId', value: UserId }),
-        StringValue({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'UserRoleId', value: UserRoleId }),
       ];
 
       let userRoleUpdateResult = await executeSp({
@@ -116,12 +116,7 @@ const AdminController = {
         connection,
       });
 
-      //Append helper patients and count for pagination
-
-      // userRoleUpdateResult = [
-      //   helperPatientsGetResult.recordsets[0],
-      //   helperPatientsGetResult.recordsets[1][0],
-      // ];
+      userRoleUpdateResult = userRoleUpdateResult.recordsets[0];
 
       handleResponse(
         response,
@@ -129,6 +124,63 @@ const AdminController = {
         'success',
         'Data retrived successfully',
         userRoleUpdateResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Update user status
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async updateUserStatus(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Admin.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+
+      const { UserId, UserStatus } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'AdminUserId', value: request.user.userId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        StringValue({ fieldName: 'UserStatus', value: UserStatus }),
+      ];
+
+      let userStatusUpdateResult = await executeSp({
+        spName: `UserStatusUpdate`,
+        params: params,
+        connection,
+      });
+
+      userStatusUpdateResult = userStatusUpdateResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Data retrived successfully',
+        userStatusUpdateResult
       );
     } catch (error) {
       handleError(

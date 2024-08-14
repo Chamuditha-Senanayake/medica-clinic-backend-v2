@@ -1,13 +1,13 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const DiseaseController = {
   /**
@@ -34,8 +34,8 @@ const DiseaseController = {
       const { Id, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let diseaseGetResult = await executeSp({
@@ -49,17 +49,17 @@ const DiseaseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Disease data retrived successfully",
+        'success',
+        'Disease data retrived successfully',
         diseaseGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -86,22 +86,17 @@ const DiseaseController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        Name,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, Name, Status, UserSaved } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "Name", value: Name }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({ fieldName: 'Name', value: Name }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let diseaseSavetResult = await executeSp({
         spName: `DiseaseSave`,
@@ -115,17 +110,17 @@ const DiseaseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Disease data retrieved successfully",
+        'success',
+        'Disease data retrieved successfully',
         diseaseSavetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -155,8 +150,8 @@ const DiseaseController = {
       const { Id, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let foodAllergyGet = await executeSp({
@@ -170,17 +165,17 @@ const DiseaseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Allergy data retrived successfully",
+        'success',
+        'Allergy data retrived successfully',
         foodAllergyGet
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -207,22 +202,17 @@ const DiseaseController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        Name,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, Name, Status, UserSaved } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "Name", value: Name }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({ fieldName: 'Name', value: Name }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let foodAllergySaveResult = await executeSp({
         spName: `FoodAllergySave`,
@@ -236,22 +226,21 @@ const DiseaseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Allergy data retrieved successfully",
+        'success',
+        'Allergy data retrieved successfully',
         foodAllergySaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default DiseaseController;

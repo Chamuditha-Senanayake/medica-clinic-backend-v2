@@ -1,14 +1,14 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   DateString,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const MedicalCertificateController = {
   /**
@@ -32,23 +32,17 @@ const MedicalCertificateController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        UserId,
-        SessionId,
-        AppointmentId,
-        DoctorId,
-        PatientId,
-        Id,
-      } = request.body;
+      const { UserId, SessionId, AppointmentId, DoctorId, PatientId, Id } =
+        request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "Id", value: Id }),
-    ];
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+      ];
 
       let medicalCertificateGetResult = await executeSp({
         spName: `MedicalCertificateGet`,
@@ -61,21 +55,21 @@ const MedicalCertificateController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         medicalCertificateGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
-  }, 
+  },
 
   /**
    *
@@ -98,7 +92,7 @@ const MedicalCertificateController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         PrescriptionId,
         AppointmentId,
         AppointmentNumber,
@@ -128,53 +122,74 @@ const MedicalCertificateController = {
         IssuingDate,
         Status,
         UserSaved,
-        Id
+        Id,
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "PrescriptionId", value: PrescriptionId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "AppointmentNumber", value: AppointmentNumber }),
-        EntityId({ fieldName: "AppointmentSessionId", value: AppointmentSessionId }),
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'AppointmentNumber', value: AppointmentNumber }),
+        EntityId({
+          fieldName: 'AppointmentSessionId',
+          value: AppointmentSessionId,
+        }),
         SignedInteger({
-          fieldName: "AppointmentStatus",
+          fieldName: 'AppointmentStatus',
           value: AppointmentStatus,
         }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
 
-        StringValue({ fieldName: "PatientTitle", value: PatientTitle }),
-        StringValue({ fieldName: "PatientFirstName", value: PatientFirstName }),
-        StringValue({ fieldName: "PatientMiddleName", value: PatientMiddleName }),
-        StringValue({ fieldName: "PatientLastName", value: PatientLastName }),
-        StringValue({ fieldName: "PatientNIC", value: PatientNIC }),
-        StringValue({ fieldName: "PatientPassport", value: PatientPassport }),
-        StringValue({ fieldName: "PatientMobile", value: PatientMobile }),
-        StringValue({ fieldName: "PatientEmail", value: PatientEmail }),
-        DateString({ fieldName: "PatientDateOfBirth", value: PatientDateOfBirth }),
-        StringValue({ fieldName: "PatientGender", value: PatientGender }),
-        EntityId({ fieldName: "PatientParentId", value: PatientParentId }),
-        EntityId({ fieldName: "PatientPatientTypeId", value: PatientPatientTypeId }),
+        StringValue({ fieldName: 'PatientTitle', value: PatientTitle }),
+        StringValue({ fieldName: 'PatientFirstName', value: PatientFirstName }),
+        StringValue({
+          fieldName: 'PatientMiddleName',
+          value: PatientMiddleName,
+        }),
+        StringValue({ fieldName: 'PatientLastName', value: PatientLastName }),
+        StringValue({ fieldName: 'PatientNIC', value: PatientNIC }),
+        StringValue({ fieldName: 'PatientPassport', value: PatientPassport }),
+        StringValue({ fieldName: 'PatientMobile', value: PatientMobile }),
+        StringValue({ fieldName: 'PatientEmail', value: PatientEmail }),
+        DateString({
+          fieldName: 'PatientDateOfBirth',
+          value: PatientDateOfBirth,
+        }),
+        StringValue({ fieldName: 'PatientGender', value: PatientGender }),
+        EntityId({ fieldName: 'PatientParentId', value: PatientParentId }),
+        EntityId({
+          fieldName: 'PatientPatientTypeId',
+          value: PatientPatientTypeId,
+        }),
 
-        StringValue({ fieldName: "PatientBloodGroup", value: PatientBloodGroup }),
+        StringValue({
+          fieldName: 'PatientBloodGroup',
+          value: PatientBloodGroup,
+        }),
 
         SignedInteger({
-          fieldName: "PatientStatus",
+          fieldName: 'PatientStatus',
           value: PatientStatus,
         }),
-        StringValue({ fieldName: "ResidentialAddress", value: ResidentialAddress }),
-        StringValue({ fieldName: "Employment", value: Employment }),
-        StringValue({ fieldName: "NatureOfDiesease", value: NatureOfDiesease }),
-        EntityId({ fieldName: "RecommendedDays", value: RecommendedDays }),
+        StringValue({
+          fieldName: 'ResidentialAddress',
+          value: ResidentialAddress,
+        }),
+        StringValue({ fieldName: 'Employment', value: Employment }),
+        StringValue({ fieldName: 'NatureOfDiesease', value: NatureOfDiesease }),
+        EntityId({ fieldName: 'RecommendedDays', value: RecommendedDays }),
 
-        DateString({ fieldName: "LeaveWithEffectFrom", value: LeaveWithEffectFrom }),
-        StringValue({ fieldName: "Remark", value: Remark }),
-        DateString({ fieldName: "IssuingDate", value: IssuingDate }),
+        DateString({
+          fieldName: 'LeaveWithEffectFrom',
+          value: LeaveWithEffectFrom,
+        }),
+        StringValue({ fieldName: 'Remark', value: Remark }),
+        DateString({ fieldName: 'IssuingDate', value: IssuingDate }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+        EntityId({ fieldName: 'Id', value: Id }),
       ];
 
       let medicalCertificateSaveResult = await executeSp({
@@ -188,22 +203,21 @@ const MedicalCertificateController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         medicalCertificateSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
-  }, 
-
+  },
 };
 
 export default MedicalCertificateController;

@@ -1,14 +1,14 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
   DateString,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const AppointmentController = {
   /**
@@ -38,16 +38,16 @@ const AppointmentController = {
         Number = 0,
         SessionId = 0,
         PatientId = 0,
-        PatientMobile = "",
+        PatientMobile = '',
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "Number", value: Number }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        StringValue({ fieldName: "PatientMobile", value: PatientMobile }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'Number', value: Number }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        StringValue({ fieldName: 'PatientMobile', value: PatientMobile }),
       ];
 
       let appointmentGetResult = await executeSp({
@@ -61,12 +61,12 @@ const AppointmentController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Appointment data retrieved successfully",
+        'success',
+        'Appointment data retrieved successfully',
         appointmentGetResult
       );
     } catch (error) {
-      handleError(res, 500, "error", error.message, "Something went wrong");
+      handleError(res, 500, 'error', error.message, 'Something went wrong');
       next(error);
     }
   },
@@ -103,19 +103,19 @@ const AppointmentController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Number", value: Number }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: 'Number', value: Number }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
         EntityId({
-          fieldName: "UserSaved",
+          fieldName: 'UserSaved',
           value: UserSaved,
         }),
         EntityId({
-          fieldName: "Id",
+          fieldName: 'Id',
           value: Id,
         }),
       ];
@@ -131,17 +131,17 @@ const AppointmentController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Appointment saved successfully",
+        'success',
+        'Appointment saved successfully',
         AppointmentSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -172,8 +172,8 @@ const AppointmentController = {
       const { UserId, SessionId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
       ];
 
       let AppointmentGetNextResult = await executeSp({
@@ -187,17 +187,17 @@ const AppointmentController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         AppointmentGetNextResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -225,11 +225,11 @@ const AppointmentController = {
       const { UserId, FromDate, ToDate, DoctorId, BranchId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        DateString({ fieldName: "FromDate", value: FromDate }),
-        DateString({ fieldName: "ToDate", value: ToDate }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "BranchId", value: BranchId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        DateString({ fieldName: 'FromDate', value: FromDate }),
+        DateString({ fieldName: 'ToDate', value: ToDate }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'BranchId', value: BranchId }),
       ];
 
       let appointmentReportResult = await executeSp({
@@ -243,17 +243,17 @@ const AppointmentController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Appointment Report retrieved successfully",
+        'success',
+        'Appointment Report retrieved successfully',
         appointmentReportResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -274,7 +274,7 @@ const AppointmentController = {
       const { AppoinmentId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "AppoinmentId", value: AppoinmentId }),
+        EntityId({ fieldName: 'AppoinmentId', value: AppoinmentId }),
       ];
 
       let appointmentDeleteResult = await executeSp({
@@ -288,17 +288,17 @@ const AppointmentController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Appointment deleted successfully",
+        'success',
+        'Appointment deleted successfully',
         appointmentDeleteResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }

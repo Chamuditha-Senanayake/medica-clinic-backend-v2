@@ -1,13 +1,13 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const NurseController = {
   /**
@@ -34,9 +34,9 @@ const NurseController = {
       const { Id, NurseUserId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "NurseUserId", value: NurseUserId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'NurseUserId', value: NurseUserId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let nurseGetResult = await executeSp({
@@ -50,17 +50,17 @@ const NurseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Nurse data retrived successfully",
+        'success',
+        'Nurse data retrived successfully',
         nurseGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -99,20 +99,20 @@ const NurseController = {
         UserSaved,
       } = request.body;
 
-       var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "FirstName", value: FirstName }),
-      StringValue({ fieldName: "MiddleName", value: MiddleName }),
-      StringValue({ fieldName: "LastName", value: LastName }),
-      StringValue({ fieldName: "Email", value: Email }),
-      StringValue({ fieldName: "NIC", value: NIC }),
-      StringValue({ fieldName: "Title", value: Title }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({ fieldName: 'FirstName', value: FirstName }),
+        StringValue({ fieldName: 'MiddleName', value: MiddleName }),
+        StringValue({ fieldName: 'LastName', value: LastName }),
+        StringValue({ fieldName: 'Email', value: Email }),
+        StringValue({ fieldName: 'NIC', value: NIC }),
+        StringValue({ fieldName: 'Title', value: Title }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let nurseSaveResult = await executeSp({
         spName: `NurseSave`,
@@ -126,17 +126,17 @@ const NurseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Nurse data retrieved successfully",
+        'success',
+        'Nurse data retrieved successfully',
         nurseSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -154,24 +154,22 @@ const NurseController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        InstituteBranchId,
-        NurseId,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, InstituteBranchId, NurseId, Status, UserSaved } =
+        request.body;
 
-       var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-      StringValue({ fieldName: "NurseId", value: NurseId }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        StringValue({
+          fieldName: 'InstituteBranchId',
+          value: InstituteBranchId,
+        }),
+        StringValue({ fieldName: 'NurseId', value: NurseId }),
+        SignedInteger({
+          fieldName: 'Status',
+          value: Status,
+        }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let nurseBranchSaveResult = await executeSp({
         spName: `NurseBranchSave`,
@@ -185,17 +183,17 @@ const NurseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         nurseBranchSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -213,23 +211,17 @@ const NurseController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        DoctorId,
-        NurseId,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, DoctorId, NurseId, Status, UserSaved } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "NurseId", value: NurseId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'NurseId', value: NurseId }),
         SignedInteger({
-          fieldName: "Status",
+          fieldName: 'Status',
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
       ];
 
       let doctorNurseSaveResult = await executeSp({
@@ -244,22 +236,21 @@ const NurseController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrieved successfully",
+        'success',
+        'Data retrieved successfully',
         doctorNurseSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default NurseController;

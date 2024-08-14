@@ -1,18 +1,18 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const NoteController = {
   /**
    *
-   * get disease by [Id, UserId]
+   * get note by [Id, UserId]
    *
    * @param {request} request object
    * @param {response} response object
@@ -34,9 +34,9 @@ const NoteController = {
       const { Id, PatientId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let noteGetResult = await executeSp({
@@ -50,17 +50,17 @@ const NoteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Notes retrived successfully",
+        'success',
+        'Notes retrived successfully',
         noteGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -68,7 +68,7 @@ const NoteController = {
 
   /**
    *
-   * save a disease
+   * save a note
    *
    * @param {request} request object
    * @param {response} response object
@@ -87,26 +87,18 @@ const NoteController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        PatientId,
-        Note,
-        AgeYears,
-        AgeMonths,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, PatientId, Note, AgeYears, AgeMonths, Status, UserSaved } =
+        request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "PatientId", value: PatientId }),
-      StringValue({ fieldName: "Note", value: Note }),
-      EntityId({ fieldName: "AgeYears", value: AgeYears }),
-      EntityId({ fieldName: "AgeMonths", value: AgeMonths }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-
-    ];
+      var params = [
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        StringValue({ fieldName: 'Note', value: Note }),
+        EntityId({ fieldName: 'AgeYears', value: AgeYears }),
+        EntityId({ fieldName: 'AgeMonths', value: AgeMonths }),
+        EntityId({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'UserSaved', value: UserSaved }),
+      ];
 
       let noteSaveResult = await executeSp({
         spName: `NoteSave`,
@@ -120,22 +112,21 @@ const NoteController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Note retrieved successfully",
+        'success',
+        'Note retrieved successfully',
         noteSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
-
 };
 
 export default NoteController;

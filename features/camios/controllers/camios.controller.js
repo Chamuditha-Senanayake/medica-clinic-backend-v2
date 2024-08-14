@@ -1,13 +1,13 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+} from '../../../utils/type-def.js';
 
 const CamiosController = {
   /**
@@ -31,22 +31,16 @@ const CamiosController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        Id,
-        DoctorId,
-        SessionId,
-        AppointmentId,
-        PatientId,
-        UserId 
-      } = request.body;
+      const { Id, DoctorId, SessionId, AppointmentId, PatientId, UserId } =
+        request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'DoctorId', value: DoctorId }),
+        EntityId({ fieldName: 'SessionId', value: SessionId }),
+        EntityId({ fieldName: 'AppointmentId', value: AppointmentId }),
+        EntityId({ fieldName: 'PatientId', value: PatientId }),
+        EntityId({ fieldName: 'UserId', value: UserId }),
       ];
 
       let CamiosRequestGetResult = await executeSp({
@@ -60,17 +54,17 @@ const CamiosController = {
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Data retrived successfully',
         CamiosRequestGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -115,10 +109,10 @@ const CamiosController = {
   //     } = request.body;
 
   //   const CamiosDifferentDiagnosisByContributoryProbabilityList = [];
-  //   const CamiosDifferentDiagnosisByExpanatoryProbabilityList = [];  
-  //   const CamiosFinalDiagnosisList = [];  
-  //   const CamiosDiagnosticStaticList = []; 
-    
+  //   const CamiosDifferentDiagnosisByExpanatoryProbabilityList = [];
+  //   const CamiosFinalDiagnosisList = [];
+  //   const CamiosDiagnosticStaticList = [];
+
   //   CamiosDifferentDiagnosisByContributoryProbability.forEach((camiosDifferentDiagnosisByContributoryProbability) => {
   //       CamiosDifferentDiagnosisByContributoryProbabilityList.push([]);
   //   });
@@ -131,8 +125,6 @@ const CamiosController = {
   //   CamiosDiagnosticStatic.forEach((camiosDiagnosticStatic) => {
   //       CamiosDiagnosticStaticList.push([]);
   //   });
-    
-    
 
   //   var params = [
   //     EntityId({ fieldName: "Id", value: Id }),
@@ -147,25 +139,25 @@ const CamiosController = {
   //     EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
   //     TableValueParameters({
-  //       tableName:"CamiosDifferentDiagnosisByContributoryProbability",        
+  //       tableName:"CamiosDifferentDiagnosisByContributoryProbability",
   //       columns:
   //       [],
   //       values:CamiosDifferentDiagnosisByContributoryProbabilityList
   //     }),
   //     TableValueParameters({
-  //       tableName:"CamiosDifferentDiagnosisByExpanatoryProbability",        
+  //       tableName:"CamiosDifferentDiagnosisByExpanatoryProbability",
   //       columns:
   //       [],
   //       values:CamiosDifferentDiagnosisByExpanatoryProbabilityList
   //     }),
   //     TableValueParameters({
-  //       tableName:"CamiosFinalDiagnosis",        
+  //       tableName:"CamiosFinalDiagnosis",
   //       columns:
   //       [],
   //       values:CamiosFinalDiagnosisList
   //     }),
   //     TableValueParameters({
-  //       tableName:"CamiosDiagnosticStatic",        
+  //       tableName:"CamiosDiagnosticStatic",
   //       columns:
   //       [],
   //       values:CamiosDiagnosticStaticList
@@ -199,7 +191,6 @@ const CamiosController = {
   //     next(error);
   //   }
   // },
-
 };
 
 export default CamiosController;

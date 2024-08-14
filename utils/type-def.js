@@ -1,6 +1,6 @@
-import { StandardValidation } from "express-validator/src/context-items/standard-validation.js";
-import Validation from "./validation.js";
-import sql from "mssql";
+import { StandardValidation } from 'express-validator/src/context-items/standard-validation.js';
+import Validation from './validation.js';
+import sql from 'mssql';
 const {
   Int,
   NVarChar,
@@ -108,8 +108,6 @@ export const DecimalValue = ({ fieldName, value }) => {
  * @returns
  */
 export const TableValueParameters = ({ tableName, columns, values }) => {
-  // note that the mssql package does not currently support retrieving User Defined Types directly.
-  // create the new table
   // this will not create a table in mssql database, it will create a instance in the memory instead
   let table = new sql.Table(tableName);
 
@@ -162,10 +160,10 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
    * ]
    */
 
-   values.map((value) => {
-      table.rows.add(...value);
-    });
-      
+  values.map(value => {
+    table.rows.add(...value);
+  });
+
   return {
     name: tableName,
     type: sql.TVP(table),

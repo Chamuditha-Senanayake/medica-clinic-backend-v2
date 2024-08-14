@@ -1,26 +1,28 @@
-import { validationResult } from "express-validator";
-import ResponseMessage from "../../../config/messages.js";
-import executeSp from "../../../utils/exeSp.js";
-import handleError from "../../../utils/handleError.js";
-import handleResponse from "../../../utils/handleResponse.js";
+import { validationResult } from 'express-validator';
+import ResponseMessage from '../../../config/messages.js';
+import executeSp from '../../../utils/exeSp.js';
+import handleError from '../../../utils/handleError.js';
+import handleResponse from '../../../utils/handleResponse.js';
 import {
   EntityId,
   DateString,
-  StringValue,
   SignedInteger,
-} from "../../../utils/type-def.js";
+  TableValueParameters,
+} from '../../../utils/type-def.js';
+import sql from 'mssql';
+import transformMediaResponse from '../../../utils/transformResponse.js';
 
 const PrescriptionController = {
   /**
    *
-   * get prescription record count
+   * Get prescriptions
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordCount(request, response, next) {
+  async getPatientPrescriptions(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -32,37 +34,66 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { SearchBy, UserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },
+        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'Page', value: Page }),
+        EntityId({ fieldName: 'Limit', value: Limit }),
+      ];
 
       let prescriptionGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordCountGet`,
+        spName: `PrescriptionGet`,
         params: params,
         connection,
       });
 
-      prescriptionGetResult = prescriptionGetResult.recordsets[0][0];
+      //Append files and transform the response
+      const transformedResponse = transformMediaResponse(
+        prescriptionGetResult.recordsets[0]
+      );
+
+      // TODO: Populating drugs
+
+      const final = await Promise.all(
+        transformedResponse?.map(async prescription => {
+          var drugParams = [
+            EntityId({ fieldName: 'PrescriptionId', value: prescription?.Id }),
+            { name: 'Page', type: sql.Int, value: 0 },
+            { name: 'Limit', type: sql.Int, value: null },
+          ];
+          let prescriptionDrugsGetResult = await executeSp({
+            spName: `PrescriptionDrugsGet`,
+            params: drugParams,
+            connection,
+          });
+
+          return {
+            ...prescription,
+            Drugs: prescriptionDrugsGetResult.recordsets[0],
+          };
+        })
+      );
+
+      prescriptionGetResult = [final, prescriptionGetResult.recordsets[1][0]];
+
+      // ----
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
+        'success',
+        'Prescriptions retrived successfully',
         prescriptionGetResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -70,14 +101,14 @@ const PrescriptionController = {
 
   /**
    *
-   * get prescription record disease count
+   * Get prescription by Id
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDiseaseCount(request, response, next) {
+  async getPatientPrescriptionById(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -89,37 +120,32 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { Id } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+      var params = [EntityId({ fieldName: 'Id', value: Id })];
 
-      let prescriptionRecordDiseaseCountGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDiseaseCountGet`,
+      let prescriptionGetByIdResult = await executeSp({
+        spName: `PrescriptionGetById`,
         params: params,
         connection,
       });
 
-      prescriptionRecordDiseaseCountGetResult = prescriptionRecordDiseaseCountGetResult.recordsets[0][0];
+      prescriptionGetByIdResult = prescriptionGetByIdResult.recordsets;
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
-        prescriptionRecordDiseaseCountGetResult
+        'success',
+        'Data retrived successfully',
+        prescriptionGetByIdResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -127,14 +153,14 @@ const PrescriptionController = {
 
   /**
    *
-   * get prescription record disease details
+   * Save prescription
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDiseaseDetails(request, response, next) {
+  async savePatientPrescription(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -146,37 +172,103 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const {
+        Id = 0,
+        PatientUserId,
+        RecordId,
+        DoctorUserId,
+        DoctorName,
+        PrescriptionName,
+        PrescriptionDate,
+        ExpirationDate,
+        DrugDataSet,
+        Files = [],
+        Status = 1,
+        UserCreated,
+      } = request.body;
+
+      const DrugDataList = [];
+      DrugDataSet.forEach(DrugData => {
+        DrugDataList.push([
+          DrugData.DrugName,
+          DrugData.Frequency,
+          DrugData.Dosage,
+          DrugData.DosageUnit,
+          DrugData.Duration,
+          DrugData.DurationUnit,
+          DrugData.Instructions,
+        ]);
+      });
+
+      const FilesList = [];
+      Files.forEach(File => {
+        FilesList.push([File.Path, File.FileType]);
+      });
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        EntityId({ fieldName: 'Id', value: Id }),
+        EntityId({ fieldName: 'PatientUserId', value: PatientUserId }),
+        { name: 'RecordId', type: sql.Numeric, value: RecordId },
+        { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
+        { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
+        {
+          name: 'PrescriptionName',
+          type: sql.NVarChar,
+          value: PrescriptionName,
+        },
+        DateString({ fieldName: 'PrescriptionDate', value: PrescriptionDate }),
+        {
+          name: 'ExpirationDate',
+          type: sql.DateTime,
+          value: ExpirationDate,
+        },
+        SignedInteger({ fieldName: 'Status', value: Status }),
+        EntityId({ fieldName: 'UserCreated', value: UserCreated }),
+        TableValueParameters({
+          tableName: 'DrugDataSet',
+          columns: [
+            { columnName: 'DrugName', type: sql.NVarChar },
+            { columnName: 'Frequency', type: sql.NVarChar(60) },
+            { columnName: 'Dosage', type: sql.Int },
+            { columnName: 'DosageUnit', type: sql.NVarChar(30) },
+            { columnName: 'Duration', type: sql.Int },
+            { columnName: 'DurationUnit', type: sql.NVarChar(30) },
+            { columnName: 'Instructions', type: sql.NVarChar },
+          ],
+          values: DrugDataList,
+        }),
+        TableValueParameters({
+          tableName: 'FileData',
+          columns: [
+            { columnName: 'Path', type: sql.NVarChar },
+            { columnName: 'FileType', type: sql.NVarChar(20) },
+          ],
+          values: FilesList,
+        }),
+      ];
 
-      let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDiseaseDetailsGet`,
+      let prescriptionSaveResult = await executeSp({
+        spName: `PrescriptionSave`,
         params: params,
         connection,
       });
 
-      prescriptionRecordDiseaseDetailsGetResult = prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+      prescriptionSaveResult = prescriptionSaveResult.recordsets;
 
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
-        prescriptionRecordDiseaseDetailsGetResult
+        'success',
+        'Data retrived successfully',
+        prescriptionSaveResult
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
@@ -184,14 +276,14 @@ const PrescriptionController = {
 
   /**
    *
-   * get prescription record drug count
+   * Delete prescription
    *
    * @param {request} request object
    * @param {response} response object
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDrugCount(request, response, next) {
+  async deletePatientPrescription(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -203,42 +295,99 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { PrescriptionId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
+      ];
 
-      let prescriptionRecordDrugCountGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDrugCountGet`,
+      await executeSp({
+        spName: `PrescriptionDelete`,
         params: params,
         connection,
       });
 
-      prescriptionRecordDrugCountGetResult = prescriptionRecordDrugCountGetResult.recordsets[0][0];
-
       handleResponse(
         response,
         200,
-        "success",
-        "Data retrived successfully",
-        prescriptionRecordDrugCountGetResult
+        'success',
+        'Prescription deleted successfully'
       );
     } catch (error) {
       handleError(
         response,
         500,
-        "error",
+        'error',
         error.message,
-        "Something went wrong"
+        'Something went wrong'
       );
       next(error);
     }
   },
 
+  /**
+   *
+   * Get prescription drugs
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getPatientPrescriptionDrugs(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { PrescriptionId, Page = 0, Limit = 0 } = request.body;
+
+      var params = [
+        EntityId({ fieldName: 'PrescriptionId', value: PrescriptionId }),
+        { name: 'Page', type: sql.Int, value: Page },
+        { name: 'Limit', type: sql.Int, value: Limit },
+      ];
+
+      let prescriptionDrugsGetResult = await executeSp({
+        spName: `PrescriptionDrugsGet`,
+        params: params,
+        connection,
+      });
+
+      if (Limit == 0 || Limit == null) {
+        prescriptionDrugsGetResult = prescriptionDrugsGetResult.recordsets;
+      } else {
+        //Append patient prescriptions and count for pagination
+        prescriptionDrugsGetResult = [
+          prescriptionDrugsGetResult.recordsets[0],
+          prescriptionDrugsGetResult.recordsets[1][0],
+        ];
+      }
+
+      handleResponse(
+        response,
+        200,
+        'success',
+        'Drugs retrived successfully',
+        prescriptionDrugsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        'error',
+        error.message,
+        'Something went wrong'
+      );
+      next(error);
+    }
+  },
 };
 
 export default PrescriptionController;

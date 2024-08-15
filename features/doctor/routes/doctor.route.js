@@ -2,12 +2,16 @@ import express from 'express';
 import { check } from 'express-validator';
 import DoctorController from '../controllers/doctor.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isDoctor } from '../../../middleware/doctor.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
+
 const router = express.Router();
 
 router.post(
   '/DoctorRequest',
   isAuth,
+  isActiveUser,
   [
     check('DoctorEmail').not().isEmpty().isString(),
     check('DoctorName').optional({ nullable: true }).isString(),
@@ -21,6 +25,8 @@ router.post(
 
 router.post(
   '/DoctorRespond',
+  isAuth,
+  isActiveUser,
   [
     check('DoctorEmail').not().isEmpty().isString(),
     check('Status')
@@ -34,6 +40,8 @@ router.post(
 
 router.post(
   '/DoctorTokenValidation',
+  isAuth,
+  isActiveUser,
   [check('Token').not().isEmpty().isString()],
   DoctorController.tokenValidation
 );
@@ -41,6 +49,8 @@ router.post(
 router.post(
   '/DoctorRequestPatientAccess',
   isAuth,
+  isActiveUser,
+  isDoctor,
   isAuthorizedDoctor,
   [check('PatientId').isInt().not().isEmpty()],
   DoctorController.issueDoctorPatientToken
@@ -49,7 +59,9 @@ router.post(
 router.post(
   '/DoctorPatientsGet',
   isAuth,
+  isActiveUser,
   [
+    check('SearchBy').optional({ nullable: true }).isString(),
     check('Page').optional({ nullable: true }).isInt(),
     check('Limit').optional({ nullable: true }).isInt(),
   ],

@@ -1,22 +1,30 @@
 import express from 'express';
 import { check } from 'express-validator';
 import DrugController from '../controllers/drug.controller.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
   '/DrugsGetByName',
+  isAuth,
+  isActiveUser,
   check('DrugName').optional({ nullable: true }).isString(),
   DrugController.getDrugsByName
 );
 
 router.post(
   '/DrugAllergyGet',
+  isAuth,
+  isActiveUser,
   [check('Id').isInt().not().isEmpty(), check('UserId').not().isEmpty()],
   DrugController.getDrugAllergy
 );
 
 router.post(
   '/DrugAllergySave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('Name').not().isEmpty(),
@@ -28,6 +36,8 @@ router.post(
 
 router.post(
   '/DrugCountGet',
+  isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('DoctorId').isInt().not().isEmpty(),
@@ -39,6 +49,8 @@ router.post(
 
 router.post(
   '/DrugGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -49,6 +61,8 @@ router.post(
 
 router.post(
   '/DrugSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('RawName').not().isEmpty(),
@@ -67,6 +81,8 @@ router.post(
 
 router.post(
   '/DrugStatusSwitch',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -77,6 +93,8 @@ router.post(
 
 router.post(
   '/DrugTemplateGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -86,6 +104,8 @@ router.post(
 
 router.post(
   '/DrugTemplateSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('DoctorId').isInt().not().isEmpty(),

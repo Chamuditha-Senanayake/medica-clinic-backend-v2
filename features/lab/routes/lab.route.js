@@ -2,12 +2,15 @@ import express from 'express';
 import { check } from 'express-validator';
 import LabController from '../controllers/lab.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
   '/LabReportsGet',
   isAuth,
+  isActiveUser,
   [
+    check('SearchBy').optional({ nullable: true }).isString(),
     check('PatientUserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
     check('Limit').isInt().not().isEmpty(),
@@ -18,6 +21,7 @@ router.post(
 router.post(
   '/LabReportGetById',
   isAuth,
+  isActiveUser,
   [check('Id').isInt().not().isEmpty()],
   LabController.getPatientLabReportById
 );
@@ -25,6 +29,7 @@ router.post(
 router.post(
   '/LabReportSave',
   isAuth,
+  isActiveUser,
   [
     check('PatientUserId').isInt().not().isEmpty(),
     check('RecordId').optional({ nullable: true }).isInt(),
@@ -42,6 +47,7 @@ router.post(
 router.post(
   '/LabReportDelete',
   isAuth,
+  isActiveUser,
   [check('Id').isInt().not().isEmpty()],
   LabController.deletePatientLabReports
 );

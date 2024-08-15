@@ -324,7 +324,7 @@ const UserController = {
       sendEmailFromCustomAccount({
         to: Email,
         subject: 'Reset Password',
-        html: `<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`,
+        html: `<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}' target='_blank'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`,
       });
 
       handleResponse(response, 200, 'success', 'Verification email sent');

@@ -3,11 +3,13 @@ import { check } from 'express-validator';
 import CaregiverController from '../controllers/caregiver.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isCaregiver } from '../../../middleware/caregiver.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
   '/CaregiverRequest',
   isAuth,
+  isActiveUser,
   [
     check('CaregiverEmail').not().isEmpty().isString(),
     check('CaregiverName').optional({ nullable: true }).isString(),
@@ -21,6 +23,8 @@ router.post(
 
 router.post(
   '/CaregiverRespond',
+  isAuth,
+  isActiveUser,
   [
     check('CaregiverEmail').not().isEmpty().isString(),
     check('Status')
@@ -34,6 +38,8 @@ router.post(
 
 router.post(
   '/CaregiverTokenValidation',
+  isAuth,
+  isActiveUser,
   [check('Token').not().isEmpty().isString()],
   CaregiverController.tokenValidation
 );
@@ -41,6 +47,7 @@ router.post(
 router.post(
   '/CaregiverRequestPatientAccess',
   isAuth,
+  isActiveUser,
   isCaregiver,
   [check('PatientId').isInt().not().isEmpty()],
   CaregiverController.issueCaregiverPatientToken
@@ -49,6 +56,7 @@ router.post(
 router.post(
   '/CaregiverPatientsGet',
   isAuth,
+  isActiveUser,
   [
     check('SearchBy').optional({ nullable: true }).isString(),
     check('Page').optional({ nullable: true }).isInt(),

@@ -2,10 +2,13 @@ import express from 'express';
 import { check } from 'express-validator';
 import PatientController from '../controllers/patient.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
   '/PatientDiagnosisDocumentGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -16,6 +19,8 @@ router.post(
 
 router.post(
   '/PatientDiagnosisDocumentSave',
+  isAuth,
+  isActiveUser,
   [
     check('PatientId').isInt(),
     check('Type').not().isEmpty(),
@@ -29,6 +34,8 @@ router.post(
 
 router.post(
   '/PatientDiseaseSave',
+  isAuth,
+  isActiveUser,
   [
     check('PatientId').isInt().not().isEmpty(),
     check('UserSaved').isInt().not().isEmpty(),
@@ -39,6 +46,8 @@ router.post(
 
 router.post(
   '/PatientDispositionGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -48,6 +57,8 @@ router.post(
 
 router.post(
   '/PatientDispositionSave',
+  isAuth,
+  isActiveUser,
   [
     check('AppointmentId').isInt().not().isEmpty(),
     check('PrescriptionId').isInt().not().isEmpty(),
@@ -74,6 +85,8 @@ router.post(
 
 router.post(
   '/PatientDrugAllergyGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -84,6 +97,8 @@ router.post(
 
 router.post(
   '/GynoObstetricsHistoryGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -106,6 +121,8 @@ router.post(
 
 router.post(
   '/PatientDiagnosisDocumentDelete',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -115,6 +132,8 @@ router.post(
 
 router.post(
   '/PatientNewFoodAllergyGet',
+  isAuth,
+  isActiveUser,
   [
     check('PatientId').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -125,6 +144,8 @@ router.post(
 
 router.post(
   '/PatientNewFoodAllergySave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -137,6 +158,8 @@ router.post(
 
 router.post(
   '/PatientGet',
+  isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('NIC').not().isEmpty(),
@@ -157,6 +180,8 @@ router.post(
 
 router.post(
   '/PatientNewSurgeryGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -167,6 +192,8 @@ router.post(
 
 router.post(
   '/PatientNewSurgerySave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -179,6 +206,8 @@ router.post(
 
 router.post(
   '/PatientOtherAllergyGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -189,6 +218,8 @@ router.post(
 
 router.post(
   '/PatientOtherAllergySave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -201,6 +232,8 @@ router.post(
 
 router.post(
   '/PatientOtherDiseasesGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -211,6 +244,8 @@ router.post(
 
 router.post(
   '/PatientOtherDiseasesSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -223,6 +258,8 @@ router.post(
 
 router.post(
   '/PatientRelativesGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -235,6 +272,8 @@ router.post(
 
 router.post(
   '/PatientRemarkGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -245,6 +284,8 @@ router.post(
 
 router.post(
   '/PatientRemarkSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -257,6 +298,8 @@ router.post(
 
 router.post(
   '/PatientReminderGet',
+  isAuth,
+  isActiveUser,
   [
     check('PatientId').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -266,6 +309,8 @@ router.post(
 
 router.post(
   '/PatientReminderSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -282,6 +327,8 @@ router.post(
 
 router.post(
   '/PatientReportSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -332,6 +379,8 @@ router.post(
 
 router.post(
   '/PatientStatusGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -342,6 +391,8 @@ router.post(
 
 router.post(
   '/PatientSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('ParentId').isInt().not().isEmpty(),
@@ -502,6 +553,8 @@ router.post(
 
 router.post(
   '/PatientCountGet',
+  isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('DoctorId').isInt().not().isEmpty(),
@@ -514,6 +567,7 @@ router.post(
 router.post(
   '/PatientAllergySave',
   isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -528,6 +582,7 @@ router.post(
 router.post(
   '/PatientAllergyGet',
   isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
@@ -539,6 +594,7 @@ router.post(
 router.post(
   '/PatientAllergyDelete',
   isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('Id').isInt().not().isEmpty(),
@@ -548,6 +604,8 @@ router.post(
 
 router.post(
   '/PatientDrugAllergySave',
+  isAuth,
+  isActiveUser,
   [
     check('PatientId').isInt().not().isEmpty(),
     check('UserSaved').isInt().not().isEmpty(),
@@ -557,6 +615,8 @@ router.post(
 
 router.post(
   '/PatientFoodAllergySave',
+  isAuth,
+  isActiveUser,
   [
     check('PatientId').isInt().not().isEmpty(),
     check('UserSaved').isInt().not().isEmpty(),
@@ -567,6 +627,7 @@ router.post(
 router.post(
   '/PatientCaregiversGet',
   isAuth,
+  isActiveUser,
   [
     check('Page').optional({ nullable: true }).isInt(),
     check('Limit').optional({ nullable: true }).isInt(),
@@ -577,6 +638,7 @@ router.post(
 router.post(
   '/PatientHelpersGet',
   isAuth,
+  isActiveUser,
   [
     check('Page').optional({ nullable: true }).isInt(),
     check('Limit').optional({ nullable: true }).isInt(),
@@ -587,6 +649,7 @@ router.post(
 router.post(
   '/PatientDoctorsGet',
   isAuth,
+  isActiveUser,
   [
     check('Page').optional({ nullable: true }).isInt(),
     check('Limit').optional({ nullable: true }).isInt(),
@@ -597,6 +660,7 @@ router.post(
 router.post(
   '/PatientEmergencyContactSave',
   isAuth,
+  isActiveUser,
   [
     check('Id').optional({ nullable: true }).isInt(),
     check('UserId').not().isEmpty().isInt(),
@@ -612,6 +676,7 @@ router.post(
 router.post(
   '/PatientEmergencyContactGet',
   isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
@@ -623,6 +688,7 @@ router.post(
 router.post(
   '/PatientEmergencyContactDelete',
   isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('Id').isInt().not().isEmpty(),

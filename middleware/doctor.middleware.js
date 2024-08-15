@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { EntityId } from '../utils/type-def.js';
 import executeSp from '../utils/exeSp.js';
+import { EntityId, StringValue } from '../utils/type-def.js';
 
 export const isAuthorizedDoctor = (req, res, next) => {
   const authorization = req.headers.authorization;
@@ -15,7 +15,9 @@ export const isAuthorizedDoctor = (req, res, next) => {
       } else {
         let connection = req.app.locals.db;
 
-        var params1 = [StringValue({ fieldName: 'Email', value: Email })];
+        var params1 = [
+          StringValue({ fieldName: 'Email', value: req.user.email }),
+        ];
         try {
           let userData = await executeSp({
             spName: `UserGetByEmail`,
@@ -33,7 +35,7 @@ export const isAuthorizedDoctor = (req, res, next) => {
               }),
               EntityId({
                 fieldName: 'DoctorUserId',
-                value: req.user.UserId,
+                value: req.user.userId,
               }),
             ];
 

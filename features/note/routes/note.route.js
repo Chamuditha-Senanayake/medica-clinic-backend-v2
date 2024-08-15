@@ -1,10 +1,14 @@
 import express from 'express';
 import { check } from 'express-validator';
 import NoteController from '../controllers/note.controller.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+import { isAuth } from '../../../middleware/auth.middleware.js';
 const router = express.Router();
 
 router.post(
   '/NoteGet',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),
@@ -15,6 +19,8 @@ router.post(
 
 router.post(
   '/NoteSave',
+  isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientId').isInt().not().isEmpty(),

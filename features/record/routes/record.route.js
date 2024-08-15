@@ -2,6 +2,7 @@ import express from 'express';
 import { check } from 'express-validator';
 import RecordController from '../controllers/record.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -18,6 +19,7 @@ router.post(
 router.post(
   '/RecordSave',
   isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('UserId').isInt().not().isEmpty(),
@@ -43,6 +45,7 @@ router.post(
 router.post(
   '/RecordDelete',
   isAuth,
+  isActiveUser,
   [
     check('UserId').isInt().not().isEmpty(),
     check('Id').isInt().not().isEmpty(),
@@ -53,6 +56,7 @@ router.post(
 router.post(
   '/RecordBodyPartsGet',
   isAuth,
+  isActiveUser,
   [check('UserId').isInt().not().isEmpty()],
   RecordController.getPatientRecordBodyParts
 );

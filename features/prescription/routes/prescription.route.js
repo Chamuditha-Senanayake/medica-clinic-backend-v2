@@ -2,11 +2,13 @@ import express from 'express';
 import { check } from 'express-validator';
 import PrescriptionController from '../controllers/prescription.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
   '/PrescriptionGet',
   isAuth,
+  isActiveUser,
   [
     check('SearchBy').optional({ nullable: true }).isString(),
     check('UserId').isInt().not().isEmpty(),
@@ -19,6 +21,7 @@ router.post(
 router.post(
   '/PrescriptionGetById',
   isAuth,
+  isActiveUser,
   [check('Id').isInt().not().isEmpty()],
   PrescriptionController.getPatientPrescriptionById
 );
@@ -26,6 +29,7 @@ router.post(
 router.post(
   '/PrescriptionSave',
   isAuth,
+  isActiveUser,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientUserId').isInt().not().isEmpty(),
@@ -45,6 +49,7 @@ router.post(
 router.post(
   '/PrescriptionDelete',
   isAuth,
+  isActiveUser,
   [check('PrescriptionId').isInt().not().isEmpty()],
   PrescriptionController.deletePatientPrescription
 );
@@ -52,6 +57,7 @@ router.post(
 router.post(
   '/PrescriptionDrugsGet',
   isAuth,
+  isActiveUser,
   [
     check('PrescriptionId').isInt().not().isEmpty(),
     check('Page').optional({ nullable: true }).isInt(),

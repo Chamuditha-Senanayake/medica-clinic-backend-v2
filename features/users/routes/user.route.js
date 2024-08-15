@@ -86,6 +86,8 @@ router.post(
 
 router.post(
   '/AddressSave',
+  isAuth,
+  isActiveUser,
   [
     check('AddressLine1').notEmpty().isString().isLength({ max: 75 }),
     check('AddressLine2')
@@ -116,6 +118,8 @@ router.post(
 
 router.post(
   '/DeleteRecord',
+  isAuth,
+  isActiveUser,
   [
     check('Id').notEmpty().isInt(),
     check('Table').notEmpty().isString(),
@@ -126,6 +130,8 @@ router.post(
 
 router.post(
   '/OCRSaves',
+  isAuth,
+  isActiveUser,
   [
     check('UUID').optional({ values: 'null' }).isString(),
     check('RefrenceNo').optional({ values: 'null' }).isString(),
@@ -183,15 +189,17 @@ router.post(
 router.post(
   '/PasswordChange',
   isAuth,
+  isActiveUser,
   [check('Password').notEmpty().isString()],
   UserController.userChangePassword
 );
 
-router.post('/ProfileGet', isAuth, UserController.getProfile);
+router.post('/ProfileGet', isAuth, isActiveUser, UserController.getProfile);
 
 router.post(
   '/BasicProfileInfoUpdate',
   isAuth,
+  isActiveUser,
   [
     check('Id').notEmpty().isInt(),
     check('FName').optional({ nullable: true }).isString(),
@@ -218,6 +226,7 @@ router.post(
 router.post(
   '/PersonalProfileInfoUpdate',
   isAuth,
+  isActiveUser,
   [
     check('Id').notEmpty().isInt(),
     check('Gender').optional({ nullable: true }).isString(),
@@ -231,6 +240,11 @@ router.post(
   UserController.updatePersonalProfileInfo
 );
 
-router.post('/UserProfileInfoGet', isAuth, UserController.getUserProfileInfo);
+router.post(
+  '/UserProfileInfoGet',
+  isAuth,
+  isActiveUser,
+  UserController.getUserProfileInfo
+);
 
 export default router;

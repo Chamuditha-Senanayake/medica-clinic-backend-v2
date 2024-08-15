@@ -3,11 +3,13 @@ import { check } from 'express-validator';
 import HelperController from '../controllers/helper.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isHelper } from '../../../middleware/helper.middleware.js';
+import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 const router = express.Router();
 
 router.post(
   '/HelperRequest',
   isAuth,
+  isActiveUser,
   [
     check('HelperEmail').not().isEmpty().isString(),
     check('HelperName').optional({ nullable: true }).isString(),
@@ -21,6 +23,8 @@ router.post(
 
 router.post(
   '/HelperRespond',
+  isAuth,
+  isActiveUser,
   [
     check('HelperEmail').not().isEmpty().isString(),
     check('Status')
@@ -34,6 +38,8 @@ router.post(
 
 router.post(
   '/HelperTokenValidation',
+  isAuth,
+  isActiveUser,
   [check('Token').not().isEmpty().isString()],
   HelperController.tokenValidation
 );
@@ -41,6 +47,7 @@ router.post(
 router.post(
   '/HelperRequestPatientAccess',
   isAuth,
+  isActiveUser,
   isHelper,
   [check('PatientId').isInt().not().isEmpty()],
   HelperController.issueHelperPatientToken
@@ -49,6 +56,7 @@ router.post(
 router.post(
   '/HelperPatientsGet',
   isAuth,
+  isActiveUser,
   [
     check('SearchBy').optional({ nullable: true }).isString(),
     check('Page').optional({ nullable: true }).isInt(),

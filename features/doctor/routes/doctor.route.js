@@ -4,6 +4,8 @@ import DoctorController from '../controllers/doctor.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isDoctor } from '../../../middleware/doctor.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
+
 const router = express.Router();
 
 router.post(
@@ -49,6 +51,7 @@ router.post(
   isAuth,
   isActiveUser,
   isDoctor,
+  isAuthorizedDoctor,
   [check('PatientId').isInt().not().isEmpty()],
   DoctorController.issueDoctorPatientToken
 );

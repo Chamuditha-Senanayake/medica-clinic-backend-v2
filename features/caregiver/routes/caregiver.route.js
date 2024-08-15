@@ -4,6 +4,7 @@ import CaregiverController from '../controllers/caregiver.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isCaregiver } from '../../../middleware/caregiver.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+
 const router = express.Router();
 
 router.post(

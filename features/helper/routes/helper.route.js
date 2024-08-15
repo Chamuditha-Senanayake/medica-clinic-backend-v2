@@ -4,6 +4,7 @@ import HelperController from '../controllers/helper.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isHelper } from '../../../middleware/helper.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+import { isAuthorizedHelper } from '../../../middleware/helper.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -49,6 +50,7 @@ router.post(
   isAuth,
   isActiveUser,
   isHelper,
+  isAuthorizedHelper,
   [check('PatientId').isInt().not().isEmpty()],
   HelperController.issueHelperPatientToken
 );

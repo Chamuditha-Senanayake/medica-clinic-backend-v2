@@ -76,6 +76,14 @@ router.post(
 );
 
 router.post(
+  "/RefreshToken",
+  [
+    check("Token").optional({ values: "null" }).isString()
+  ],
+  UserController.refreshTokenAPI
+);
+
+router.post(
   "/OTPCheck",
   [
     check("Mobile").notEmpty().isString().isLength({ max: 15 }),
@@ -98,7 +106,7 @@ router.post(
 
 router.post(
   "/PasswordReset",
-  [check("UserId").notEmpty().isInt(), 
+  [check("UserId").notEmpty().isInt(),
   check("Password").notEmpty().isString()],
   UserController.resetPassword
 );

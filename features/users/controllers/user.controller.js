@@ -11,6 +11,8 @@ import {
   DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
+import {getToken, refreshTokenGAS} from "../../../utils/gas.js";
+
 
 const UserController = {
   /**
@@ -326,13 +328,70 @@ const UserController = {
 
       authenticateResult = authenticateResult.recordsets[0][0];
 
+      const tokenResponse = await getToken(request);
+      console.log(tokenResponse);
+      const {token,refreshToken} = tokenResponse.data;
+
+
+
       handleResponse(
         response,
         200,
         "success",
         "User authenticated successfully",
-        authenticateResult
+          {...authenticateResult,token,refreshToken}
       );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Refersh Token User
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async refreshTokenAPI(request, response, next) {
+
+
+    try {
+      const {Token} = request.body;
+      console.log(request.body)
+
+      const tokenResponse = await refreshTokenGAS(Token);
+      console.log("tokenResponse");
+      console.log(tokenResponse);
+
+      if(tokenResponse!=null){
+        const {token,refreshToken} = tokenResponse.data;
+        handleResponse(
+            response,
+            200,
+            "success",
+            "User authenticated successfully",
+            {token,refreshToken}
+        );
+      }else {
+        handleResponse(
+            response,
+            401,
+            "success",
+            "invalid token",
+            {}
+        );
+      }
+
     } catch (error) {
       handleError(
         response,

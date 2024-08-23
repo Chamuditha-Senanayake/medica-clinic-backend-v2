@@ -144,7 +144,7 @@ const MedicaController = {
             value: RelationStatus,
           }),
         ];
-
+        //TODO:check whether doctor already registered in the medicaYH2 db before save (create sp getMedicaYH2DoctorById)
         medicaYH2DoctorSaveResult = await executeSp({
           spName: `MedicaYH2DoctorSave`,
           params: params2,

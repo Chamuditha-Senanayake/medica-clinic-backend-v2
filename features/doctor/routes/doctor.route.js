@@ -41,9 +41,9 @@ router.post(
       .isString()
       .withMessage("ZoomPassword must be a string if provided")
       .isLength({ max: 150 }),
-      check("DoctorFee").not().isEmpty().isFloat(),
-      check("HospitalFee").not().isEmpty().isFloat(),
-      check("OtherFee").not().isEmpty().isFloat(),
+    check("DoctorFee").not().isEmpty().isFloat(),
+    check("HospitalFee").not().isEmpty().isFloat(),
+    check("OtherFee").not().isEmpty().isFloat(),
     // check("ContactNumbers")
     //   .isArray()
     //   .withMessage("ContactNumbers must be an array")
@@ -174,6 +174,12 @@ router.post(
     check("UserSaved").not().isEmpty().isInt(),
   ],
   DoctorController.DoctorDispositionReminderSave
+);
+
+router.post(
+  "/Doctor/GetByUser",
+  [check("UserId").not().isEmpty().isInt()],
+  DoctorController.getDoctorByUserId
 );
 
 export default router;

@@ -26,7 +26,7 @@ import UserRouter from "./features/users/routes/user.route.js";
 import analyticsRouter from "./features/analytics/routes/analytics.route.js";
 import medicalCertificateRouter from "./features/medicalCertificate/routes/medicalCertificate.route.js";
 import camiosRouter from "./features/camios/routes/camios.route.js";
-import {validateToken} from "./utils/gas.js";
+import { validateToken } from "./utils/gas.js";
 
 dotenv.config();
 
@@ -53,8 +53,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
 
-app.use(`/api/v1/Authenticate`, doctorRouter)
-app.use(validateToken)
+app.use(`/api/v1/Authenticate`, doctorRouter);
+// app.use(validateToken)
 app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);
 app.use(`/api/v1`, prescriptionRouter);

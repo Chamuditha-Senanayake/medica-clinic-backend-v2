@@ -11,7 +11,6 @@ import {
   StringValue,
   TableValueParameters,
   FloatValue,
-
 } from "../../../utils/type-def.js";
 const {
   Int,
@@ -88,6 +87,67 @@ const DoctorController = {
 
   /**
    *
+   * get doctor by [Id, DoctorUserId, UserId]
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getDoctorByUserId(request, response, next) {
+    console.log(request.body);
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, DoctorUserId, UserId } = request.body;
+      console.log(UserId);
+
+      // convert the request body value into a type
+      var params = [
+        EntityId({ fieldName: "Id", value: 0 }),
+        EntityId({ fieldName: "DoctorUserId", value: UserId }),
+        EntityId({ fieldName: "UserId", value: 0 }),
+      ];
+
+      // executes the given stored procedure
+      let doctorGetResult = await executeSp({
+        spName: `DoctorGet`,
+        params: params,
+        connection,
+      });
+
+      doctorGetResult = doctorGetResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Doctor data retrived successfully",
+        doctorGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
    * save a doctor
    *
    * @param {request} request object
@@ -128,10 +188,10 @@ const DoctorController = {
         OtherFee,
       } = request.body;
 
-    const ContactNumberList = [];
-    ContactNumbers.forEach((phoneNumber) => {
-      ContactNumberList.push([null, phoneNumber, 1]);
-    });
+      const ContactNumberList = [];
+      ContactNumbers.forEach((phoneNumber) => {
+        ContactNumberList.push([null, phoneNumber, 1]);
+      });
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -144,7 +204,7 @@ const DoctorController = {
           fieldName: "Status",
           value: Status,
         }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),       
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
         StringValue({
           fieldName: "RegistrationNumber",
           value: RegistrationNumber,
@@ -157,21 +217,20 @@ const DoctorController = {
               fieldName: "ZoomPassword",
               value: ZoomPassword,
             })
-          : null,        
+          : null,
         EntityId({ fieldName: "BranchId", value: BranchId }),
         FloatValue({ fieldName: "DoctorFee", value: DoctorFee }),
         FloatValue({ fieldName: "HospitalFee", value: HospitalFee }),
         FloatValue({ fieldName: "OtherFee", value: OtherFee }),
 
         TableValueParameters({
-          tableName:"ContactNumbers",        
-          columns:
-          [
-            {columnName:"Id", type: sql.Int},
-            {columnName:"Number", type: sql.VarChar(15)},
-            {columnName:"Status", type: sql.TinyInt},
+          tableName: "ContactNumbers",
+          columns: [
+            { columnName: "Id", type: sql.Int },
+            { columnName: "Number", type: sql.VarChar(15) },
+            { columnName: "Status", type: sql.TinyInt },
           ],
-          values:ContactNumberList
+          values: ContactNumberList,
         }),
       ];
 
@@ -370,7 +429,8 @@ const DoctorController = {
         connection,
       });
 
-      doctorChannelingStatusGetResult = doctorChannelingStatusGetResult.recordsets;
+      doctorChannelingStatusGetResult =
+        doctorChannelingStatusGetResult.recordsets;
 
       handleResponse(
         response,

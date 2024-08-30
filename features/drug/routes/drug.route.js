@@ -5,10 +5,7 @@ const router = express.Router();
 
 router.post(
   "/DrugAllergyGet",
-  [
-    check("Id").isInt().not().isEmpty(),
-    check("UserId").not().isEmpty(),
-  ],
+  [check("Id").isInt().not().isEmpty(), check("UserId").not().isEmpty()],
   DrugController.getDrugAllergy
 );
 
@@ -35,7 +32,7 @@ router.post(
 );
 
 router.post(
-  "/DrugGet",
+  "/Drug/Get",
   [
     check("Id").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),

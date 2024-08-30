@@ -206,7 +206,7 @@ const DrugController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id, Source, UserId } = request.body;
+      const { Id = 0, Source = "", UserId } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),

@@ -33,11 +33,11 @@ router.post(
 
 router.post(
   "/Drug/Get",
-  [
-    check("Id").isInt().not().isEmpty(),
-    check("UserId").isInt().not().isEmpty(),
-    check("Source").not().isEmpty(),
-  ],
+  // [
+  //   check("Id").isInt().not().isEmpty(),
+  //   check("UserId").isInt().not().isEmpty(),
+  //   check("Source").not().isEmpty(),
+  // ],
   DrugController.getDrug
 );
 

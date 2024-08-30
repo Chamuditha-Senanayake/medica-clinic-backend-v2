@@ -195,14 +195,14 @@ const DrugController = {
    * @returns
    */
   async getDrug(request, response, next) {
-    // const errors = validationResult(request);
-    // if (!errors.isEmpty()) {
-    //   return response.status(422).json({
-    //     error: true,
-    //     message: ResponseMessage.Drug.VALIDATION_ERROR,
-    //     data: errors,
-    //   });
-    // }
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Drug.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
 
     try {
       let connection = request.app.locals.db;

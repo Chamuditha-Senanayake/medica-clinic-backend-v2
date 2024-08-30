@@ -4,7 +4,7 @@ import InstituteController from "../controllers/institute.controller.js";
 const router = express.Router();
 
 router.post(
-  "/InstituteBranchDoctorGet",
+  "/InstituteDoctor/GetInstituteByDoctor",
   [
     check("Id").isInt().not().isEmpty(),
     check("InstituteBranchId").isInt().not().isEmpty(),
@@ -26,7 +26,7 @@ router.post(
 );
 
 router.post(
-  "/InstituteBranchGet",
+  "/InstituteBranch/GetInstituteBranch",
   [
     check("Id").isInt().not().isEmpty(),
     check("DoctorId").isInt().not().isEmpty(),
@@ -62,10 +62,7 @@ router.post(
 
 router.post(
   "/InstituteGet",
-  [
-    check("Id").isInt().not().isEmpty(),
-    check("UserId").not().isEmpty(),
-  ],
+  [check("Id").isInt().not().isEmpty(), check("UserId").not().isEmpty()],
   InstituteController.getInstitute
 );
 

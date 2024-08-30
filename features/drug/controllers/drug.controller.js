@@ -88,23 +88,17 @@ const DrugController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        Name,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, Name, Status, UserSaved } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "Name", value: Name }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-
-    ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "Name", value: Name }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
 
       let drugAllergySaveResult = await executeSp({
         spName: `DrugAllergySave`,
@@ -155,13 +149,13 @@ const DrugController = {
 
     try {
       let connection = request.app.locals.db;
-      const {UserId,DoctorId, DateFrom, DateTo} = request.body;
+      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: 'DateFrom', value: DateFrom }),
-        DateString({ fieldName: 'DateTo', value: DateTo }),
+        DateString({ fieldName: "DateFrom", value: DateFrom }),
+        DateString({ fieldName: "DateTo", value: DateTo }),
       ];
 
       let drugCountGetResult = await executeSp({
@@ -201,14 +195,14 @@ const DrugController = {
    * @returns
    */
   async getDrug(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.Drug.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
+    // const errors = validationResult(request);
+    // if (!errors.isEmpty()) {
+    //   return response.status(422).json({
+    //     error: true,
+    //     message: ResponseMessage.Drug.VALIDATION_ERROR,
+    //     data: errors,
+    //   });
+    // }
 
     try {
       let connection = request.app.locals.db;
@@ -276,14 +270,14 @@ const DrugController = {
         DrugTypeId,
         Weight,
         WeightType,
-        Status ,
+        Status,
         UserSaved,
         Source,
-        Description
+        Description,
       } = request.body;
 
-    var params = [
-       EntityId({ fieldName: "Id", value: Id }),
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
         StringValue({ fieldName: "RawName", value: RawName }),
         StringValue({ fieldName: "GenericName", value: GenericName }),
         StringValue({ fieldName: "TradeName", value: TradeName }),
@@ -297,8 +291,7 @@ const DrugController = {
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
         StringValue({ fieldName: "Source", value: Source }),
         StringValue({ fieldName: "Description", value: Description }),
-
-    ];
+      ];
 
       let drugSaveResult = await executeSp({
         spName: `DrugSave`,
@@ -354,9 +347,9 @@ const DrugController = {
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
         SignedInteger({
-        fieldName: "Active",
-        value: Active,
-      }),
+          fieldName: "Active",
+          value: Active,
+        }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
@@ -465,13 +458,7 @@ const DrugController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        Name,
-        DoctorId,
-        Status,
-        UserSaved,
-        Id, 
-      } = request.body;
+      const { Name, DoctorId, Status, UserSaved, Id } = request.body;
 
       var params = [
         StringValue({ fieldName: "Name", value: Name }),
@@ -510,7 +497,6 @@ const DrugController = {
       next(error);
     }
   },
-
 };
 
 export default DrugController;

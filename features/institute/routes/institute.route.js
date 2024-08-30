@@ -7,8 +7,8 @@ router.post(
   "/InstituteDoctor/GetInstituteByDoctor",
   [
     check("Id").isInt().not().isEmpty(),
-    check("InstituteBranchId").isInt().not().isEmpty(),
-    check("UserId").not().isEmpty(),
+    // check("InstituteBranchId").isInt().not().isEmpty(),
+    // check("UserId").not().isEmpty(),
   ],
   InstituteController.getInstituteBranchDoctor
 );
@@ -28,10 +28,10 @@ router.post(
 router.post(
   "/InstituteBranch/GetInstituteBranch",
   [
-    check("Id").isInt().not().isEmpty(),
+    // check("Id").isInt().not().isEmpty(),
     check("DoctorId").isInt().not().isEmpty(),
-    check("InstituteId").isInt().not().isEmpty(),
-    check("UserId").not().isEmpty(),
+    // check("InstituteId").isInt().not().isEmpty(),
+    // check("UserId").not().isEmpty(),
   ],
   InstituteController.getInstituteBranch
 );

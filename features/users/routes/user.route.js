@@ -5,6 +5,20 @@ import UserController from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.post(
+  "/EmailAvailabilityCheck",
+  [check("Email").notEmpty().isString()],
+  UserController.getUserByEmail
+);
+
+router.post(
+  "/EmailVerify",
+  [check("Email").notEmpty().isString()],
+  UserController.verifyEmail
+);
+
+///////////////////////////////////////
+
+router.post(
   "/AddressGet",
   [check("UserId").notEmpty().isInt(), check("Id").notEmpty().isInt()],
   UserController.getAddress
@@ -77,9 +91,7 @@ router.post(
 
 router.post(
   "/RefreshToken",
-  [
-    check("Token").optional({ values: "null" }).isString()
-  ],
+  [check("Token").optional({ values: "null" }).isString()],
   UserController.refreshTokenAPI
 );
 
@@ -106,8 +118,8 @@ router.post(
 
 router.post(
   "/PasswordReset",
-  [check("UserId").notEmpty().isInt(),
-  check("Password").notEmpty().isString()],
+  [check("UserId").notEmpty().isInt(), check("Password").notEmpty().isString()],
   UserController.resetPassword
 );
+
 export default router;

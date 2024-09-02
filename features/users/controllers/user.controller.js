@@ -1,8 +1,10 @@
 import { validationResult } from "express-validator";
+import jwtSign from "../../../utils/jwtSign.js";
 import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
+import { sendEmailFromCustomAccount } from "../../../utils/sendMail.js";
 import {
   EntityId,
   StringValue,
@@ -11,10 +13,125 @@ import {
   DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
-import {getToken, refreshTokenGAS} from "../../../utils/gas.js";
-
+import { getToken, refreshTokenGAS } from "../../../utils/gas.js";
 
 const UserController = {
+  /**
+   *
+   * Get user by email
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getUserByEmail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    let userGetByEmailResult;
+
+    try {
+      let connection = request.app.locals.db;
+      const { Email } = request.body;
+
+      var params = [StringValue({ fieldName: "Email", value: Email })];
+
+      userGetByEmailResult = await executeSp({
+        spName: `UserGetByEmail`, //UserEmailGet
+        params: params,
+        connection,
+      });
+
+      userGetByEmailResult = { Availability: true };
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByEmailResult
+      );
+    } catch (error) {
+      userGetByEmailResult = { Availability: false };
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        userGetByEmailResult
+      );
+    }
+  },
+
+  /**
+   *
+   * Verify email
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async verifyEmail(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.User.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+    try {
+      let connection = request.app.locals.db;
+      const { Email } = request.body;
+
+      var params = [StringValue({ fieldName: "Email", value: Email })];
+
+      let userData = await executeSp({
+        spName: `UserGetByEmail`,
+        params: params,
+        connection,
+      });
+
+      if (!userData) {
+        throw Error("User not found");
+      }
+
+      let token = jwtSign(
+        {
+          userId: userData.recordsets[0][0].Id,
+          username: userData.recordsets[0][0].Username,
+          email: userData.recordsets[0][0].Email,
+        },
+        process.env.VERIFY_EMAIL_TOKEN_EXPIRATION_TIME
+      );
+
+      sendEmailFromCustomAccount({
+        to: Email,
+        subject: "Reset Password",
+        html: `<h2>Verify Your Email</h2><p>Click the link below to reset your password:</p><a href='${process.env.FRONTEND_URL}/forgot-password?token=${token}' target='_blank'>${process.env.FRONTEND_URL}/forgot-password?token=${token}</a>`,
+      });
+
+      handleResponse(response, 200, "success", "Verification email sent");
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
   /**
    *
    * Get addresses
@@ -23,8 +140,7 @@ const UserController = {
    * @param {response} response object
    * @param {next} next middleware
    * @returns
-   */
-  async getAddress(request, response, next) {
+   */ async getAddress(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -330,16 +446,14 @@ const UserController = {
 
       const tokenResponse = await getToken(request);
       console.log(tokenResponse);
-      const {token,refreshToken} = tokenResponse.data;
-
-
+      const { token, refreshToken } = tokenResponse.data;
 
       handleResponse(
         response,
         200,
         "success",
         "User authenticated successfully",
-          {...authenticateResult,token,refreshToken}
+        { ...authenticateResult, token, refreshToken }
       );
     } catch (error) {
       handleError(
@@ -363,35 +477,26 @@ const UserController = {
    * @returns
    */
   async refreshTokenAPI(request, response, next) {
-
-
     try {
-      const {Token} = request.body;
-      console.log(request.body)
+      const { Token } = request.body;
+      console.log(request.body);
 
       const tokenResponse = await refreshTokenGAS(Token);
       console.log("tokenResponse");
       console.log(tokenResponse);
 
-      if(tokenResponse!=null){
-        const {token,refreshToken} = tokenResponse.data;
+      if (tokenResponse != null) {
+        const { token, refreshToken } = tokenResponse.data;
         handleResponse(
-            response,
-            200,
-            "success",
-            "User authenticated successfully",
-            {token,refreshToken}
+          response,
+          200,
+          "success",
+          "User authenticated successfully",
+          { token, refreshToken }
         );
-      }else {
-        handleResponse(
-            response,
-            401,
-            "success",
-            "invalid token",
-            {}
-        );
+      } else {
+        handleResponse(response, 401, "success", "invalid token", {});
       }
-
     } catch (error) {
       handleError(
         response,

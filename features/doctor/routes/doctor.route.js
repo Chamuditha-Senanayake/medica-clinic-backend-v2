@@ -2,7 +2,6 @@ import express from 'express';
 import { check } from 'express-validator';
 import DoctorController from '../controllers/doctor.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
-import { isDoctor } from '../../../middleware/doctor.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
 
@@ -50,7 +49,6 @@ router.post(
   '/DoctorRequestPatientAccess',
   isAuth,
   isActiveUser,
-  isDoctor,
   isAuthorizedDoctor,
   [check('PatientId').isInt().not().isEmpty()],
   DoctorController.issueDoctorPatientToken

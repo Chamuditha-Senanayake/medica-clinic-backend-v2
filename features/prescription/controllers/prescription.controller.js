@@ -34,11 +34,11 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { SearchBy, UserId, Page = 0, Limit = 0 } = request.body;
+      const { SearchBy, PatientUserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
         { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },
-        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'UserId', value: PatientUserId }),
         EntityId({ fieldName: 'Page', value: Page }),
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];

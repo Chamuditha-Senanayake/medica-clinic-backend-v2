@@ -3,13 +3,20 @@ import { check } from 'express-validator';
 import RecordController from '../controllers/record.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+import { isAuthorizedCaregiver } from '../../../middleware/caregiver.middleware.js';
+import { isAuthorizedHelper } from '../../../middleware/helper.middleware.js';
+import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
 const router = express.Router();
 
 router.post(
   '/RecordGet',
   isAuth,
+  isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
-    check('UserId').isInt().not().isEmpty(),
+    check('PatientUserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
     check('Limit').isInt().not().isEmpty(),
   ],
@@ -20,9 +27,12 @@ router.post(
   '/RecordSave',
   isAuth,
   isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
     check('Id').isInt().not().isEmpty(),
-    check('UserId').isInt().not().isEmpty(),
+    check('PatientUserId').isInt().not().isEmpty(),
     check('DoctorUserId').optional({ nullable: true }).isInt(),
     check('DoctorName').optional({ nullable: true }).isString(),
     check('RecordType')
@@ -36,7 +46,7 @@ router.post(
     check('Diagnosis').optional({ nullable: true }).isString(),
     check('Symptoms').isString().not().isEmpty(),
     check('Notes').optional({ nullable: true }).isString(),
-    check('UserSaved').isInt().not().isEmpty(),
+    check('UserSaved').isInt().optional({ nullable: true }),
     check('Files').optional({ nullable: true }).isArray(),
   ],
   RecordController.savePatientRecord
@@ -46,8 +56,11 @@ router.post(
   '/RecordDelete',
   isAuth,
   isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
-    check('UserId').isInt().not().isEmpty(),
+    check('PatientUserId').isInt().not().isEmpty(),
     check('Id').isInt().not().isEmpty(),
   ],
   RecordController.deletePatientRecords
@@ -57,7 +70,10 @@ router.post(
   '/RecordBodyPartsGet',
   isAuth,
   isActiveUser,
-  [check('UserId').isInt().not().isEmpty()],
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
+  [check('PatientUserId').isInt().not().isEmpty()],
   RecordController.getPatientRecordBodyParts
 );
 

@@ -3,12 +3,18 @@ import { check } from 'express-validator';
 import LabController from '../controllers/lab.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+import { isAuthorizedCaregiver } from '../../../middleware/caregiver.middleware.js';
+import { isAuthorizedHelper } from '../../../middleware/helper.middleware.js';
+import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
 const router = express.Router();
 
 router.post(
   '/LabReportsGet',
   isAuth,
   isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
     check('SearchBy').optional({ nullable: true }).isString(),
     check('PatientUserId').isInt().not().isEmpty(),
@@ -30,6 +36,9 @@ router.post(
   '/LabReportSave',
   isAuth,
   isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
     check('PatientUserId').isInt().not().isEmpty(),
     check('RecordId').optional({ nullable: true }).isInt(),

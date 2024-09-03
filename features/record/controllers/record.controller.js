@@ -35,10 +35,10 @@ const RecordController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, Page = 0, Limit = 0 } = request.body;
+      const { PatientUserId, Page = 0, Limit = 0 } = request.body;
 
       var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'UserId', value: PatientUserId }),
         EntityId({ fieldName: 'Page', value: Page }),
         EntityId({ fieldName: 'Limit', value: Limit }),
       ];
@@ -102,7 +102,7 @@ const RecordController = {
       let connection = request.app.locals.db;
       const {
         Id,
-        UserId,
+        PatientUserId,
         DoctorUserId,
         DoctorName,
         RecordType,
@@ -115,7 +115,6 @@ const RecordController = {
         Notes,
         Files = [],
         Status = 1,
-        UserSaved,
       } = request.body;
 
       const FilesList = [];
@@ -125,7 +124,7 @@ const RecordController = {
 
       var params = [
         EntityId({ fieldName: 'Id', value: Id }),
-        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'UserId', value: PatientUserId }),
         { name: 'DoctorUserId', type: sql.Numeric, value: DoctorUserId },
         { name: 'DoctorName', type: sql.NVarChar, value: DoctorName },
         StringValue({ fieldName: 'RecordType', value: RecordType }),
@@ -137,7 +136,7 @@ const RecordController = {
         StringValue({ fieldName: 'Symptoms', value: Symptoms }),
         StringValue({ fieldName: 'Notes', value: Notes }),
         SignedInteger({ fieldName: 'Status', value: Status }),
-        EntityId({ fieldName: 'UserCreated', value: UserSaved }),
+        EntityId({ fieldName: 'UserCreated', value: request.user.userId }),
         TableValueParameters({
           tableName: 'FileData',
           columns: [
@@ -196,10 +195,10 @@ const RecordController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, Id } = request.body;
+      const { PatientUserId, Id } = request.body;
 
       var params = [
-        EntityId({ fieldName: 'UserId', value: UserId }),
+        EntityId({ fieldName: 'UserId', value: PatientUserId }),
         EntityId({ fieldName: 'Id', value: Id }),
       ];
 
@@ -243,9 +242,9 @@ const RecordController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId } = request.body;
+      const { PatientUserId } = request.body;
 
-      var params = [EntityId({ fieldName: 'UserId', value: UserId })];
+      var params = [EntityId({ fieldName: 'UserId', value: PatientUserId })];
 
       let patientRecordBodyPartsGetResult = await executeSp({
         spName: `PatientRecordBodyPartsGet`,

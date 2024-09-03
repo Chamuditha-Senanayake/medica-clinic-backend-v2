@@ -3,15 +3,21 @@ import { check } from 'express-validator';
 import PrescriptionController from '../controllers/prescription.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
+import { isAuthorizedCaregiver } from '../../../middleware/caregiver.middleware.js';
+import { isAuthorizedHelper } from '../../../middleware/helper.middleware.js';
+import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
 const router = express.Router();
 
 router.post(
   '/PrescriptionGet',
   isAuth,
   isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
     check('SearchBy').optional({ nullable: true }).isString(),
-    check('UserId').isInt().not().isEmpty(),
+    check('PatientUserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),
     check('Limit').isInt().not().isEmpty(),
   ],
@@ -30,6 +36,9 @@ router.post(
   '/PrescriptionSave',
   isAuth,
   isActiveUser,
+  isAuthorizedCaregiver,
+  isAuthorizedHelper,
+  isAuthorizedDoctor,
   [
     check('Id').isInt().not().isEmpty(),
     check('PatientUserId').isInt().not().isEmpty(),

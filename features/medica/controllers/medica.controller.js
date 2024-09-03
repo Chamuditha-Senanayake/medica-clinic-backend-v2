@@ -58,7 +58,7 @@ const MedicaController = {
         );
 
         sendEmailFromCustomAccount({
-          to: 'chamudithacbs@gmail.com',
+          to: request.user.email, //'chamudithacbs@gmail.com'
           subject: 'YH2 Access Request ',
           html: `<p>Hello ${getUserProfileResult.FName},</p><h2>YH2 Access Request</h2><p>Copy and paste the below token in the medica UI to proceed:</p> <b><i>${token}</i></b>`,
         });

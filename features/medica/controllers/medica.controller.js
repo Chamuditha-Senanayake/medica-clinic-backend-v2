@@ -122,48 +122,87 @@ const MedicaController = {
 
       doctorInfo = doctorInfo.recordsets[0][0];
 
+      let token;
+
       let medicaYH2DoctorSaveResult;
 
       if (doctorInfo && doctorInfo.IsDoctor === true) {
         let params2 = [
-          EntityId({ fieldName: 'Id', value: Id }),
           EntityId({
             fieldName: 'YH2DoctorUserId',
             value: decodedToken.YH2DoctorUserId,
           }),
-          EntityId({
-            fieldName: 'MedicaDoctorUserId',
-            value: MedicaDoctorUserId,
-          }),
-          EntityId({
-            fieldName: 'MedicaDoctorId',
-            value: MedicaDoctorId,
-          }),
-          StringValue({
-            fieldName: 'RelationStatus',
-            value: RelationStatus,
-          }),
         ];
-        //TODO:check whether doctor already registered in the medicaYH2 db before save (create sp getMedicaYH2DoctorById)
-        medicaYH2DoctorSaveResult = await executeSp({
-          spName: `MedicaYH2DoctorSave`,
+
+        let medicaYH2DoctorGetResult = await executeSp({
+          spName: `MedicaYH2DoctorGet`,
           params: params2,
           connection,
         });
 
-        medicaYH2DoctorSaveResult = medicaYH2DoctorSaveResult.recordsets[0][0];
+        medicaYH2DoctorGetResult = medicaYH2DoctorGetResult.recordsets[0][0];
+
+        if (medicaYH2DoctorGetResult) {
+          token = jwtSign(
+            {
+              id: medicaYH2DoctorGetResult.Id,
+              yh2DoctorUserId: medicaYH2DoctorGetResult.YH2DoctorUserId,
+              doctorEmail: medicaYH2DoctorGetResult.Email,
+              medicaDoctorId: medicaYH2DoctorGetResult.MedicaDoctorId,
+            },
+            process.env.YH2_ACCESS_REQUEST_TOKEN_EXPIRATION_TIME
+          );
+        } else {
+          let params3 = [
+            EntityId({ fieldName: 'Id', value: Id }),
+            EntityId({
+              fieldName: 'YH2DoctorUserId',
+              value: decodedToken.yH2DoctorUserId,
+            }),
+            EntityId({
+              fieldName: 'MedicaDoctorUserId',
+              value: MedicaDoctorUserId,
+            }),
+            EntityId({
+              fieldName: 'MedicaDoctorId',
+              value: MedicaDoctorId,
+            }),
+            StringValue({
+              fieldName: 'Email',
+              value: decodedToken.doctorEmail,
+            }),
+            StringValue({
+              fieldName: 'RelationStatus',
+              value: RelationStatus,
+            }),
+          ];
+
+          medicaYH2DoctorSaveResult = await executeSp({
+            spName: `MedicaYH2DoctorSave`,
+            params: params3,
+            connection,
+          });
+
+          medicaYH2DoctorSaveResult =
+            medicaYH2DoctorSaveResult.recordsets[0][0];
+
+          token = jwtSign(
+            {
+              id: medicaYH2DoctorSaveResult.Id,
+              yh2DoctorUserId: medicaYH2DoctorSaveResult.yh2DoctorUserId,
+              doctorEmail: medicaYH2DoctorSaveResult.Email,
+              medicaDoctorId: medicaYH2DoctorSaveResult.MedicaDoctorId,
+            },
+            process.env.YH2_ACCESS_REQUEST_TOKEN_EXPIRATION_TIME
+          );
+        }
       } else {
         throw Error('Invalid token.');
       }
 
-      //TODO: generate token and send it instead of the medicaYH2DoctorSaveResult
-      handleResponse(
-        response,
-        200,
-        'success',
-        'Data retrived successfully',
-        medicaYH2DoctorSaveResult
-      );
+      handleResponse(response, 200, 'success', 'Data retrived successfully', {
+        token,
+      });
     } catch (error) {
       handleError(
         response,

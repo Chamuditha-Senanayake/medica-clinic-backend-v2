@@ -39,6 +39,7 @@ import caregiverRouter from './features/caregiver/routes/caregiver.route.js';
 import doctorRouter from './features/doctor/routes/doctor.route.js';
 import helperRouter from './features/helper/routes/helper.route.js';
 import labRouter from './features/lab/routes/lab.route.js';
+import medicaRouter from './features/medica/routes/medica.route.js';
 import fileUploadRouter from './features/fileHandler/routes/fileHandler.route.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -98,6 +99,7 @@ app.use(`/api/v1`, caregiverRouter);
 app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, helperRouter);
 app.use(`/api/v1`, labRouter);
+app.use(`/api/v1`, medicaRouter);
 app.use(`/api/v1`, fileUploadRouter);
 
 app.use('/api/v1/GetFile', [

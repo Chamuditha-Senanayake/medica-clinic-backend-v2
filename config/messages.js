@@ -15,6 +15,9 @@ const ResponseMessages = {
   User: {
     VALIDATION_ERROR: 'Validation errors',
   },
+  Medica: {
+    VALIDATION_ERROR: 'Validation errors',
+  },
   Inventory: {
     VALIDATION_ERROR: 'Validation errors',
     LIST_RETRIEVE: 'Inventory list retrieved!',

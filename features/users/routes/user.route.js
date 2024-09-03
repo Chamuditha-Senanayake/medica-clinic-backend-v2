@@ -16,16 +16,6 @@ router.post(
   UserController.verifyEmail
 );
 
-// router.post(
-//   "/ForgotPasswordChange",
-//   [
-//     check("Email").notEmpty().isString(),
-//     check("Password").notEmpty().isString(),
-//     // check("Token").notEmpty().isString(),
-//   ],
-//   UserController.userForgotChangePassword
-// );
-
 router.post(
   "/ForgotPasswordChange",
   [

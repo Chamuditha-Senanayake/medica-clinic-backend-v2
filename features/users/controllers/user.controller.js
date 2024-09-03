@@ -172,6 +172,8 @@ const UserController = {
           connection,
         });
 
+        console.log(User.recordsets[0][0]);
+
         params = [
           StringValue({
             fieldName: "Username",
@@ -179,6 +181,8 @@ const UserController = {
           }),
           StringValue({ fieldName: "Password", value: Password }),
         ];
+
+        console.log(params);
 
         userPasswordResetResult = await executeSp({
           spName: `UserResetPassword`,

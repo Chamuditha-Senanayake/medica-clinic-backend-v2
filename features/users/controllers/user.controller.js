@@ -175,9 +175,13 @@ const UserController = {
         console.log(User.recordsets[0][0]);
 
         params = [
+          // StringValue({
+          //   fieldName: "Username",
+          //   value: User.recordsets[0][0].Username,
+          // }),
           StringValue({
-            fieldName: "Username",
-            value: User.recordsets[0][0].Username,
+            fieldName: "UserId",
+            value: User.recordsets[0][0].Id.toString(),
           }),
           StringValue({ fieldName: "Password", value: Password }),
         ];
@@ -207,7 +211,9 @@ const UserController = {
         200,
         "success",
         "Password changed successfully",
-        userPasswordResetResult
+        null
+        // adding null and set to not visible record data with the response
+        // userPasswordResetResult
       );
     } catch (error) {
       handleError(
@@ -220,147 +226,6 @@ const UserController = {
       next(error);
     }
   },
-  // /**
-  //  *
-  //  * Rest Password
-  //  *
-  //  * @param {request} request object
-  //  * @param {response} response object
-  //  * @param {next} next middleware
-  //  * @returns
-  //  */
-
-  // // UserController.js
-  // async userForgotChangePassword(request, response, next) {
-  //   const errors = validationResult(request);
-  //   if (!errors.isEmpty()) {
-  //     return response.status(422).json({
-  //       error: true,
-  //       message: ResponseMessage.User.VALIDATION_ERROR,
-  //       data: errors,
-  //     });
-  //   }
-
-  //   try {
-  //     let connection = request.app.locals.db;
-  //     const { Email, Username, Password } = request.body;
-
-  //     let userResult = await executeSp({
-  //       spName: `UserGetByEmailAndUsername`,
-  //       params: [
-  //         StringValue({ fieldName: "Email", value: Email }),
-  //         StringValue({ fieldName: "Username", value: Username }),
-  //       ],
-  //       connection,
-  //     });
-
-  //     if (!userResult.recordsets[0].length) {
-  //       throw new Error("User not found with the provided email and username.");
-  //     }
-
-  //     let userPasswordResetResult = await executeSp({
-  //       spName: `UserResetPassword`,
-  //       params: [
-  //         StringValue({ fieldName: "Username", value: Username }),
-  //         StringValue({ fieldName: "Password", value: Password }),
-  //       ],
-  //       connection,
-  //     });
-
-  //     handleResponse(
-  //       response,
-  //       200,
-  //       "success",
-  //       "Password changed successfully",
-  //       userPasswordResetResult.recordsets
-  //     );
-  //   } catch (error) {
-  //     handleError(
-  //       response,
-  //       401,
-  //       "error",
-  //       error.message,
-  //       "Something went wrong"
-  //     );
-  //     next(error);
-  //   }
-  // },
-
-  // async userForgotChangePassword(request, response, next) {
-  //   const errors = validationResult(request);
-  //   if (!errors.isEmpty()) {
-  //     return response.status(422).json({
-  //       error: true,
-  //       message: ResponseMessage.User.VALIDATION_ERROR,
-  //       data: errors,
-  //     });
-  //   }
-
-  //   try {
-  //     let connection = request.app.locals.db;
-  //     const { Email, Password } = request.body;
-
-  //     // let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
-
-  //     if (Email !== decodedToken.email) {
-  //       throw Error("Unauthorized");
-  //     }
-
-  //     let userPasswordResetResult;
-
-  //     try {
-  //       let params = [StringValue({ fieldName: "Email", value: Email })];
-
-  //       let User = await executeSp({
-  //         spName: `UserGetByEmail`,
-  //         params: params,
-  //         connection,
-  //       });
-
-  //       params = [
-  //         StringValue({
-  //           fieldName: "Username",
-  //           value: User.recordsets[0][0].Username,
-  //         }),
-  //         StringValue({ fieldName: "Password", value: Password }),
-  //       ];
-
-  //       userPasswordResetResult = await executeSp({
-  //         spName: `UserResetPassword`,
-  //         params: params,
-  //         connection,
-  //       });
-  //     } catch (error) {
-  //       handleError(
-  //         response,
-  //         500,
-  //         "error",
-  //         error.message,
-  //         "Something went wrong"
-  //       );
-  //       next(error);
-  //     }
-
-  //     userPasswordResetResult = userPasswordResetResult.recordsets;
-
-  //     handleResponse(
-  //       response,
-  //       200,
-  //       "success",
-  //       "Password changed successfully",
-  //       userPasswordResetResult
-  //     );
-  //   } catch (error) {
-  //     handleError(
-  //       response,
-  //       401,
-  //       "error",
-  //       error.message,
-  //       "Something went wrong"
-  //     );
-  //     next(error);
-  //   }
-  // },
 
   /**
    *

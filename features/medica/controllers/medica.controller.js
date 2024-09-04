@@ -51,14 +51,14 @@ const MedicaController = {
 
         token = jwtSign(
           {
-            YH2DoctorUserId: getUserProfileResult.Id,
+            yh2DoctorUserId: getUserProfileResult.Id,
             doctorEmail: request.user.email,
           },
           process.env.YH2_ACCESS_REQUEST_TOKEN_EXPIRATION_TIME
         );
 
         sendEmailFromCustomAccount({
-          to: request.user.email, //'chamudithacbs@gmail.com'
+          to: request.user.email,
           subject: 'YH2 Access Request ',
           html: `<p>Hello ${getUserProfileResult.FName},</p><h2>YH2 Access Request</h2><p>Copy and paste the below token in the medica UI to proceed:</p> <b><i>${token}</i></b>`,
         });
@@ -111,7 +111,7 @@ const MedicaController = {
       let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
 
       let params1 = [
-        EntityId({ fieldName: 'Id', value: decodedToken.YH2DoctorUserId }),
+        EntityId({ fieldName: 'Id', value: decodedToken.yh2DoctorUserId }),
       ];
 
       let doctorInfo = await executeSp({
@@ -130,7 +130,7 @@ const MedicaController = {
         let params2 = [
           EntityId({
             fieldName: 'YH2DoctorUserId',
-            value: decodedToken.YH2DoctorUserId,
+            value: decodedToken.yh2DoctorUserId,
           }),
         ];
 
@@ -146,8 +146,8 @@ const MedicaController = {
           token = jwtSign(
             {
               id: medicaYH2DoctorGetResult.Id,
-              yh2DoctorUserId: medicaYH2DoctorGetResult.YH2DoctorUserId,
-              doctorEmail: medicaYH2DoctorGetResult.Email,
+              userId: medicaYH2DoctorGetResult.YH2DoctorUserId,
+              email: medicaYH2DoctorGetResult.Email,
               medicaDoctorId: medicaYH2DoctorGetResult.MedicaDoctorId,
             },
             process.env.YH2_ACCESS_REQUEST_TOKEN_EXPIRATION_TIME
@@ -157,7 +157,7 @@ const MedicaController = {
             EntityId({ fieldName: 'Id', value: Id }),
             EntityId({
               fieldName: 'YH2DoctorUserId',
-              value: decodedToken.yH2DoctorUserId,
+              value: decodedToken.yh2DoctorUserId,
             }),
             EntityId({
               fieldName: 'MedicaDoctorUserId',
@@ -189,8 +189,8 @@ const MedicaController = {
           token = jwtSign(
             {
               id: medicaYH2DoctorSaveResult.Id,
-              yh2DoctorUserId: medicaYH2DoctorSaveResult.yh2DoctorUserId,
-              doctorEmail: medicaYH2DoctorSaveResult.Email,
+              userId: medicaYH2DoctorSaveResult.yh2DoctorUserId,
+              email: medicaYH2DoctorSaveResult.Email,
               medicaDoctorId: medicaYH2DoctorSaveResult.MedicaDoctorId,
             },
             process.env.YH2_ACCESS_REQUEST_TOKEN_EXPIRATION_TIME

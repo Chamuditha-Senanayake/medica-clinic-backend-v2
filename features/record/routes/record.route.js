@@ -6,6 +6,7 @@ import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 import { isAuthorizedCaregiver } from '../../../middleware/caregiver.middleware.js';
 import { isAuthorizedHelper } from '../../../middleware/helper.middleware.js';
 import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
+import { isMedicaYH2RegisteredDoctor } from '../../../middleware/medicaYH2RegisteredDoctor.middleware.js';
 const router = express.Router();
 
 router.post(
@@ -15,6 +16,7 @@ router.post(
   isAuthorizedCaregiver,
   isAuthorizedHelper,
   isAuthorizedDoctor,
+  isMedicaYH2RegisteredDoctor,
   [
     check('PatientUserId').isInt().not().isEmpty(),
     check('Page').isInt().not().isEmpty(),

@@ -11,20 +11,26 @@ export const isMedicaYH2RegisteredDoctor = (req, res, next) => {
     } else {
       req.user = decode;
 
-      if (req.user.userId) {
+      if (req.user.medicaDoctorId) {
         let connection = req.app.locals.db;
-
-        var params = [EntityId({ fieldName: 'Id', value: req.user.userId })];
+        console.log(req.user);
+        var params = [
+          EntityId({ fieldName: 'YH2DoctorUserId', value: req.user.userId }),
+          EntityId({
+            fieldName: 'MedicaDoctorId',
+            value: req.user.medicaDoctorId,
+          }),
+        ];
         try {
           let userData = await executeSp({
-            spName: `UserGetById`,
+            spName: `MedicaYH2DoctorGet`,
             params: params,
             connection,
           });
 
           if (!userData) {
             throw Error('User not found');
-          } else if (userData.recordsets[0][0].UserStatus === 'active') {
+          } else if (userData.recordsets[0][0].RelationStatus === 'active') {
             next();
           } else {
             res.status(401).send({
@@ -34,6 +40,8 @@ export const isMedicaYH2RegisteredDoctor = (req, res, next) => {
         } catch (error) {
           res.status(401).send({ message: 'Failed to perform this action' });
         }
+      } else {
+        next();
       }
     }
   });

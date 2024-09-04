@@ -13,7 +13,6 @@ export const isMedicaYH2RegisteredDoctor = (req, res, next) => {
 
       if (req.user.medicaDoctorId) {
         let connection = req.app.locals.db;
-        console.log(req.user);
         var params = [
           EntityId({ fieldName: 'YH2DoctorUserId', value: req.user.userId }),
           EntityId({

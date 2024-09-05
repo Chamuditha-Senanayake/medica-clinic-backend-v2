@@ -5,15 +5,6 @@ import UserController from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.post(
-  "/Login",
-  [
-    check("Username").notEmpty().isString(),
-    check("Password").notEmpty().isString(),
-  ],
-  UserController.login
-);
-
-router.post(
   "/EmailAvailabilityCheck",
   [check("Email").notEmpty().isString()],
   UserController.getUserByEmail

@@ -108,14 +108,15 @@ const DoctorController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id, DoctorUserId, UserId } = request.body;
+      const { UserId } = request.body;
+
       console.log(UserId);
 
       // convert the request body value into a type
       var params = [
         EntityId({ fieldName: "Id", value: 0 }),
-        EntityId({ fieldName: "DoctorUserId", value: UserId }),
-        EntityId({ fieldName: "UserId", value: 0 }),
+        EntityId({ fieldName: "DoctorUserId", value: 0 }),
+        EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
       // executes the given stored procedure
@@ -125,14 +126,17 @@ const DoctorController = {
         connection,
       });
 
+      console.log(doctorGetResult);
+
       doctorGetResult = doctorGetResult.recordsets[0][0];
+      console.log("Raw doctorGetResult:", doctorGetResult);
 
       handleResponse(
         response,
         200,
         "success",
         "Doctor data retrived successfully",
-        doctorGetResult
+        { doctorGetResult }
       );
     } catch (error) {
       handleError(

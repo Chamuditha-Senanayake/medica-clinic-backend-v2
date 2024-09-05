@@ -18,69 +18,7 @@ import bcrypt from "bcrypt";
 import { getToken, refreshTokenGAS } from "../../../utils/gas.js";
 
 const UserController = {
-  /**
-   *
-   * Login
-   *
-   * @param {request} request object
-   * @param {response} response object
-   * @param {next} next middleware
-   * @returns
-   */
-
-  async login(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.User.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
-    try {
-      let connection = request.app.locals.db;
-      const { Username, Password } = request.body;
-
-      var params = [
-        StringValue({ fieldName: "Username", value: Username }),
-        StringValue({ fieldName: "Password", value: Password }),
-      ];
-
-      let userLoginResult = await executeSp({
-        spName: `UserLogin`,
-        params: params,
-        connection,
-      });
-
-      userLoginResult = userLoginResult.recordsets[0][0];
-
-      let token = jwtSign({
-        userId: userLoginResult.Id,
-        username: userLoginResult.Username,
-        email: userLoginResult.Email,
-      });
-
-      userLoginResult.token = token;
-
-      handleResponse(
-        response,
-        200,
-        "success",
-        "User logged successfully",
-        userLoginResult
-      );
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
-    }
-  },
-
+ 
   /**
    *
    * Get user by email
@@ -238,16 +176,12 @@ const UserController = {
 
         console.log(User.recordsets[0][0]);
 
-        // Hash the password before saving
-        // const hashedPassword = await bcrypt.hash(Password, 10);
-
         params = [
           StringValue({
             fieldName: "UserId",
             value: User.recordsets[0][0].Id.toString(),
           }),
           StringValue({ fieldName: "Password", value: Password }),
-          // StringValue({ fieldName: "Password", value: hashedPassword }), // Use hashed password
         ];
 
         console.log(params);
@@ -588,10 +522,7 @@ const UserController = {
       var params = [
         StringValue({ fieldName: "UserName", value: UserName }),
         StringValue({ fieldName: "Password", value: Password }),
-        SignedInteger({
-          fieldName: "RememberMe",
-          value: RememberMe,
-        }),
+        SignedInteger({ fieldName: "RememberMe", value: RememberMe }),
         StringValue({ fieldName: "AccessToken", value: AccessToken }),
         StringValue({ fieldName: "UserAgent", value: UserAgent }),
       ];
@@ -605,6 +536,11 @@ const UserController = {
       authenticateResult = authenticateResult.recordsets[0][0];
 
       const tokenResponse = await getToken(request);
+
+      if (!tokenResponse) {
+        throw new Error("Failed to generate token");
+      }
+
       console.log(tokenResponse);
       const { token, refreshToken } = tokenResponse.data;
 
@@ -616,6 +552,8 @@ const UserController = {
         { ...authenticateResult, token, refreshToken }
       );
     } catch (error) {
+      console.log(error);
+
       handleError(
         response,
         500,

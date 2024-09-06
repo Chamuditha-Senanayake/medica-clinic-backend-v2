@@ -95,7 +95,7 @@ const DoctorController = {
    * @returns
    */
   async getDoctorByUserId(request, response, next) {
-    console.log(request.body);
+    // console.log(request.body);
     const errors = validationResult(request);
 
     if (!errors.isEmpty()) {
@@ -110,14 +110,16 @@ const DoctorController = {
       let connection = request.app.locals.db;
       const { UserId } = request.body;
 
-      console.log(UserId);
+      // console.log(UserId);
 
       // convert the request body value into a type
       var params = [
         EntityId({ fieldName: "Id", value: 0 }),
-        EntityId({ fieldName: "DoctorUserId", value: 0 }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "DoctorUserId", value: UserId }),
+        EntityId({ fieldName: "UserId", value: 0 }),
       ];
+
+      console.log(params);
 
       // executes the given stored procedure
       let doctorGetResult = await executeSp({
@@ -125,8 +127,6 @@ const DoctorController = {
         params: params,
         connection,
       });
-
-      console.log(doctorGetResult);
 
       doctorGetResult = doctorGetResult.recordsets[0][0];
 

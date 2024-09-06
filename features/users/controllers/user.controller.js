@@ -18,7 +18,6 @@ import bcrypt from "bcrypt";
 import { getToken, refreshTokenGAS } from "../../../utils/gas.js";
 
 const UserController = {
- 
   /**
    *
    * Get user by email
@@ -528,7 +527,9 @@ const UserController = {
       ];
 
       let authenticateResult = await executeSp({
-        spName: `Authenticate`,
+        // hashing part is in AuthenticateV2
+        // spName: `Authenticate`,
+        spName: `AuthenticateV2`,
         params: params,
         connection,
       });

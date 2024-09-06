@@ -129,14 +129,13 @@ const DoctorController = {
       console.log(doctorGetResult);
 
       doctorGetResult = doctorGetResult.recordsets[0][0];
-      console.log("Raw doctorGetResult:", doctorGetResult);
 
       handleResponse(
         response,
         200,
         "success",
         "Doctor data retrived successfully",
-        { doctorGetResult }
+        doctorGetResult
       );
     } catch (error) {
       handleError(

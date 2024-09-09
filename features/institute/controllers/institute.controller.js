@@ -367,9 +367,9 @@ const InstituteController = {
     }
   },
 
-  // get a Institute By Doctor
+  // get a Branch By Doctor
 
-  async getBranchByInstitute(request, response, next) {
+  async getBranchByDoctor(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -381,10 +381,10 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const { instituteId, UserId } = request.body;
+      const { DoctorId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "InstituteId", value: instituteId }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 

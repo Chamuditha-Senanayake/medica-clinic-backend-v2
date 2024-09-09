@@ -88,9 +88,9 @@ router.post(
 );
 
 router.post(
-  "/GetBrachesByInstitute",
-  [check("instituteId").not().isEmpty(), check("UserId").not().isEmpty()],
-  InstituteController.getBranchByInstitute
+  "/GetBranchesByDoctor",
+  [check("DoctorId").not().isEmpty(), check("UserId").not().isEmpty()],
+  InstituteController.getBranchByDoctor
 );
 
 //////////////////////////////////////////////////////////////////

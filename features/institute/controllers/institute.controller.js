@@ -47,7 +47,8 @@ const InstituteController = {
         connection,
       });
 
-      instituteBranchDoctorGetResult = instituteBranchDoctorGetResult.recordsets[0];
+      instituteBranchDoctorGetResult =
+        instituteBranchDoctorGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -89,22 +90,16 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        InstituteBranchId,
-        DoctorId,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, InstituteBranchId, DoctorId, Status, UserSaved } =
+        request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-      EntityId({ fieldName: "DoctorId", value: DoctorId }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-
-    ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
 
       let instituteBranchDoctorSaveResult = await executeSp({
         spName: `InstituteBranchDoctorSave`,
@@ -113,7 +108,8 @@ const InstituteController = {
       });
 
       console.log(instituteBranchDoctorSaveResult.recordsets);
-      instituteBranchDoctorSaveResult = instituteBranchDoctorSaveResult.recordsets[0][0];
+      instituteBranchDoctorSaveResult =
+        instituteBranchDoctorSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -134,7 +130,6 @@ const InstituteController = {
     }
   },
 
-  
   // save a Institute Branch
 
   async getInstituteBranch(request, response, next) {
@@ -149,12 +144,12 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id, DoctorId, InstituteId, UserId } = request.body;
+      const { DoctorId, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "Id", value: 0 }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "InstituteId", value: InstituteId }),
+        EntityId({ fieldName: "InstituteId", value: 0 }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
@@ -218,36 +213,35 @@ const InstituteController = {
         ContactNumbers,
       } = request.body;
 
-    const ContactNumberList = [];
-    ContactNumbers.forEach((phoneNumber) => {
-      ContactNumberList.push([null, phoneNumber, 1]);
-    });
+      const ContactNumberList = [];
+      ContactNumbers.forEach((phoneNumber) => {
+        ContactNumberList.push([null, phoneNumber, 1]);
+      });
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "InstituteId", value: InstituteId }),
-      StringValue({ fieldName: "Name", value: Name }),
-      EntityId({ fieldName: "AddressId", value: AddressId }),
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "InstituteId", value: InstituteId }),
+        StringValue({ fieldName: "Name", value: Name }),
+        EntityId({ fieldName: "AddressId", value: AddressId }),
 
-      StringValue({ fieldName: "Email", value: Email }),
-      StringValue({ fieldName: "Website", value: Website }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        StringValue({ fieldName: "Email", value: Email }),
+        StringValue({ fieldName: "Website", value: Website }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
-      TableValueParameters({
-        tableName:"ContactNumbers",        
-        columns:
-        [
-          {columnName:"Id", type: sql.Int},
-          {columnName:"Number", type: sql.VarChar(15)},
-          {columnName:"Status", type: sql.TinyInt},
-        ],
-        values:ContactNumberList
-      })
-    ];
+        TableValueParameters({
+          tableName: "ContactNumbers",
+          columns: [
+            { columnName: "Id", type: sql.Int },
+            { columnName: "Number", type: sql.VarChar(15) },
+            { columnName: "Status", type: sql.TinyInt },
+          ],
+          values: ContactNumberList,
+        }),
+      ];
 
       let instituteBranchSaveResult = await executeSp({
         spName: `InstituteBranchSave`,
@@ -277,7 +271,7 @@ const InstituteController = {
     }
   },
 
-// get a Institute Doctor
+  // get a Institute Doctor
 
   async getInstituteDoctor(request, response, next) {
     const errors = validationResult(request);
@@ -325,6 +319,101 @@ const InstituteController = {
     }
   },
 
+  // get a Institute By Doctor
+
+  async getInstituteByDoctor(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Institute.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "DoctorId", value: Id }),
+        EntityId({ fieldName: "UserId", value: 0 }),
+      ];
+
+      let instituteDoctorGetResult = await executeSp({
+        spName: `DoctorInstituteGet`,
+        params: params,
+        connection,
+      });
+
+      instituteDoctorGetResult = instituteDoctorGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        instituteDoctorGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  // get a Branch By Doctor
+
+  async getBranchByDoctor(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Institute.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { DoctorId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let instituteDoctorGetResult = await executeSp({
+        spName: `InstituteBranchGet`,
+        params: params,
+        connection,
+      });
+
+      instituteDoctorGetResult = instituteDoctorGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        instituteDoctorGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
   // get a Institute
 
@@ -340,10 +429,10 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id, UserId } = request.body;
+      const { UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "Id", value: 0 }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 
@@ -374,7 +463,6 @@ const InstituteController = {
     }
   },
 
-
   /**
    *
    * save a Institute
@@ -396,14 +484,7 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        Name,
-        Email,
-        Website,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, Name, Email, Website, Status, UserSaved } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -445,7 +526,6 @@ const InstituteController = {
       next(error);
     }
   },
-
 };
 
 export default InstituteController;

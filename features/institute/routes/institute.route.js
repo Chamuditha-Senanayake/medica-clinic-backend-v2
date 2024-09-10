@@ -62,10 +62,7 @@ router.post(
 
 router.post(
   "/InstituteGet",
-  [
-    check("Id").isInt().not().isEmpty(),
-    check("UserId").not().isEmpty(),
-  ],
+  [check("Id").isInt().not().isEmpty(), check("UserId").not().isEmpty()],
   InstituteController.getInstitute
 );
 
@@ -81,5 +78,21 @@ router.post(
   ],
   InstituteController.saveInstitute
 );
+
+///////////////////////////////////////////////////////////////
+
+router.post(
+  "/GetInstituteByDoctor",
+  [check("Id").not().isEmpty()],
+  InstituteController.getInstituteByDoctor
+);
+
+router.post(
+  "/GetBranchesByDoctor",
+  [check("DoctorId").not().isEmpty(), check("UserId").not().isEmpty()],
+  InstituteController.getBranchByDoctor
+);
+
+//////////////////////////////////////////////////////////////////
 
 export default router;

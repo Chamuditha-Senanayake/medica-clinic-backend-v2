@@ -1,5 +1,5 @@
 {
-  "name": "medica_clinic",
+  "name": "yh2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -38,7 +38,8 @@
     "passport": "^0.5.3",
     "passport-google-oauth": "^2.0.0",
     "path": "^0.12.7",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "yh2": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",

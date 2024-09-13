@@ -5,9 +5,9 @@ import DoctorBookingController from "../controllers/doctorBooking.controller.js"
 const router = express.Router();
 
 router.post(
-  "/GetBookingsByProductId",
+  "/GetSessionsByProductId",
   [check("ProductId").not().isEmpty(), check("SessionDate").not().isEmpty()],
-  DoctorBookingController.getProductByProductId
+  DoctorBookingController.getSessionsByProductId
 );
 
 export default router;

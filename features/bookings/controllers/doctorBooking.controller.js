@@ -16,7 +16,7 @@ const DoctorBookingController = {
    * @returns
    */
 
-  async getProductByProductId(request, response, next) {
+  async getSessionsByProductId(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -38,25 +38,19 @@ const DoctorBookingController = {
       const apiResponse = await axios.get(apiUrl);
       const sessionData = apiResponse.data;
 
-      console.log("Session Data:", sessionData);
-
-      const matchingBookings = [];
+      const matchingSessions = [];
 
       sessionData.forEach((data) => {
         const [_, productIdFromSession] = data.uniqueField.split("_");
 
         if (ProductId === parseInt(productIdFromSession, 10)) {
-          matchingBookings.push(data);
-        } else {
-          console.log(
-            `ProductId does not match: ${ProductId} vs ${productIdFromSession}`
-          );
+          matchingSessions.push(data);
         }
       });
 
-      console.log("Matching Bookings:", matchingBookings);
+      //   console.log("Matching Bookings:", matchingSessions);
 
-      if (matchingBookings.length === 0) {
+      if (matchingSessions.length === 0) {
         return handleResponse(
           response,
           404,
@@ -71,7 +65,7 @@ const DoctorBookingController = {
         200,
         "success",
         "Booking data retrieved successfully",
-        matchingBookings
+        matchingSessions
       );
     } catch (error) {
       handleError(

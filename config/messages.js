@@ -164,18 +164,31 @@ const ResponseMessages = {
     DELETE: "Notification schedule deleted!",
     DELETE_FAILED: "Failed to delete notification schedule!",
   },
+  Product: {
+    VALIDATION_ERROR: "Validation errors",
+    LIST_RETRIEVE: "Product list retrieved!",
+    LIST_RETRIEVE_FAILED: "Failed to fetch Product list!",
+    RETRIEVE: "Product retrieved!",
+    RETRIEVE_FAILED: "Failed to fetch Product!",
+    CREATE: "Product created!",
+    CREATE_FAILED: "Failed to create Product!",
+    UPDATE: "Product updated!",
+    UPDATE_FAILED: "Failed to update Product!",
+    DELETE: "Product deleted!",
+    DELETE_FAILED: "Failed to delete Product!",
+  },
   Analytics: {
-    VALIDATION_ERROR: "Validation errors",   
+    VALIDATION_ERROR: "Validation errors",
   },
   MedicalCertificate: {
-    VALIDATION_ERROR: "Validation errors",   
+    VALIDATION_ERROR: "Validation errors",
   },
   Camios: {
-    VALIDATION_ERROR: "Validation errors",   
+    VALIDATION_ERROR: "Validation errors",
   },
-  Bill:{
-    VALIDATION_ERROR: "Validation errors", 
-  }
+  Bill: {
+    VALIDATION_ERROR: "Validation errors",
+  },
 };
 
 export default ResponseMessages;

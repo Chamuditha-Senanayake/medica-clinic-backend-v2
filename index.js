@@ -26,6 +26,8 @@ import UserRouter from "./features/users/routes/user.route.js";
 import analyticsRouter from "./features/analytics/routes/analytics.route.js";
 import medicalCertificateRouter from "./features/medicalCertificate/routes/medicalCertificate.route.js";
 import camiosRouter from "./features/camios/routes/camios.route.js";
+import productRouter from "./features/product/routes/product.route.js";
+import doctorBookingRouter from "./features/bookings/routes/doctorBooking.router.js";
 import { validateToken } from "./utils/gas.js";
 
 dotenv.config();
@@ -72,6 +74,8 @@ app.use(`/api/v1`, UserRouter);
 app.use(`/api/v1`, analyticsRouter);
 app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
+app.use(`/api/v1`, productRouter);
+app.use(`/api/v1`, doctorBookingRouter);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

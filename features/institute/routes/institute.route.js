@@ -81,16 +81,26 @@ router.post(
 
 ///////////////////////////////////////////////////////////////
 
-router.post(
-  "/GetInstituteByDoctor",
-  [check("Id").not().isEmpty()],
-  InstituteController.getInstituteByDoctor
-);
+// router.post(
+//   "/GetInstituteByDoctor",
+//   [check("Id").not().isEmpty()],
+//   InstituteController.getInstituteByDoctor
+// );
+
+// router.post(
+//   "/GetBranchesByDoctor",
+//   [
+//     check("DoctorId").not().isEmpty(),
+//     check("InstituteId").not().isEmpty(),
+//     check("UserId").not().isEmpty(),
+//   ],
+//   InstituteController.getBranchByDoctor
+// );
 
 router.post(
-  "/GetBranchesByDoctor",
+  "/GetInstituteBranchesByUserAndDoctorId",
   [check("DoctorId").not().isEmpty(), check("UserId").not().isEmpty()],
-  InstituteController.getBranchByDoctor
+  InstituteController.getInstituteBranchesByUserAndDoctorId
 );
 
 //////////////////////////////////////////////////////////////////

@@ -28,10 +28,11 @@ const ProductController = {
 
     try {
       let connection = request.app.locals.db;
-      const { ExtId, InstituteBranchId } = request.body;
+      const { ExtId, InstituteBranchId, Type = "Doctor" } = request.body;
 
       var params = [
         EntityId({ fieldName: "ExtId", value: ExtId }),
+        StringValue({ fieldName: "Type", value: Type }),
         EntityId({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
       ];
 

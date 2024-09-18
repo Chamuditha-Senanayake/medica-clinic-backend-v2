@@ -45,7 +45,7 @@ const NurseController = {
         connection,
       });
 
-      nurseGetResult = nurseGetResult.recordsets;
+      nurseGetResult = nurseGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -121,13 +121,13 @@ const NurseController = {
       });
 
       console.log(nurseSaveResult.recordsets);
-      nurseSaveResult = nurseSaveResult.recordsets;
+      nurseSaveResult = nurseSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrieved successfully",
+        "Nurse data retrieved successfully",
         nurseSaveResult
       );
     } catch (error) {
@@ -180,14 +180,73 @@ const NurseController = {
       });
 
       console.log(nurseBranchSaveResult.recordsets);
-      nurseSaveResult = nurseBranchSaveResult.recordsets;
+      nurseBranchSaveResult = nurseBranchSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrieved successfully",
+        "Data retrieved successfully",
         nurseBranchSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async SaveDoctorNurse(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Nurse.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        DoctorId,
+        NurseId,
+        Status,
+        UserSaved,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        EntityId({ fieldName: "NurseId", value: NurseId }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
+
+      let doctorNurseSaveResult = await executeSp({
+        spName: `DoctorNurseSave`,
+        params: params,
+        connection,
+      });
+
+      console.log(doctorNurseSaveResult.recordsets);
+      doctorNurseSaveResult = doctorNurseSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        doctorNurseSaveResult
       );
     } catch (error) {
       handleError(

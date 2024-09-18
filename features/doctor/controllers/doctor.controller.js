@@ -1,16 +1,17 @@
 import { validationResult } from "express-validator";
+import sql from "mssql";
 import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
 import {
-  EntityId,
-  StringValue,
-  SignedInteger,
-  TableValueParameters,
   DateString,
+  EntityId,
+  SignedInteger,
+  StringValue,
+  TableValueParameters,
+  FloatValue,
 } from "../../../utils/type-def.js";
-import sql from "mssql";
 const {
   Int,
   NVarChar,
@@ -63,7 +64,71 @@ const DoctorController = {
         connection,
       });
 
-      doctorGetResult = doctorGetResult.recordsets;
+      doctorGetResult = doctorGetResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Doctor data retrived successfully",
+        doctorGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * get doctor by [Id, DoctorUserId, UserId]
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next - middleware
+   * @returns
+   */
+  async getDoctorByUserId(request, response, next) {
+    // console.log(request.body);
+    const errors = validationResult(request);
+
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId } = request.body;
+
+      // console.log(UserId);
+
+      // convert the request body value into a type
+      var params = [
+        EntityId({ fieldName: "Id", value: 0 }),
+        EntityId({ fieldName: "DoctorUserId", value: UserId }),
+        EntityId({ fieldName: "UserId", value: 0 }),
+      ];
+
+      console.log(params);
+
+      // executes the given stored procedure
+      let doctorGetResult = await executeSp({
+        spName: `DoctorGet`,
+        params: params,
+        connection,
+      });
+
+      doctorGetResult = doctorGetResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -90,7 +155,7 @@ const DoctorController = {
    *
    * @param {request} request object
    * @param {response} response object
-   * @param {next} next function
+   * @param {next} next middleware
    * @returns
    */
   async saveDoctor(request, response, next) {
@@ -113,15 +178,23 @@ const DoctorController = {
         Email,
         NIC,
         Status,
-        UserSaved,
+        UserSaved = 0,
         ContactNumbers,
         RegistrationNumber,
         DateOfBirth,
         Title,
         ZoomEmail,
         ZoomPassword,
-        Chargers,
+        BranchId,
+        DoctorFee,
+        HospitalFee,
+        OtherFee,
       } = request.body;
+
+      const ContactNumberList = [];
+      ContactNumbers.forEach((phoneNumber) => {
+        ContactNumberList.push([null, phoneNumber, 1]);
+      });
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -135,29 +208,6 @@ const DoctorController = {
           value: Status,
         }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        // TODO: Contact numbers is an array of objects
-        // StringValue({ fieldName: "ContactNumbers", value: ContactNumbers }),
-        TableValueParameters({
-          tableName: "ContactNumbers",
-          columns: [
-            {
-              columnName: "Id",
-              type: Int,
-              options: { nullable: true },
-            },
-            {
-              columnName: "Number",
-              type: NVarChar,
-              options: null,
-            },
-            {
-              columnName: "Status",
-              type: TinyInt,
-              options: null,
-            },
-          ],
-          values: ContactNumbers,
-        }),
         StringValue({
           fieldName: "RegistrationNumber",
           value: RegistrationNumber,
@@ -171,7 +221,20 @@ const DoctorController = {
               value: ZoomPassword,
             })
           : null,
-        StringValue({ fieldName: "Chargers", value: Chargers }),
+        EntityId({ fieldName: "BranchId", value: BranchId }),
+        FloatValue({ fieldName: "DoctorFee", value: DoctorFee }),
+        FloatValue({ fieldName: "HospitalFee", value: HospitalFee }),
+        FloatValue({ fieldName: "OtherFee", value: OtherFee }),
+
+        TableValueParameters({
+          tableName: "ContactNumbers",
+          columns: [
+            { columnName: "Id", type: sql.Int },
+            { columnName: "Number", type: sql.VarChar(15) },
+            { columnName: "Status", type: sql.TinyInt },
+          ],
+          values: ContactNumberList,
+        }),
       ];
 
       let doctorSaveResult = await executeSp({
@@ -183,24 +246,11 @@ const DoctorController = {
       console.log(doctorSaveResult.recordsets);
       doctorSaveResult = doctorSaveResult.recordsets;
 
-      //handle no data
-      // if (doctorSaveResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorSaveResult[0][0];
-      // const billData = doctorSaveResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
-
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrieved successfully",
+        "Data retrieved successfully",
         doctorSaveResult
       );
     } catch (error) {
@@ -215,6 +265,15 @@ const DoctorController = {
     }
   },
 
+  /**
+   *
+   * get the doctor's specializations
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async getDoctorSpecializations(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -227,15 +286,10 @@ const DoctorController = {
 
     try {
       let connection = request.app.locals.db;
-      const { DoctorId, Id } = request.body;
+      const { DoctorId = 0, Id = 0 } = request.body;
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        StringValue({
-          fieldName: "AppointmentNumber",
-          value: AppointmentNumber,
-        }),
       ];
 
       let doctorSpecializationsGetResult = await executeSp({
@@ -248,24 +302,11 @@ const DoctorController = {
       doctorSpecializationsGetResult =
         doctorSpecializationsGetResult.recordsets;
 
-      //handle no data
-      // if (doctorSpecializationsGetResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorSpecializationsGetResult[0][0];
-      // const billData = doctorSpecializationsGetResult[1];
-
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
-
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrived successfully",
+        "Data retrived successfully",
         doctorSpecializationsGetResult
       );
     } catch (error) {
@@ -280,6 +321,15 @@ const DoctorController = {
     }
   },
 
+  /**
+   *
+   * save a specialization for a doctor
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
   async saveDoctorSpecialization(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -292,8 +342,13 @@ const DoctorController = {
 
     try {
       let connection = request.app.locals.db;
-      const { DoctorId, SpecializationId, Status, UserSaved, Id } =
-        request.body;
+      const {
+        DoctorId,
+        SpecializationId,
+        Status,
+        UserSaved,
+        Id = 0,
+      } = request.body;
 
       var params = [
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
@@ -316,25 +371,343 @@ const DoctorController = {
       doctorSpecializationsSaveResult =
         doctorSpecializationsSaveResult.recordsets;
 
-      //handle no data
-      // if (doctorSpecializationsSaveResult[0].length == 0) {
-      //   handleResponse(response, 200, "success", "No data found", {});
-      //   return;
-      // }
-      // const appointment = doctorSpecializationsSaveResult[0][0];
-      // const billData = doctorSpecializationsSaveResult[1];
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        doctorSpecializationsSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
-      // const data = {
-      //   ...appointment,
-      //   BillData: billData,
-      // };
+  /**
+   *
+   * get the channeling status of a doctor
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   */
+  async DoctorChannelingStatusGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        UserId = 0,
+        Id = 0,
+        AppointmentId = 0,
+        SessionId = 0,
+        PatientId = 0,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+      ];
+
+      let doctorChannelingStatusGetResult = await executeSp({
+        spName: `DoctorChannelingStatusGet`,
+        params: params,
+        connection,
+      });
+
+      doctorChannelingStatusGetResult =
+        doctorChannelingStatusGetResult.recordsets;
 
       handleResponse(
         response,
         200,
         "success",
-        "Bill data retrived successfully",
-        doctorSpecializationsSaveResult
+        "Channeling data retrieved successfully",
+        doctorChannelingStatusGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * save/update channeling status
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async DoctorChannelingStatusSave(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        SessionId,
+        PatientId,
+        AppointmentId,
+        UserSaved,
+        Id = 0,
+        DoctorStatus = "",
+        ChanalingStatus = "",
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "DoctorStatus", value: DoctorStatus }),
+        StringValue({ fieldName: "ChanalingStatus", value: ChanalingStatus }),
+      ];
+
+      let doctorChannelingStatusSaveResult = await executeSp({
+        spName: `DoctorChannelingStatusSave`,
+        params: params,
+        connection,
+      });
+
+      doctorChannelingStatusSaveResult =
+        doctorChannelingStatusSaveResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Channeling status created successfully",
+        doctorChannelingStatusSaveResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get the contact numbers of doctors
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async DoctorContactNumberGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id = 0, DoctorId = 0, ContactNumber = "", UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        StringValue({ fieldName: "ContactNumber", value: ContactNumber }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let doctorContactNumberGetResult = await executeSp({
+        spName: `DoctorContactNumberGet`,
+        params: params,
+        connection,
+      });
+
+      doctorContactNumberGetResult = doctorContactNumberGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Contact numbers retrieved successfully",
+        doctorContactNumberGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Get doctor disposition reminder
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async DoctorDispositionReminderGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, PatientId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+      ];
+
+      let doctorDispositionReminderGetResult = await executeSp({
+        spName: `DoctorDispositionReminderGet`,
+        params: params,
+        connection,
+      });
+
+      doctorDispositionReminderGetResult =
+        doctorDispositionReminderGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        doctorDispositionReminderGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  /**
+   *
+   * Save doctor disposition reminder
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+
+  async DoctorDispositionReminderSave(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Doctor.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id = 0,
+        PrescriptionRecordId = 0,
+        AppointmentId = 0,
+        PatientId = 0,
+        RemindOn = 0,
+        RemindFromDate = "",
+        RemindType = "",
+        Message = "",
+        Status = 0,
+        UserSaved = 0,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({
+          fieldName: "PrescriptionRecordId",
+          value: PrescriptionRecordId,
+        }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        SignedInteger({
+          fieldName: "RemindOn",
+          value: RemindOn,
+        }),
+        DateString({ fieldName: "RemindFromDate", value: RemindFromDate }),
+        StringValue({ fieldName: "RemindType", value: RemindType }),
+        StringValue({ fieldName: "Message", value: Message }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+      ];
+
+      let doctorDispositionReminderSaveResult = await executeSp({
+        spName: `DoctorDispositionReminderSave`,
+        params: params,
+        connection,
+      });
+
+      doctorDispositionReminderSaveResult =
+        doctorDispositionReminderSaveResult.recordsets[0][0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Reminder saved successfully",
+        doctorDispositionReminderSaveResult
       );
     } catch (error) {
       handleError(

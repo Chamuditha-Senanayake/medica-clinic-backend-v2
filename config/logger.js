@@ -10,23 +10,35 @@ const option = {
   },
 };
 
+// const logger = createLogger({
+//   transports: [new transports.Console(option.console)],
+//   exitOnError: false, // do not exit on handled exceptions
+//   format: format.combine(
+//     format.printf(info => {
+//       let message = ` ${dateFormat()}  ${info.level.toUpperCase()} ${
+//         info.path ? info.path : ''
+//       }  ${info.message}  `;
+//       message = info.obj
+//         ? message + `data:${JSON.stringify(info.obj)}  `
+//         : message;
+//       return message;
+//     }),
+//     format.colorize(),
+//     format.timestamp(),
+//     format.align()
+//   ),
+// });
+
 const logger = createLogger({
-  transports: [new transports.Console(option.console)],
-  exitOnError: false, // do not exit on handled exceptions
+  level: 'info',
   format: format.combine(
-    format.printf(info => {
-      let message = ` ${dateFormat()}  ${info.level.toUpperCase()} ${
-        info.path ? info.path : ''
-      }  ${info.message}  `;
-      message = info.obj
-        ? message + `data:${JSON.stringify(info.obj)}  `
-        : message;
-      return message;
-    }),
-    format.colorize(),
     format.timestamp(),
-    format.align()
+    format.printf(info => `${info.timestamp} [${info.level}]: ${info.message}`)
   ),
+  transports: [
+    new transports.File({ filename: 'app.log' }),
+    new transports.Console(option.console),
+  ],
 });
 
 function dateFormat() {

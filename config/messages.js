@@ -197,6 +197,9 @@ const ResponseMessages = {
   LabReport: {
     VALIDATION_ERROR: 'Validation errors',
   },
+  Diagnosis: {
+    VALIDATION_ERROR: 'Validation errors',
+  },
   Provider: {
     VALIDATION_ERROR:
       'Provider must be either "google" or "apple" or "microsoft".',

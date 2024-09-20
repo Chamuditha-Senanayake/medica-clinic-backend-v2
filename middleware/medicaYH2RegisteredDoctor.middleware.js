@@ -27,7 +27,7 @@ export const isMedicaYH2RegisteredDoctor = (req, res, next) => {
             connection,
           });
 
-          if (!userData) {
+          if (!userData?.recordsets?.[0]?.[0]) {
             throw Error('User not found');
           } else if (userData.recordsets[0][0].RelationStatus === 'active') {
             next();
@@ -37,6 +37,7 @@ export const isMedicaYH2RegisteredDoctor = (req, res, next) => {
             });
           }
         } catch (error) {
+          console.log(error.message);
           res.status(401).send({ message: 'Failed to perform this action' });
         }
       } else {

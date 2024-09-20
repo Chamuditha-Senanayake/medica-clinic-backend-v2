@@ -32,6 +32,7 @@ export const isActiveUser = (req, res, next) => {
             });
           }
         } catch (error) {
+          console.log(error.message);
           res.status(401).send({ message: 'Failed to perform this action' });
         }
       }

@@ -54,6 +54,7 @@ export const isAuthorizedCaregiver = (req, res, next) => {
                 next();
               }
             } catch (error) {
+              console.log(error.message);
               res.status(401).send({
                 message: 'You are not allowed to perform this action',
               });
@@ -62,6 +63,7 @@ export const isAuthorizedCaregiver = (req, res, next) => {
             next();
           }
         } catch (error) {
+          console.log(error.message);
           res.status(401).send({ message: 'Failed to perform this action' });
         }
       }

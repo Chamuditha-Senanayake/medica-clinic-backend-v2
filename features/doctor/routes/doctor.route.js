@@ -4,6 +4,7 @@ import DoctorController from '../controllers/doctor.controller.js';
 import { isAuth } from '../../../middleware/auth.middleware.js';
 import { isActiveUser } from '../../../middleware/activityCheck.middleware.js';
 import { isAuthorizedDoctor } from '../../../middleware/doctor.middleware.js';
+import { isMedicaYH2RegisteredDoctor } from '../../../middleware/medicaYH2RegisteredDoctor.middleware.js';
 
 const router = express.Router();
 
@@ -58,6 +59,7 @@ router.post(
   '/DoctorPatientsGet',
   isAuth,
   isActiveUser,
+  isMedicaYH2RegisteredDoctor,
   [
     check('SearchBy').optional({ nullable: true }).isString(),
     check('Page').optional({ nullable: true }).isInt(),

@@ -14,7 +14,7 @@ router.post(
 
 router.post(
   '/AccessRequestValidation',
-  isAuth,
+  // isAuth,
   isActiveUser,
   [
     check('Id').optional({ nullable: true }).isInt(),

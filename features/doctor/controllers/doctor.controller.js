@@ -318,7 +318,7 @@ const DoctorController = {
     try {
       let connection = request.app.locals.db;
 
-      const { SearchBy, Page = 0, Limit = 0 } = request.body;
+      const { SearchBy = '', Page = 0, Limit = 0 } = request.body;
 
       var params = [
         { name: 'SearchBy', type: sql.NVarChar, value: SearchBy },

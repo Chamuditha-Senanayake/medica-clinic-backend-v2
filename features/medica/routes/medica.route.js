@@ -15,7 +15,7 @@ router.post(
 router.post(
   '/AccessRequestValidation',
   // isAuth,
-  isActiveUser,
+  // isActiveUser,
   [
     check('Id').optional({ nullable: true }).isInt(),
     check('MedicaDoctorUserId').isInt().not().isEmpty(),

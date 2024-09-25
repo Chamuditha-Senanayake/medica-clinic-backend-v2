@@ -105,14 +105,40 @@ const MedicaController = {
         MedicaDoctorUserId,
         MedicaDoctorId,
         RelationStatus = 'active',
-        Token,
+        Token = null,
       } = request.body;
 
-      let decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
+      let decodedToken;
+      let params1;
+      let token;
+      let medicaYH2DoctorSaveResult;
 
-      let params1 = [
-        EntityId({ fieldName: 'Id', value: decodedToken.yh2DoctorUserId }),
-      ];
+      if (Token) {
+        decodedToken = jwt.verify(Token, process.env.JWT_SECRET);
+        params1 = [
+          EntityId({ fieldName: 'Id', value: decodedToken.yh2DoctorUserId }),
+        ];
+      } else {
+        let params = [
+          EntityId({
+            fieldName: 'MedicaDoctorId',
+            value: MedicaDoctorUserId,
+          }),
+        ];
+
+        let yh2UserInfo = await executeSp({
+          spName: `MedicaYH2DoctorGet`,
+          params: params,
+          connection,
+        });
+
+        params1 = [
+          EntityId({
+            fieldName: 'Id',
+            value: yh2UserInfo.recordsets[0][0].YH2DoctorUserId,
+          }),
+        ];
+      }
 
       let doctorInfo = await executeSp({
         spName: `UserGetById`,
@@ -122,15 +148,11 @@ const MedicaController = {
 
       doctorInfo = doctorInfo.recordsets[0][0];
 
-      let token;
-
-      let medicaYH2DoctorSaveResult;
-
       if (doctorInfo && doctorInfo.IsDoctor === true) {
         let params2 = [
           EntityId({
             fieldName: 'YH2DoctorUserId',
-            value: decodedToken.yh2DoctorUserId,
+            value: doctorInfo.Id,
           }),
         ];
 

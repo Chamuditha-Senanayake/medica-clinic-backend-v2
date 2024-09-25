@@ -21,7 +21,7 @@ router.post(
     check('MedicaDoctorUserId').isInt().not().isEmpty(),
     check('MedicaDoctorId').isInt().not().isEmpty(),
     check('RelationStatus').optional({ nullable: true }).isString(),
-    check('Token').not().isEmpty().isString(),
+    check('Token').optional({ nullable: true }).isString(),
   ],
 
   MedicaController.userAccessRequestValidation

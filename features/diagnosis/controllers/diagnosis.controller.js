@@ -3,11 +3,6 @@ import ResponseMessage from '../../../config/messages.js';
 import executeSp from '../../../utils/exeSp.js';
 import handleError from '../../../utils/handleError.js';
 import handleResponse from '../../../utils/handleResponse.js';
-import {
-  EntityId,
-  StringValue,
-  SignedInteger,
-} from '../../../utils/type-def.js';
 import sql from 'mssql';
 
 const DiagnosisController = {
@@ -55,7 +50,6 @@ const DiagnosisController = {
           diagnosisGetByNameResult.recordsets[1][0],
         ];
       }
-      // drugsGetByNameResult = drugsGetByNameResult.recordsets;
 
       handleResponse(
         response,

@@ -122,7 +122,7 @@ const MedicaController = {
         let params = [
           EntityId({
             fieldName: 'MedicaDoctorId',
-            value: MedicaDoctorUserId,
+            value: MedicaDoctorId,
           }),
         ];
 
@@ -132,10 +132,16 @@ const MedicaController = {
           connection,
         });
 
+        if (!yh2UserInfo?.recordsets[0][0]?.YH2DoctorUserId) {
+          return response
+            .status(401)
+            .json({ resCode: 401, error: 'User not registered' });
+        }
+
         params1 = [
           EntityId({
             fieldName: 'Id',
-            value: yh2UserInfo.recordsets[0][0].YH2DoctorUserId,
+            value: yh2UserInfo?.recordsets[0][0]?.YH2DoctorUserId,
           }),
         ];
       }
@@ -219,7 +225,9 @@ const MedicaController = {
           );
         }
       } else {
-        throw Error('Invalid token.');
+        return response
+          .status(401)
+          .json({ resCode: 401, error: 'Invalid token' });
       }
 
       handleResponse(response, 200, 'success', 'Data retrived successfully', {

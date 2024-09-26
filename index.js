@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(`/api/v1/Authenticate`, doctorRouter);
-// app.use(validateToken)
+app.use(validateToken);
 app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);
 app.use(`/api/v1`, prescriptionRouter);

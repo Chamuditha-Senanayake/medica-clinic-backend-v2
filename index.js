@@ -53,7 +53,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
 
-app.use(`/api/v1/Authenticate`, doctorRouter);
 app.use(validateToken);
 app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);

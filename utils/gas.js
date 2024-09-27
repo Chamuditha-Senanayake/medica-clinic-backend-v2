@@ -13,9 +13,8 @@ export const validateMedicaToken = async (req, res, next) => {
         const token = authorizationHeader.split(' ')[1];
         req.token = token;
 
-        console.log(token);
         const response = await fetch(
-          process.env.GAS_BASE_URL + '/auth/validate-token',
+          process.env.GAS_BASE_URL + 'auth/validate-token',
           {
             method: 'POST',
             body: JSON.stringify({

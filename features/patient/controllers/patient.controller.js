@@ -693,7 +693,9 @@ const PatientController = {
         StringValue({ fieldName: "ClinicId", value: ClinicId }),
         StringValue({ fieldName: "UniqueId", value: UniqueId }),
         StringValue({ fieldName: "Name", value: Name }),
-        DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
+        DateOfBirth
+          ? DateString({ fieldName: "DateOfBirth", value: DateOfBirth })
+          : null,
         EntityId({ fieldName: "ParentId", value: ParentId }),
         EntityId({ fieldName: "Guid", value: Guid }),
         StringValue({ fieldName: "Address", value: Address }),

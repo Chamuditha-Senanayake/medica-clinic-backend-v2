@@ -4,11 +4,11 @@ import InstituteController from "../controllers/institute.controller.js";
 const router = express.Router();
 
 router.post(
-  "/InstituteDoctor/GetInstituteByDoctor",
+  "/DoctorBranch/GetInstituteBranchDoctor",
   [
-    check("Id").isInt().not().isEmpty(),
-    // check("InstituteBranchId").isInt().not().isEmpty(),
-    // check("UserId").not().isEmpty(),
+    check("Id").optional().isInt(),
+    check("InstituteBranchId").optional().isInt(),
+    check("UserId").optional().isInt(),
   ],
   InstituteController.getInstituteBranchDoctor
 );

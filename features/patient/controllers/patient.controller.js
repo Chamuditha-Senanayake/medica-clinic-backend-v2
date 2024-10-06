@@ -678,7 +678,7 @@ const PatientController = {
         ParentId = 0,
         Guid = 0,
         Address = "",
-        Id,
+        Id = 0,
       } = request.body;
 
       var params = [

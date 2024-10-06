@@ -675,8 +675,8 @@ const PatientController = {
         UniqueId = "",
         Name = "",
         DateOfBirth,
-        ParentId,
-        Guid,
+        ParentId = 0,
+        Guid = 0,
         Address = "",
         Id,
       } = request.body;

@@ -33,7 +33,7 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id, InstituteBranchId = 0, UserId = 0 } = request.body;
+      const { Id = 0, InstituteBranchId = 0, UserId = 0 } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),

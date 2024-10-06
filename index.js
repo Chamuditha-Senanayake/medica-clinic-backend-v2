@@ -49,6 +49,7 @@ import pharmacyRoutes from "./features/pharmacy/routes/pharmacy-routes.js";
 import referralLetterRoutes from "./features/referralLetter/routes/referral-letter-routes.js";
 import sessionRoutes from "./features/session/routes/session-routes.js";
 import serviceFeeRoutes from "./features/service-fee/routes/service-fee-routes.js";
+import prescriptionRoutes from "./features/prescription/routes/prescription-routes.js";
 
 dotenv.config();
 
@@ -123,6 +124,7 @@ app.use(`/api/v1/sms`, smsRoutes);
 app.use(`/api/v1/specializations`, specializationsRoutes);
 app.use(`/api/v1/ratings`, ratingRoutes);
 app.use(`/api/v1/service-fee`, serviceFeeRoutes);
+app.use(`/api/v1/prescriptions`, prescriptionRoutes);
 
 
 

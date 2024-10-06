@@ -502,7 +502,7 @@ export const getByBranch = async (req, res, next) => {
       throw new Error("doctor not found");
     }
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Doctor retrived successfully",

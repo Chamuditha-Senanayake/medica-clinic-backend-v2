@@ -48,6 +48,7 @@ import otpRoutes from "./features/otp/routes/otp-routes.js";
 import pharmacyRoutes from "./features/pharmacy/routes/pharmacy-routes.js";
 import referralLetterRoutes from "./features/referralLetter/routes/referral-letter-routes.js";
 import sessionRoutes from "./features/session/routes/session-routes.js";
+import serviceFeeRoutes from "./features/service-fee/routes/service-fee-routes.js";
 
 dotenv.config();
 
@@ -121,6 +122,9 @@ app.use(`/api/v1/institute-branch`, instituteBranchRoutes);
 app.use(`/api/v1/sms`, smsRoutes);
 app.use(`/api/v1/specializations`, specializationsRoutes);
 app.use(`/api/v1/ratings`, ratingRoutes);
+app.use(`/api/v1/service-fee`, serviceFeeRoutes);
+
+
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

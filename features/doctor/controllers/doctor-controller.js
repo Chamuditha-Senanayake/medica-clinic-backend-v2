@@ -433,6 +433,7 @@ export const saveDoctorSpecialization = async (req, res, next) => {
 };
 export const getByUser = async (req, res, next) => {
   try {
+    let connection = req.app.locals.db;
     const { DoctorId, BranchId } = req.body;
 
     const doctorGetQuery = `
@@ -449,19 +450,20 @@ export const getByUser = async (req, res, next) => {
     doctorsResult = doctorsResult.recordsets[0];
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Doctors retrived successfully",
-        doctorsResult
+      response,
+      200,
+      "success",
+      "Doctors retrived successfully",
+      doctorsResult
     );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
   }
 };
-export const getByBranch= async (req, res, next) => {
+export const getByBranch = async (req, res, next) => {
   try {
+    let connection = req.app.locals.db;
     const { Id, BranchId, UserId } = req.body;
 
     let doctorsResult = await executeSp({
@@ -491,7 +493,7 @@ export const getByBranch= async (req, res, next) => {
       doctorsResult = doctorsResult[0];
       if (doctorsResult?.Specializations) {
         doctorsResult.Specializations = JSON.parse(
-            doctorsResult.Specializations
+          doctorsResult.Specializations
         ).map((specialization) => specialization?.Name);
       } else {
         doctorsResult["Specializations"] = [];
@@ -509,7 +511,7 @@ export const getByBranch= async (req, res, next) => {
     handleError(res, 500, "error", "Something went wrong", error);
   }
 };
-export const doctorServiceFeeSave= async (req, res, next) => {
+export const doctorServiceFeeSave = async (req, res, next) => {
   try {
     let connection = req.app.locals.db;
     const {
@@ -532,9 +534,9 @@ export const doctorServiceFeeSave= async (req, res, next) => {
       throw new Error("Doctor id is required");
     }
     if (
-        instituteBranchId == null ||
-        instituteBranchId == undefined ||
-        instituteBranchId == ""
+      instituteBranchId == null ||
+      instituteBranchId == undefined ||
+      instituteBranchId == ""
     ) {
       throw new Error("Institute branch id is required");
     }
@@ -601,18 +603,18 @@ export const doctorServiceFeeSave= async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Doctor service fee added successfully",
-        doctorServiceFeeSaveResult
+      response,
+      200,
+      "success",
+      "Doctor service fee added successfully",
+      doctorServiceFeeSaveResult
     );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
   }
 };
-export const doctorServiceFeeGet= async (req, res, next) => {
+export const doctorServiceFeeGet = async (req, res, next) => {
   try {
     let connection = req.app.locals.db;
     const { feeId, instituteBranchId, doctorId } = req.query;
@@ -640,26 +642,26 @@ export const doctorServiceFeeGet= async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Doctor service fee retrieved successfully",
-        doctorServiceFeeGetResult.recordset
+      response,
+      200,
+      "success",
+      "Doctor service fee retrieved successfully",
+      doctorServiceFeeGetResult.recordset
     );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
   }
 };
-export const notifyNewAppointment= async (req, res, next) => {
+export const notifyNewAppointment = async (req, res, next) => {
   try {
     const connection = req.app.locals.db;
     const { appointmentId } = req.body;
     // console.log(profileName, emailAddress, mobileNumber);
     if (
-        appointmentId === null ||
-        appointmentId === undefined ||
-        appointmentId === ""
+      appointmentId === null ||
+      appointmentId === undefined ||
+      appointmentId === ""
     ) {
       throw new Error("Profile name is required");
     }
@@ -741,7 +743,7 @@ export const notifyNewAppointment= async (req, res, next) => {
     handleError(res, 500, "error", "Something went wrong", error);
   }
 };
-export const getDoctorByInstitute= async (req, res, next) => {
+export const getDoctorByInstitute = async (req, res, next) => {
   try {
     let connection = req.app.locals.db;
     const { userId, instituteId } = req.body;
@@ -764,18 +766,18 @@ export const getDoctorByInstitute= async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Data retrieved successfully",
-        DoctorByInstituteGetResult.recordset
+      response,
+      200,
+      "success",
+      "Data retrieved successfully",
+      DoctorByInstituteGetResult.recordset
     );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
   }
 };
-export const getDoctorInstitute= async (req, res, next) => {
+export const getDoctorInstitute = async (req, res, next) => {
   try {
     let connection = req.app.locals.db;
     const { userId, doctorId } = req.body;
@@ -798,11 +800,11 @@ export const getDoctorInstitute= async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Data retrieved successfully",
-        DoctorInstituteGetResult.recordset
+      response,
+      200,
+      "success",
+      "Data retrieved successfully",
+      DoctorInstituteGetResult.recordset
     );
   } catch (error) {
     console.log(error);

@@ -198,9 +198,21 @@ export const billDataSave = async (req, res, next) => {
     };
 
     if (successfulInsertsCount === itemsCount) {
-      handleResponse(response, 200, "success", "Bill data added", responseRecreated);
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Bill data added",
+        responseRecreated
+      );
     } else {
-      handleError(response, 500, "error", "Something went wrong", responseRecreated);
+      handleError(
+        response,
+        500,
+        "error",
+        "Something went wrong",
+        responseRecreated
+      );
     }
   } catch (error) {
     console.log(error);
@@ -269,7 +281,7 @@ export const billGet = async (req, res, next) => {
     for (let i = 0; i < billGetAllResult.recordset.length; i++) {
       if (billGetAllResult.recordset[i]?.BillReamrks) {
         billGetAllResult.recordset[i].BillReamrks = JSON.parse(
-            billGetAllResult.recordset[i].BillReamrks
+          billGetAllResult.recordset[i].BillReamrks
         );
       }
       const billDataGetQuery = `SELECT
@@ -297,19 +309,19 @@ export const billGet = async (req, res, next) => {
 
     if (billGetAllResult.rowsAffected[0] === 0) {
       handleError(
-          response,
-          200,
-          "error",
-          "Invalid appointment id",
-          billGetAllResult.recordset
+        response,
+        200,
+        "error",
+        "Invalid appointment id",
+        billGetAllResult.recordset
       );
     } else {
       handleResponse(
-          response,
-          200,
-          "success",
-          "All bills retrieved successfully",
-          responseRecreated
+        response,
+        200,
+        "success",
+        "All bills retrieved successfully",
+        responseRecreated
       );
     }
   } catch (error) {
@@ -322,19 +334,19 @@ export const billUpdatePaymentStatus = async (req, res, next) => {
     let connection = req.app.locals.db;
     const { billId, paymentStatus } = req.body;
     if (
-        billId === null ||
-        billId === undefined ||
-        billId === "" ||
-        isNaN(billId)
+      billId === null ||
+      billId === undefined ||
+      billId === "" ||
+      isNaN(billId)
     ) {
       throw new Error("Please provide a valid bill id");
     }
 
     if (
-        paymentStatus === null ||
-        paymentStatus === undefined ||
-        paymentStatus === "" ||
-        paymentStatus.length > 50
+      paymentStatus === null ||
+      paymentStatus === undefined ||
+      paymentStatus === "" ||
+      paymentStatus.length > 50
     ) {
       throw new Error("Please provide a valid payment status");
     }
@@ -420,11 +432,11 @@ export const billRemarkSave = async (req, res, next) => {
     billRemarkSaveResponse = billRemarkSaveResponse?.recordsets[0][0];
 
     handleResponse(
-        response,
-        200,
-        "sucess",
-        "Operation Success",
-        billRemarkSaveResponse
+      response,
+      200,
+      "sucess",
+      "Operation Success",
+      billRemarkSaveResponse
     );
   } catch (error) {
     console.log(error);
@@ -464,11 +476,11 @@ export const billRemarkGet = async (req, res, next) => {
     billRemarkGetResponse = billRemarkGetResponse?.recordsets[0][0];
 
     handleResponse(
-        response,
-        200,
-        "sucess",
-        "Operation Success",
-        billRemarkGetResponse
+      response,
+      200,
+      "sucess",
+      "Operation Success",
+      billRemarkGetResponse
     );
   } catch (error) {
     console.log(error);
@@ -521,14 +533,20 @@ export const refundBillDataSave = async (req, res, next) => {
 
     if (successfulInsertsCount === itemsCount) {
       handleResponse(
-          response,
-          200,
-          "success",
-          "Refund data added",
-          responseRecreated
+        response,
+        200,
+        "success",
+        "Refund data added",
+        responseRecreated
       );
     } else {
-      handleError(response, 500, "error", "Something went wrong", responseRecreated);
+      handleError(
+        response,
+        500,
+        "error",
+        "Something went wrong",
+        responseRecreated
+      );
     }
   } catch (error) {
     console.log(error);
@@ -571,22 +589,22 @@ export const refundBillDataGet = async (req, res, next) => {
 
     if (refundBillGetResult.rowsAffected[0] === 0) {
       handleError(
-          response,
-          200,
-          "error",
-          "Invalid refund bill id",
-          refundBillGetResult
+        response,
+        200,
+        "error",
+        "Invalid refund bill id",
+        refundBillGetResult
       );
     } else {
       handleResponse(
-          response,
-          200,
-          "success",
-          "Refund bill data retrieved successfully",
-          {
-            refundBill: refundBillGetResult.recordset[0],
-            refundBillData: refundBillDataGetResult.recordset,
-          }
+        response,
+        200,
+        "success",
+        "Refund bill data retrieved successfully",
+        {
+          refundBill: refundBillGetResult.recordset[0],
+          refundBillData: refundBillDataGetResult.recordset,
+        }
       );
     }
   } catch (error) {
@@ -594,66 +612,66 @@ export const refundBillDataGet = async (req, res, next) => {
     handleError(res, 500, "error", "Could not save medical bill", error);
   }
 };
-export const serviceFeeSave = async (req, res, next) => {
-  try {
-    let connection = req.app.locals.db;
-    const { serviceFeeId, serviceName, userId, instituteId } = req.body;
-    // console.log('req.body:', serviceName, userId, instituteId);
+// export const serviceFeeSave = async (req, res, next) => {
+//   try {
+//     let connection = req.app.locals.db;
+//     const { serviceFeeId, serviceName, userId, instituteId } = req.body;
+//     // console.log('req.body:', serviceName, userId, instituteId);
 
-    if (
-        serviceName === null ||
-        serviceName === undefined ||
-        serviceName === ""
-    ) {
-      throw new Error("Service fee name is required");
-    }
-    if (userId === null || userId === undefined || userId === "") {
-      throw new Error("User id is required");
-    }
-    if (
-        instituteId === null ||
-        instituteId === undefined ||
-        instituteId === ""
-    ) {
-      throw new Error("Institute id is required");
-    }
+//     if (
+//         serviceName === null ||
+//         serviceName === undefined ||
+//         serviceName === ""
+//     ) {
+//       throw new Error("Service fee name is required");
+//     }
+//     if (userId === null || userId === undefined || userId === "") {
+//       throw new Error("User id is required");
+//     }
+//     if (
+//         instituteId === null ||
+//         instituteId === undefined ||
+//         instituteId === ""
+//     ) {
+//       throw new Error("Institute id is required");
+//     }
 
-    const serviceFeeSaveResult = await executeSp({
-      spName: "ServiceFeeSave",
-      params: [
-        {
-          name: "ServiceName",
-          type: sql.TYPES.NVarChar,
-          value: serviceName,
-        },
-        {
-          name: "UserCreated",
-          type: sql.TYPES.Int,
-          value: userId,
-        },
-        {
-          name: "ServiceFeeId",
-          type: sql.TYPES.Int,
-          value: serviceFeeId,
-        },
-        {
-          name: "InstituteId",
-          type: sql.TYPES.Int,
-          value: instituteId,
-        },
-      ],
-      connection,
-    });
+//     const serviceFeeSaveResult = await executeSp({
+//       spName: "ServiceFeeSave",
+//       params: [
+//         {
+//           name: "ServiceName",
+//           type: sql.TYPES.NVarChar,
+//           value: serviceName,
+//         },
+//         {
+//           name: "UserCreated",
+//           type: sql.TYPES.Int,
+//           value: userId,
+//         },
+//         {
+//           name: "ServiceFeeId",
+//           type: sql.TYPES.Int,
+//           value: serviceFeeId,
+//         },
+//         {
+//           name: "InstituteId",
+//           type: sql.TYPES.Int,
+//           value: instituteId,
+//         },
+//       ],
+//       connection,
+//     });
 
-    handleResponse(
-        response,
-        200,
-        "success",
-        "Service fee added successfully",
-        serviceFeeSaveResult
-    );
-  } catch (error) {
-    console.log(error);
-    handleError(res, 500, "error", "Could not save medical bill", error);
-  }
-};
+//     handleResponse(
+//         response,
+//         200,
+//         "success",
+//         "Service fee added successfully",
+//         serviceFeeSaveResult
+//     );
+//   } catch (error) {
+//     console.log(error);
+//     handleError(res, 500, "error", "Could not save medical bill", error);
+//   }
+// };

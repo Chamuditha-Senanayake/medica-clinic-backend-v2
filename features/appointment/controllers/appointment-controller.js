@@ -3,7 +3,7 @@ import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
 import sql from "mssql";
 import { deHashPatientId } from "../../../utils/id-hashing.js";
-import moment from "moment";
+import moment from "moment-timezone";
 
 export const getAppointments = async (req, res, next) => {
   try {
@@ -222,9 +222,9 @@ export const savePatientResponse = async (req, res, next) => {
     }
 
     if (
-        AppointmentId === null ||
-        AppointmentId === undefined ||
-        AppointmentId === ""
+      AppointmentId === null ||
+      AppointmentId === undefined ||
+      AppointmentId === ""
     ) {
       throw new Error("AppointmentId id is required");
     }
@@ -256,11 +256,11 @@ export const savePatientResponse = async (req, res, next) => {
     patientResponseSaveResult = patientResponseSaveResult?.recordsets[0][0];
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Operation Success",
-        patientResponseSaveResult
+      response,
+      200,
+      "success",
+      "Operation Success",
+      patientResponseSaveResult
     );
   } catch (error) {
     console.log(error);
@@ -322,8 +322,8 @@ export const appointmentReport = async (req, res, next) => {
         data.IsInitialBill = false;
         for (let i = 0; i < data.BillItems.length; i++) {
           if (
-              data.BillItems[i].ItemName === "Doctor fee" ||
-              data.BillItems[i].ItemName === "Hospital fee"
+            data.BillItems[i].ItemName === "Doctor fee" ||
+            data.BillItems[i].ItemName === "Hospital fee"
           ) {
             data.IsInitialBill = true;
             break;
@@ -396,11 +396,11 @@ export const appointmentOnGoing = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "All ongoing appointments retrieved successfully",
-        response
+      response,
+      200,
+      "success",
+      "All ongoing appointments retrieved successfully",
+      response
     );
   } catch (error) {
     console.log(error);

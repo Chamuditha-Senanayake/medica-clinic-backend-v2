@@ -5,7 +5,7 @@ import { sendMessage } from "../../../utils/sendMesssage.js";
 import sql from "mssql";
 
 export const sendOtp = async (req, res, next) => {
-  const APP_ID = 'WuCggUYxV1Y'
+  const APP_ID = "WuCggUYxV1Y";
   try {
     let connection = req.app.locals.db;
     const { MobileNumber, InstituteId } = req.body;
@@ -96,19 +96,13 @@ export const verifyOtp = async (req, res, next) => {
     }
 
     if (isOtpVerified) {
-      res.json({
-        Status: 1000,
-        Message: "Success",
-      }); //had to mimic old otp api response
+      handleResponse(response, 200, "Success", "Success", {});
     } else {
       throw new Error("OTP not verified");
     }
   } catch (error) {
     console.log(error);
-    res.json({
-      Status: 1001,
-      Message: "Failed",
-    }); //had to mimic old otp api response
+    handleError(res, 500, "error", "Failed", error);
     next(error);
   }
 };

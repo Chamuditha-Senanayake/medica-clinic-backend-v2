@@ -501,11 +501,13 @@ export const getByBranch = async (req, res, next) => {
     } else {
       throw new Error("doctor not found");
     }
-    res.json({
-      Status: 1000,
-      Message: "Success",
-      Data: doctorsResult,
-    });
+    handleResponse(
+      response,
+      200,
+      "success",
+      "Doctor retrived successfully",
+      doctorsResult
+    );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);

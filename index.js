@@ -93,7 +93,7 @@ app.use(`/api/v1`, analyticsRouter);
 app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
 
-app.use(`/api/v1`, analyticsRoutes);
+
 app.use(`/api/v1`, appVersionRoutes);
 
 app.use(`/api/v1`, appointmentVitalRoutes);
@@ -114,6 +114,7 @@ app.use(`/api/v1`, referralLetterRoutes);
 //admin apis
 app.use(`/api/v1/appointments`, appointmentRoutes);
 app.use(`/api/v1/sessions`, sessionRoutes);
+app.use(`/api/v1/analytics`, analyticsRoutes);
 app.use(`/api/v1/employee`, employeeRoutes);
 app.use(`/api/v1/appointment-records`, appointmentRecordsRoutes);
 app.use(`/api/v1/institute-branch`, instituteBranchRoutes);

@@ -8,7 +8,7 @@ import {
   StringValue,
   SignedInteger,
   DateString,
-  TableValueParameters
+  TableValueParameters,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
 
@@ -48,7 +48,8 @@ const PatientController = {
         connection,
       });
 
-      patientDiagnosisDocumentGetResult = patientDiagnosisDocumentGetResult.recordsets[0];
+      patientDiagnosisDocumentGetResult =
+        patientDiagnosisDocumentGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -90,23 +91,16 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        PatientId,
-        Type,
-        FileName,
-        Name,
-        UserId,
-        Id
-      } = request.body;
+      const { PatientId, Type, FileName, Name, UserId, Id } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "PatientId", value: PatientId }),
-      StringValue({ fieldName: "Type", value: Type }),
-      StringValue({ fieldName: "FileName", value: FileName }),
-      StringValue({ fieldName: "Name", value: Name }),
-      EntityId({ fieldName: "UserId", value: UserId }),
-      EntityId({ fieldName: "Id", value: Id }),
-    ];
+      var params = [
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "Type", value: Type }),
+        StringValue({ fieldName: "FileName", value: FileName }),
+        StringValue({ fieldName: "Name", value: Name }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+      ];
 
       let PatientDiagnosisDocumentSaveResult = await executeSp({
         spName: `PatientDiagnosisDocumentSave`,
@@ -115,7 +109,8 @@ const PatientController = {
       });
 
       console.log(PatientDiagnosisDocumentSaveResult.recordsets);
-      PatientDiagnosisDocumentSaveResult = PatientDiagnosisDocumentSaveResult.recordsets[0][0];
+      PatientDiagnosisDocumentSaveResult =
+        PatientDiagnosisDocumentSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -136,7 +131,6 @@ const PatientController = {
     }
   },
 
-
   async savePatientDisease(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -156,7 +150,7 @@ const PatientController = {
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
         StringValue({ fieldName: "PatientDisease", value: PatientDisease }),
       ];
-      console.log(params)
+      console.log(params);
 
       let patientDiseaseSaveResult = await executeSp({
         spName: `PatientDiseaseSave`,
@@ -228,7 +222,7 @@ const PatientController = {
         "Something went wrong"
       );
       next(error);
-    }    
+    }
   },
 
   async savePatientDisposition(request, response, next) {
@@ -243,7 +237,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         AppointmentId,
         PrescriptionId,
         PatientId,
@@ -260,7 +254,7 @@ const PatientController = {
         UserSaved,
         Id,
         UserId,
-       } = request.body;
+      } = request.body;
 
       var params = [
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
@@ -279,7 +273,6 @@ const PatientController = {
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
         EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "UserId", value: UserId }),
-
       ];
 
       let patientDispositionSaveResult = await executeSp({
@@ -288,7 +281,8 @@ const PatientController = {
         connection,
       });
 
-      patientDispositionSaveResult = patientDispositionSaveResult.recordsets[0][0];
+      patientDispositionSaveResult =
+        patientDispositionSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -306,7 +300,7 @@ const PatientController = {
         "Something went wrong"
       );
       next(error);
-    }    
+    }
   },
 
   async getPatientDrugAllergy(request, response, next) {
@@ -391,7 +385,8 @@ const PatientController = {
         connection,
       });
 
-      gynoObstetricsHistoryGetResult = gynoObstetricsHistoryGetResult.recordsets[0];
+      gynoObstetricsHistoryGetResult =
+        gynoObstetricsHistoryGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -433,21 +428,19 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        PatientId,
-        GynoObstetricsHistory,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, PatientId, GynoObstetricsHistory, Status, UserSaved } =
+        request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "PatientId", value: PatientId }),
-      StringValue({ fieldName: "GynoObstetricsHistory", value: GynoObstetricsHistory }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({
+          fieldName: "GynoObstetricsHistory",
+          value: GynoObstetricsHistory,
+        }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
 
       let gynoObstetricsHistorySaveResult = await executeSp({
         spName: `GynoObstetricsHistorySave`,
@@ -456,7 +449,8 @@ const PatientController = {
       });
 
       console.log(gynoObstetricsHistorySaveResult.recordsets);
-      gynoObstetricsHistorySaveResult = gynoObstetricsHistorySaveResult.recordsets[0][0];
+      gynoObstetricsHistorySaveResult =
+        gynoObstetricsHistorySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -511,7 +505,8 @@ const PatientController = {
         connection,
       });
 
-      patientDiagnosisDocumentDeleteResult = patientDiagnosisDocumentDeleteResult.recordsets[0];
+      patientDiagnosisDocumentDeleteResult =
+        patientDiagnosisDocumentDeleteResult.recordsets[0];
 
       handleResponse(
         response,
@@ -567,7 +562,8 @@ const PatientController = {
         connection,
       });
 
-      patientNewFoodAllergyGetResult = patientNewFoodAllergyGetResult.recordsets[0];
+      patientNewFoodAllergyGetResult =
+        patientNewFoodAllergyGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -609,21 +605,15 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        PatientId,
-        AllergyFoods,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, PatientId, AllergyFoods, Status, UserSaved } = request.body;
 
-    var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      EntityId({ fieldName: "PatientId", value: PatientId }),
-      StringValue({ fieldName: "AllergyFoods", value: AllergyFoods }),
-      EntityId({ fieldName: "Status", value: Status }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "AllergyFoods", value: AllergyFoods }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
 
       let patientNewFoodAllergySaveResult = await executeSp({
         spName: `PatientNewFoodAllergySave`,
@@ -632,7 +622,8 @@ const PatientController = {
       });
 
       console.log(patientNewFoodAllergySaveResult.recordsets);
-      patientNewFoodAllergySaveResult = patientNewFoodAllergySaveResult.recordsets[0][0];
+      patientNewFoodAllergySaveResult =
+        patientNewFoodAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -674,20 +665,20 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         UserId,
         NIC,
-        Passport,
+        Passport = "",
         Mobile,
-        BedHeadTicketNumber ,
-        ClinicId ,
-        UniqueId  ,
-        Name  ,
-        DateOfBirth  ,
-        ParentId ,
-        Guid   ,
-        Address ,
-        Id
+        BedHeadTicketNumber,
+        ClinicId,
+        UniqueId,
+        Name,
+        DateOfBirth,
+        ParentId,
+        Guid,
+        Address,
+        Id,
       } = request.body;
 
       var params = [
@@ -695,7 +686,10 @@ const PatientController = {
         StringValue({ fieldName: "NIC", value: NIC }),
         StringValue({ fieldName: "Passport", value: Passport }),
         StringValue({ fieldName: "Mobile", value: Mobile }),
-        StringValue({ fieldName: "BedHeadTicketNumber", value: BedHeadTicketNumber }),
+        StringValue({
+          fieldName: "BedHeadTicketNumber",
+          value: BedHeadTicketNumber,
+        }),
         StringValue({ fieldName: "ClinicId", value: ClinicId }),
         StringValue({ fieldName: "UniqueId", value: UniqueId }),
         StringValue({ fieldName: "Name", value: Name }),
@@ -703,7 +697,7 @@ const PatientController = {
         EntityId({ fieldName: "ParentId", value: ParentId }),
         EntityId({ fieldName: "Guid", value: Guid }),
         StringValue({ fieldName: "Address", value: Address }),
-        EntityId({ fieldName: "Id", value: Id}),
+        EntityId({ fieldName: "Id", value: Id }),
       ];
 
       let patientGetResult = await executeSp({
@@ -733,7 +727,7 @@ const PatientController = {
     }
   },
 
-   /**
+  /**
    *
    * get Patient New Surgery
    *
@@ -789,7 +783,6 @@ const PatientController = {
     }
   },
 
-
   /**
    *
    * save Patient New Surgery
@@ -811,13 +804,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        Id, 
-        PatientId, 
-        Surgeries,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, PatientId, Surgeries, Status, UserSaved } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -833,7 +820,8 @@ const PatientController = {
         connection,
       });
 
-      patientNewSurgerySaveResult = patientNewSurgerySaveResult.recordsets[0][0];
+      patientNewSurgerySaveResult =
+        patientNewSurgerySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -910,7 +898,6 @@ const PatientController = {
     }
   },
 
-
   /**
    *
    * save patient other surgery
@@ -932,13 +919,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        Id, 
-        PatientId, 
-        Allergies,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, PatientId, Allergies, Status, UserSaved } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -954,7 +935,8 @@ const PatientController = {
         connection,
       });
 
-      patientOtherAllergySaveResult = patientOtherAllergySaveResult.recordsets[0][0];
+      patientOtherAllergySaveResult =
+        patientOtherAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1010,7 +992,8 @@ const PatientController = {
         connection,
       });
 
-      patientOtherDiseasesGetResult = patientOtherDiseasesGetResult.recordsets[0];
+      patientOtherDiseasesGetResult =
+        patientOtherDiseasesGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1030,7 +1013,6 @@ const PatientController = {
       next(error);
     }
   },
-
 
   /**
    *
@@ -1053,13 +1035,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        Id, 
-        PatientId, 
-        Diseases,
-        Status,
-        UserSaved
-      } = request.body;
+      const { Id, PatientId, Diseases, Status, UserSaved } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -1075,7 +1051,8 @@ const PatientController = {
         connection,
       });
 
-      patientOtherDiseasesSaveResult = patientOtherDiseasesSaveResult.recordsets[0][0];
+      patientOtherDiseasesSaveResult =
+        patientOtherDiseasesSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1117,13 +1094,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        PatientId,
-        RelationId,
-        TypeId,
-        UserId
-      } = request.body;
+      const { Id, PatientId, RelationId, TypeId, UserId } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -1159,7 +1130,6 @@ const PatientController = {
       next(error);
     }
   },
-
 
   /*
    *
@@ -1238,13 +1208,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        PatientId,
-        Details,
-        Status,
-        UserSaved,
-        Id
-      } = request.body;
+      const { PatientId, Details, Status, UserSaved, Id } = request.body;
 
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
@@ -1280,7 +1244,6 @@ const PatientController = {
       next(error);
     }
   },
-
 
   /*
    *
@@ -1359,15 +1322,15 @@ const PatientController = {
     try {
       let connection = request.app.locals.db;
       const {
-        Id ,
-        PatientId ,
-        Subject ,
-        ReminderType ,
-        Description  ,
-        Date  ,
-        Time  ,
-        Status  ,
-        UserSaved
+        Id,
+        PatientId,
+        Subject,
+        ReminderType,
+        Description,
+        Date,
+        Time,
+        Status,
+        UserSaved,
       } = request.body;
 
       var params = [
@@ -1439,7 +1402,7 @@ const PatientController = {
         Description,
         Status,
         UserSaved,
-        Id
+        Id,
       } = request.body;
 
       var params = [
@@ -1450,7 +1413,7 @@ const PatientController = {
         StringValue({ fieldName: "FileLocation", value: FileLocation }),
         StringValue({ fieldName: "ReportType", value: ReportType }),
         StringValue({ fieldName: "Description", value: Description }),
-     
+
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
         EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "Status", value: Status }),
@@ -1506,9 +1469,7 @@ const PatientController = {
       let connection = request.app.locals.db;
       const { PatientId } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-      ];
+      var params = [EntityId({ fieldName: "PatientId", value: PatientId })];
 
       let patientRobsonInfoGetResult = await executeSp({
         spName: `PatientRobsonInfoGet`,
@@ -1560,9 +1521,7 @@ const PatientController = {
       let connection = request.app.locals.db;
       const { UserId } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-      ];
+      var params = [EntityId({ fieldName: "UserId", value: UserId })];
 
       let patientRobsonReportDataGetResult = await executeSp({
         spName: `PatientRobsonReportDataGet`,
@@ -1570,7 +1529,8 @@ const PatientController = {
         connection,
       });
 
-      patientRobsonReportDataGetResult = patientRobsonReportDataGetResult.recordsets[0];
+      patientRobsonReportDataGetResult =
+        patientRobsonReportDataGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -1612,23 +1572,22 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
-        Id ,
-        PatientId ,
-        Parity  ,
-        PreviousCs  ,
-        OnsetOfLabour  ,
-        NoOfFetuses  ,
-        GestationalAge ,
-        Presentation  ,
-        DeliveryMode  ,
-        DeliveryOutcome  ,
-        DeliveryComplications  ,
-        CsElectiveIndications  ,
-        CsEmergencyIndications  ,
-        Notes  ,
-        UserSaved
-
+      const {
+        Id,
+        PatientId,
+        Parity,
+        PreviousCs,
+        OnsetOfLabour,
+        NoOfFetuses,
+        GestationalAge,
+        Presentation,
+        DeliveryMode,
+        DeliveryOutcome,
+        DeliveryComplications,
+        CsElectiveIndications,
+        CsEmergencyIndications,
+        Notes,
+        UserSaved,
       } = request.body;
 
       var params = [
@@ -1642,9 +1601,18 @@ const PatientController = {
         StringValue({ fieldName: "Presentation", value: Presentation }),
         StringValue({ fieldName: "DeliveryMode", value: DeliveryMode }),
         StringValue({ fieldName: "DeliveryOutcome", value: DeliveryOutcome }),
-        StringValue({ fieldName: "DeliveryComplications", value: DeliveryComplications }),
-        StringValue({ fieldName: "CsElectiveIndications", value: CsElectiveIndications }),
-        StringValue({ fieldName: "CsEmergencyIndications", value: CsEmergencyIndications }),
+        StringValue({
+          fieldName: "DeliveryComplications",
+          value: DeliveryComplications,
+        }),
+        StringValue({
+          fieldName: "CsElectiveIndications",
+          value: CsElectiveIndications,
+        }),
+        StringValue({
+          fieldName: "CsEmergencyIndications",
+          value: CsEmergencyIndications,
+        }),
         StringValue({ fieldName: "Notes", value: Notes }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
       ];
@@ -1655,7 +1623,8 @@ const PatientController = {
         connection,
       });
 
-      patientRobsonInfoSaveResult = patientRobsonInfoSaveResult.recordsets[0][0];
+      patientRobsonInfoSaveResult =
+        patientRobsonInfoSaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -1697,7 +1666,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId,Id, PatientId } = request.body;
+      const { UserId, Id, PatientId } = request.body;
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
@@ -1754,58 +1723,57 @@ const PatientController = {
     try {
       let connection = request.app.locals.db;
       const {
-        Id  ,
-        Title  ,
-        FirstName  ,
-        MiddleName ,
-        LastName  ,
-        NIC  ,
-        Passport  ,
-        Mobile  ,
-        BedHeadTicketNumber  ,
-        ClinicId ,
-        UniqueId ,
-        Email ,
-        DateOfBirth ,
-        Gender  ,
-        ParentId ,
-        PatientTypeId  ,
-        BloodGroup  ,
-        InvalidOTPAttempts  ,
-        AddressId ,
-        AddressLine1  ,
-        AddressLine2  ,
-        Suburb  ,
-        City ,
-        Postcode  ,
-        Province  ,
-        Country ,
-        RelationId  ,
-        RelationTypeId ,
-        EmergencyContact  ,
-        Occupation ,
-        MaritalStatus  ,
-        Status ,
-        UserSaved  ,
-        PHIArea  ,
-        MOH  ,
-        GNDivision  ,
-        AgeGroupId ,
-        EthnicGroupId  ,
-        EducationLevelId ,
-        ReligionId ,
-        SpiritualityId  ,
-        IncomeGroupId ,
-        PatientStatusSave  ,
-        PatientStatusId  ,
-        PatientStatusStatusType ,/*1 - Hostapitalized, 2 - Dead*/
-        PatientStatusStatusDate  ,
-        PatientStatusStatus  ,
-        Guid  ,
-        UserId ,
-        LocalTran  ,
-        OperationUniqueId
-
+        Id,
+        Title,
+        FirstName,
+        MiddleName,
+        LastName,
+        NIC,
+        Passport,
+        Mobile,
+        BedHeadTicketNumber,
+        ClinicId,
+        UniqueId,
+        Email,
+        DateOfBirth,
+        Gender,
+        ParentId,
+        PatientTypeId,
+        BloodGroup,
+        InvalidOTPAttempts,
+        AddressId,
+        AddressLine1,
+        AddressLine2,
+        Suburb,
+        City,
+        Postcode,
+        Province,
+        Country,
+        RelationId,
+        RelationTypeId,
+        EmergencyContact,
+        Occupation,
+        MaritalStatus,
+        Status,
+        UserSaved,
+        PHIArea,
+        MOH,
+        GNDivision,
+        AgeGroupId,
+        EthnicGroupId,
+        EducationLevelId,
+        ReligionId,
+        SpiritualityId,
+        IncomeGroupId,
+        PatientStatusSave,
+        PatientStatusId,
+        PatientStatusStatusType /*1 - Hostapitalized, 2 - Dead*/,
+        PatientStatusStatusDate,
+        PatientStatusStatus,
+        Guid,
+        UserId,
+        LocalTran,
+        OperationUniqueId,
       } = request.body;
 
       var params = [
@@ -1818,64 +1786,76 @@ const PatientController = {
         StringValue({ fieldName: "NIC", value: NIC }),
         StringValue({ fieldName: "Passport", value: Passport }),
         StringValue({ fieldName: "Mobile", value: Mobile }),
-        StringValue({ fieldName: "BedHeadTicketNumber", value: BedHeadTicketNumber }),
+        StringValue({
+          fieldName: "BedHeadTicketNumber",
+          value: BedHeadTicketNumber,
+        }),
         StringValue({ fieldName: "ClinicId", value: ClinicId }),
         StringValue({ fieldName: "UniqueId", value: UniqueId }),
         StringValue({ fieldName: "Email", value: Email }),
         DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
-        StringValue({ fieldName: "Gender", value: Gender }),        
+        StringValue({ fieldName: "Gender", value: Gender }),
         EntityId({ fieldName: "ParentId", value: ParentId }),
-        EntityId({ fieldName: "PatientTypeId", value: PatientTypeId }),        
-        StringValue({ fieldName: "BloodGroup", value: BloodGroup }),        
-        EntityId({ fieldName: "InvalidOTPAttempts", value: InvalidOTPAttempts }),
-        EntityId({ fieldName: "AddressId", value: AddressId }),        
+        EntityId({ fieldName: "PatientTypeId", value: PatientTypeId }),
+        StringValue({ fieldName: "BloodGroup", value: BloodGroup }),
+        EntityId({
+          fieldName: "InvalidOTPAttempts",
+          value: InvalidOTPAttempts,
+        }),
+        EntityId({ fieldName: "AddressId", value: AddressId }),
         StringValue({ fieldName: "AddressLine1", value: AddressLine1 }),
         StringValue({ fieldName: "AddressLine2", value: AddressLine2 }),
         StringValue({ fieldName: "Suburb", value: Suburb }),
         StringValue({ fieldName: "City", value: City }),
         StringValue({ fieldName: "Postcode", value: Postcode }),
         StringValue({ fieldName: "Province", value: Province }),
-        StringValue({ fieldName: "Country", value: Country  }),        
+        StringValue({ fieldName: "Country", value: Country }),
         // EntityId({ fieldName: "RelationId", value: RelationId }),
-        // EntityId({ fieldName: "RelationTypeId", value: RelationTypeId }),        
-        StringValue({ fieldName: "EmergencyContact", value: EmergencyContact  }),
-        StringValue({ fieldName: "Occupation", value: Occupation  }),        
+        // EntityId({ fieldName: "RelationTypeId", value: RelationTypeId }),
+        StringValue({ fieldName: "EmergencyContact", value: EmergencyContact }),
+        StringValue({ fieldName: "Occupation", value: Occupation }),
         SignedInteger({
           fieldName: "MaritalStatus",
           value: MaritalStatus,
         }),
         EntityId({ fieldName: "Status", value: Status }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),        
-        StringValue({ fieldName: "PHIArea", value: PHIArea  }),
-        StringValue({ fieldName: "MOH", value: MOH  }),
-        StringValue({ fieldName: "GNDivision", value: GNDivision  }),        
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        StringValue({ fieldName: "PHIArea", value: PHIArea }),
+        StringValue({ fieldName: "MOH", value: MOH }),
+        StringValue({ fieldName: "GNDivision", value: GNDivision }),
         EntityId({ fieldName: "AgeGroupId", value: AgeGroupId }),
         EntityId({ fieldName: "EthnicGroupId", value: EthnicGroupId }),
         EntityId({ fieldName: "EducationLevelId", value: EducationLevelId }),
         EntityId({ fieldName: "ReligionId", value: ReligionId }),
         EntityId({ fieldName: "SpiritualityId", value: SpiritualityId }),
-        EntityId({ fieldName: "IncomeGroupId", value: IncomeGroupId }),        
+        EntityId({ fieldName: "IncomeGroupId", value: IncomeGroupId }),
         SignedInteger({
           fieldName: "PatientStatusSave",
           value: PatientStatusSave,
         }),
-        EntityId({ fieldName: "PatientStatusId", value: PatientStatusId }),    
+        EntityId({ fieldName: "PatientStatusId", value: PatientStatusId }),
         SignedInteger({
           fieldName: "PatientStatusStatusType",
           value: PatientStatusStatusType,
-        }),        
-        DateString({ fieldName: "PatientStatusStatusDate", value: PatientStatusStatusDate }),       
+        }),
+        DateString({
+          fieldName: "PatientStatusStatusDate",
+          value: PatientStatusStatusDate,
+        }),
         SignedInteger({
           fieldName: "PatientStatusStatus",
           value: PatientStatusStatus,
-        }),        
+        }),
         EntityId({ fieldName: "Guid", value: Guid }),
-        EntityId({ fieldName: "UserId", value: UserId }),        
+        EntityId({ fieldName: "UserId", value: UserId }),
         SignedInteger({
           fieldName: "LocalTran",
           value: LocalTran,
-        }),        
-        StringValue({ fieldName: "OperationUniqueId", value: OperationUniqueId }),
+        }),
+        StringValue({
+          fieldName: "OperationUniqueId",
+          value: OperationUniqueId,
+        }),
       ];
 
       let patientSaveResult = await executeSp({
@@ -1926,7 +1906,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         PatientId,
         AppointmentId,
         PrescriptionRecordId,
@@ -1941,13 +1921,16 @@ const PatientController = {
         RiskFactors,
         Management,
         Advice,
-        Prevention
+        Prevention,
       } = request.body;
 
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PrescriptionRecordId", value: PrescriptionRecordId }),
+        EntityId({
+          fieldName: "PrescriptionRecordId",
+          value: PrescriptionRecordId,
+        }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
         StringValue({ fieldName: "CovidSymptoms", value: CovidSymptoms }),
@@ -1989,7 +1972,7 @@ const PatientController = {
       next(error);
     }
   },
-  
+
   /*
    *
    * get patient deceased
@@ -2011,7 +1994,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         UserId,
         PatientId,
         NIC,
@@ -2062,7 +2045,7 @@ const PatientController = {
     }
   },
 
-/*
+  /*
    *
    * get illness data detail
    *
@@ -2083,21 +2066,24 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         UserId,
         SessionId,
         AppointmentId,
         PrescriptionRecordId,
         DoctorId,
         PatientId,
-        Id
+        Id,
       } = request.body;
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "SessionId", value: SessionId }),
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PrescriptionRecordId", value: PrescriptionRecordId }),
+        EntityId({
+          fieldName: "PrescriptionRecordId",
+          value: PrescriptionRecordId,
+        }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "Id", value: Id }),
@@ -2151,12 +2137,12 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { 
+      const {
         AppointmentId,
         AppointmentNumber,
         AppointmentSessionId,
         AppointmentStatus,
-        PatientId ,
+        PatientId,
         PatientTitle,
         PatientFirstName,
         PatientMiddleName,
@@ -2173,12 +2159,12 @@ const PatientController = {
         PatientStatus,
         EpisodeType,
         PrescriptionRecordId,
-        CurrentEpisodeDuration ,
+        CurrentEpisodeDuration,
         TotalDuration,
         OnsetDescription,
         Profile,
-        PrecipitatingFactors ,
-        PredisposingFactors ,
+        PrecipitatingFactors,
+        PredisposingFactors,
         RelievingFactors,
         FunctionalStatus,
         FamilyMedicineVitalSigns,
@@ -2186,7 +2172,7 @@ const PatientController = {
         CurrentMedications,
         Weight,
         Height,
-        BloodPressureSystolic   ,
+        BloodPressureSystolic,
         BloodPressureDiastolic,
         Temperature,
         Pulse,
@@ -2194,61 +2180,104 @@ const PatientController = {
         WaistCircumference,
         Status,
         UserSaved,
-        Id
+        Id,
       } = request.body;
 
       var params = [
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
         EntityId({ fieldName: "AppointmentNumber", value: AppointmentNumber }),
-        EntityId({ fieldName: "AppointmentSessionId", value: AppointmentSessionId }),
+        EntityId({
+          fieldName: "AppointmentSessionId",
+          value: AppointmentSessionId,
+        }),
         SignedInteger({
           fieldName: "AppointmentStatus",
           value: AppointmentStatus,
         }),
-        EntityId({ fieldName: "PatientId", value: PatientId    }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
         StringValue({ fieldName: "PatientTitle", value: PatientTitle }),
         StringValue({ fieldName: "PatientFirstName", value: PatientFirstName }),
-        StringValue({ fieldName: "PatientMiddleName", value: PatientMiddleName }),
+        StringValue({
+          fieldName: "PatientMiddleName",
+          value: PatientMiddleName,
+        }),
         StringValue({ fieldName: "PatientLastName", value: PatientLastName }),
         StringValue({ fieldName: "PatientNIC", value: PatientNIC }),
         StringValue({ fieldName: "PatientPassport", value: PatientPassport }),
         StringValue({ fieldName: "PatientMobile", value: PatientMobile }),
         StringValue({ fieldName: "PatientEmail", value: PatientEmail }),
-        DateString({ fieldName: "PatientDateOfBirth", value: PatientDateOfBirth }),
+        DateString({
+          fieldName: "PatientDateOfBirth",
+          value: PatientDateOfBirth,
+        }),
         StringValue({ fieldName: "PatientGender", value: PatientGender }),
-        EntityId({ fieldName: "PatientParentId", value: PatientParentId    }),
-        EntityId({ fieldName: "PatientPatientTypeId", value: PatientPatientTypeId }),
-        StringValue({ fieldName: "PatientBloodGroup", value: PatientBloodGroup }),
+        EntityId({ fieldName: "PatientParentId", value: PatientParentId }),
+        EntityId({
+          fieldName: "PatientPatientTypeId",
+          value: PatientPatientTypeId,
+        }),
+        StringValue({
+          fieldName: "PatientBloodGroup",
+          value: PatientBloodGroup,
+        }),
         SignedInteger({
           fieldName: "PatientStatus",
           value: PatientStatus,
-        }),SignedInteger({
+        }),
+        SignedInteger({
           fieldName: "EpisodeType",
           value: EpisodeType,
         }),
-        EntityId({ fieldName: "PrescriptionRecordId", value: PrescriptionRecordId }),      
-        StringValue({ fieldName: "CurrentEpisodeDuration", value: CurrentEpisodeDuration }),
+        EntityId({
+          fieldName: "PrescriptionRecordId",
+          value: PrescriptionRecordId,
+        }),
+        StringValue({
+          fieldName: "CurrentEpisodeDuration",
+          value: CurrentEpisodeDuration,
+        }),
         StringValue({ fieldName: "TotalDuration", value: TotalDuration }),
         StringValue({ fieldName: "OnsetDescription", value: OnsetDescription }),
         StringValue({ fieldName: "Profile", value: Profile }),
-        StringValue({ fieldName: "PrecipitatingFactors", value: PrecipitatingFactors }),
-        StringValue({ fieldName: "PredisposingFactors", value: PredisposingFactors }),
+        StringValue({
+          fieldName: "PrecipitatingFactors",
+          value: PrecipitatingFactors,
+        }),
+        StringValue({
+          fieldName: "PredisposingFactors",
+          value: PredisposingFactors,
+        }),
         StringValue({ fieldName: "RelievingFactors", value: RelievingFactors }),
         StringValue({ fieldName: "FunctionalStatus", value: FunctionalStatus }),
-        StringValue({ fieldName: "FamilyMedicineVitalSigns", value: FamilyMedicineVitalSigns }),
+        StringValue({
+          fieldName: "FamilyMedicineVitalSigns",
+          value: FamilyMedicineVitalSigns,
+        }),
         StringValue({ fieldName: "ChronicDiseaseMx", value: ChronicDiseaseMx }),
-        StringValue({ fieldName: "CurrentMedications", value: CurrentMedications }),
+        StringValue({
+          fieldName: "CurrentMedications",
+          value: CurrentMedications,
+        }),
         StringValue({ fieldName: "Weight", value: Weight }),
         StringValue({ fieldName: "Height", value: Height }),
-        StringValue({ fieldName: "BloodPressureSystolic", value: BloodPressureSystolic  }),
-        StringValue({ fieldName: "BloodPressureDiastolic", value: BloodPressureDiastolic  }),
-        StringValue({ fieldName: "Temperature", value: Temperature  }),
-        StringValue({ fieldName: "Pulse", value: Pulse  }),
-        StringValue({ fieldName: "RespiratoryRate", value: RespiratoryRate  }),
-        StringValue({ fieldName: "WaistCircumference", value: WaistCircumference  }),
-        EntityId({ fieldName: "Status", value: Status}),
-        EntityId({ fieldName: "UserSaved", value: UserSaved}),
-        EntityId({ fieldName: "Id", value: Id}),
+        StringValue({
+          fieldName: "BloodPressureSystolic",
+          value: BloodPressureSystolic,
+        }),
+        StringValue({
+          fieldName: "BloodPressureDiastolic",
+          value: BloodPressureDiastolic,
+        }),
+        StringValue({ fieldName: "Temperature", value: Temperature }),
+        StringValue({ fieldName: "Pulse", value: Pulse }),
+        StringValue({ fieldName: "RespiratoryRate", value: RespiratoryRate }),
+        StringValue({
+          fieldName: "WaistCircumference",
+          value: WaistCircumference,
+        }),
+        EntityId({ fieldName: "Status", value: Status }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        EntityId({ fieldName: "Id", value: Id }),
       ];
 
       let illnessDataDetailSaveResult = await executeSp({
@@ -2278,7 +2307,7 @@ const PatientController = {
     }
   },
 
-   /**
+  /**
    *
    * get patient count
    *
@@ -2305,8 +2334,8 @@ const PatientController = {
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        DateString({ fieldName: "DateTo", value: DateTo }),
+      ];
 
       let patientCountGetResult = await executeSp({
         spName: `Analytic.PatientCountGet`,
@@ -2359,27 +2388,32 @@ const PatientController = {
       const { PatientId, UserSaved, PatientAllergyDrug } = request.body;
 
       const PatientAllergyDrugList = [];
-        PatientAllergyDrug.forEach((patientAllergyDrug) => {
-        PatientAllergyDrugList.push([patientAllergyDrug.Id, patientAllergyDrug.AllergyDrugId, patientAllergyDrug.Name, patientAllergyDrug.Comments,patientAllergyDrug.Status]);
-    });
-      
+      PatientAllergyDrug.forEach((patientAllergyDrug) => {
+        PatientAllergyDrugList.push([
+          patientAllergyDrug.Id,
+          patientAllergyDrug.AllergyDrugId,
+          patientAllergyDrug.Name,
+          patientAllergyDrug.Comments,
+          patientAllergyDrug.Status,
+        ]);
+      });
+
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
         TableValueParameters({
-        tableName:"PatientAllergyDrug",        
-        columns:
-        [
-          {columnName:"Id", type: sql.Int},
-          {columnName:"AllergyDrugId", type: sql.Int},
-          {columnName:"Name", type: sql.VarChar(50)},
-          {columnName:"Comments", type: sql.VarChar()},
-          {columnName:"Status", type: sql.TinyInt},
-        ],
-        values:PatientAllergyDrugList
-      })
-    ];
+          tableName: "PatientAllergyDrug",
+          columns: [
+            { columnName: "Id", type: sql.Int },
+            { columnName: "AllergyDrugId", type: sql.Int },
+            { columnName: "Name", type: sql.VarChar(50) },
+            { columnName: "Comments", type: sql.VarChar() },
+            { columnName: "Status", type: sql.TinyInt },
+          ],
+          values: PatientAllergyDrugList,
+        }),
+      ];
 
       let patientDrugAllergySaveResult = await executeSp({
         spName: `PatientDrugAllergySave`,
@@ -2387,7 +2421,8 @@ const PatientController = {
         connection,
       });
 
-      patientDrugAllergySaveResult = patientDrugAllergySaveResult.recordsets[0][0];
+      patientDrugAllergySaveResult =
+        patientDrugAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -2432,27 +2467,32 @@ const PatientController = {
       const { PatientId, UserSaved, PatientAllergyFood } = request.body;
 
       const PatientAllergyFoodList = [];
-        PatientAllergyFood.forEach((patientAllergyFood) => {
-        PatientAllergyFoodList.push([patientAllergyFood.Id, patientAllergyFood.AllergyDrugId, patientAllergyFood.Name, patientAllergyFood.Comments,patientAllergyFood.Status]);
-    });
-      
+      PatientAllergyFood.forEach((patientAllergyFood) => {
+        PatientAllergyFoodList.push([
+          patientAllergyFood.Id,
+          patientAllergyFood.AllergyDrugId,
+          patientAllergyFood.Name,
+          patientAllergyFood.Comments,
+          patientAllergyFood.Status,
+        ]);
+      });
+
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
         TableValueParameters({
-        tableName:"PatientAllergyFood",        
-        columns:
-        [
-          {columnName:"Id", type: sql.Int},
-          {columnName:"AllergyFoodId", type: sql.Int},
-          {columnName:"Name", type: sql.VarChar(50)},
-          {columnName:"Comments", type: sql.VarChar()},
-          {columnName:"Status", type: sql.TinyInt},
-        ],
-        values:PatientAllergyFoodList
-      })
-    ];
+          tableName: "PatientAllergyFood",
+          columns: [
+            { columnName: "Id", type: sql.Int },
+            { columnName: "AllergyFoodId", type: sql.Int },
+            { columnName: "Name", type: sql.VarChar(50) },
+            { columnName: "Comments", type: sql.VarChar() },
+            { columnName: "Status", type: sql.TinyInt },
+          ],
+          values: PatientAllergyFoodList,
+        }),
+      ];
 
       let patientFoodAllergySaveResult = await executeSp({
         spName: `PatientFoodAllergySave`,
@@ -2460,7 +2500,8 @@ const PatientController = {
         connection,
       });
 
-      patientFoodAllergySaveResult = patientFoodAllergySaveResult.recordsets[0][0];
+      patientFoodAllergySaveResult =
+        patientFoodAllergySaveResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -2480,7 +2521,6 @@ const PatientController = {
       next(error);
     }
   },
-
 };
 
 export default PatientController;

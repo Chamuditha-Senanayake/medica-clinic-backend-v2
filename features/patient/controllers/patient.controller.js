@@ -667,17 +667,17 @@ const PatientController = {
       let connection = request.app.locals.db;
       const {
         UserId,
-        NIC,
+        NIC = "",
         Passport = "",
-        Mobile,
-        BedHeadTicketNumber,
-        ClinicId,
-        UniqueId,
-        Name,
+        Mobile = "",
+        BedHeadTicketNumber = "",
+        ClinicId = "",
+        UniqueId = "",
+        Name = "",
         DateOfBirth,
         ParentId,
         Guid,
-        Address,
+        Address = "",
         Id,
       } = request.body;
 

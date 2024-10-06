@@ -2,16 +2,17 @@
 
 import { logger } from "../../medica-clinic-backend-v2/utils/logger.js";
 
-export const loggerMiddleware = (req, response, next) => {
-  logger.info(
-    `Request: ${req.method} ${req.path}\n${JSON.stringify({
-      path: req.path,
-      method: req.method,
-      body: req.body,
-      query: req.query,
-      params: req.params,
-    })}`
+export const loggerMiddleware = (request, response, next) => {
+  const newObj = {
+    headers: request.headers,
+    body: request.body,
+    query: request.query,
+    params: request.params,
+  };
+  info(
+    `Request Method: ${request.method} | Request Path: ${
+      request.path
+    } | Request Data: ${JSON.stringify(newObj)}`
   );
   next();
 };
-

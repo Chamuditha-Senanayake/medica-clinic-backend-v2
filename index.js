@@ -74,7 +74,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
 
-app.use(`/api/v1/Authenticate`, doctorRouter);
 app.use(validateToken);
 app.use(`/api/v1`, doctorRouter);
 app.use(`/api/v1`, nurseRouter);
@@ -111,7 +110,6 @@ app.use(`/api/v1`, pharmacyRoutes);
 app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, referralLetterRoutes);
 app.use(`/api/v1`, sessionRoutes);
-
 
 //admin apis
 app.use(`/api/v1/employee`, employeeRoutes);

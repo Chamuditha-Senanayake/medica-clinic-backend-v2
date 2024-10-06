@@ -8,6 +8,7 @@ import {
   StringValue,
   SignedInteger,
 } from "../../../utils/type-def.js";
+import sql from "mssql";
 
 const NurseController = {
   /**
@@ -99,20 +100,20 @@ const NurseController = {
         UserSaved,
       } = request.body;
 
-       var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "FirstName", value: FirstName }),
-      StringValue({ fieldName: "MiddleName", value: MiddleName }),
-      StringValue({ fieldName: "LastName", value: LastName }),
-      StringValue({ fieldName: "Email", value: Email }),
-      StringValue({ fieldName: "NIC", value: NIC }),
-      StringValue({ fieldName: "Title", value: Title }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "FirstName", value: FirstName }),
+        StringValue({ fieldName: "MiddleName", value: MiddleName }),
+        StringValue({ fieldName: "LastName", value: LastName }),
+        StringValue({ fieldName: "Email", value: Email }),
+        StringValue({ fieldName: "NIC", value: NIC }),
+        StringValue({ fieldName: "Title", value: Title }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
 
       let nurseSaveResult = await executeSp({
         spName: `NurseSave`,
@@ -154,24 +155,22 @@ const NurseController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        InstituteBranchId,
-        NurseId,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, InstituteBranchId, NurseId, Status, UserSaved } =
+        request.body;
 
-       var params = [
-      EntityId({ fieldName: "Id", value: Id }),
-      StringValue({ fieldName: "InstituteBranchId", value: InstituteBranchId }),
-      StringValue({ fieldName: "NurseId", value: NurseId }),
-      SignedInteger({
-        fieldName: "Status",
-        value: Status,
-      }),
-      EntityId({ fieldName: "UserSaved", value: UserSaved }),
-    ];
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({
+          fieldName: "InstituteBranchId",
+          value: InstituteBranchId,
+        }),
+        StringValue({ fieldName: "NurseId", value: NurseId }),
+        SignedInteger({
+          fieldName: "Status",
+          value: Status,
+        }),
+        EntityId({ fieldName: "UserSaved", value: UserSaved }),
+      ];
 
       let nurseBranchSaveResult = await executeSp({
         spName: `NurseBranchSave`,
@@ -213,13 +212,7 @@ const NurseController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        Id,
-        DoctorId,
-        NurseId,
-        Status,
-        UserSaved,
-      } = request.body;
+      const { Id, DoctorId, NurseId, Status, UserSaved } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -260,8 +253,6 @@ const NurseController = {
     }
   },
   async nurseInstituteBranchGet(request, response, next) {
-
-
     try {
       let connection = request.app.locals.db;
       const { nurseId, userId } = request.body;
@@ -284,11 +275,11 @@ const NurseController = {
       });
 
       handleResponse(
-          response,
-          200,
-          "success",
-          "Institute branch retrieved successfully",
-          nurseBranchGetResult.recordset
+        response,
+        200,
+        "success",
+        "Institute branch retrieved successfully",
+        nurseBranchGetResult.recordset
       );
     } catch (error) {
       handleError(
@@ -302,8 +293,6 @@ const NurseController = {
     }
   },
   async nurseDoctorGet(request, response, next) {
-
-
     try {
       const { Id, NurseId, DoctorId, UserId } = request.body;
 
@@ -338,11 +327,11 @@ const NurseController = {
       doctorNurseGetResult = doctorNurseGetResult?.recordsets[0];
 
       handleResponse(
-          response,
-          200,
-          "success",
-          "Operation Success",
-          doctorNurseGetResult
+        response,
+        200,
+        "success",
+        "Operation Success",
+        doctorNurseGetResult
       );
     } catch (error) {
       handleError(
@@ -356,11 +345,10 @@ const NurseController = {
     }
   },
   async nurseDoctorUpdate(request, response, next) {
-
-
     try {
       let connection = request.app.locals.db;
-      const { Id, DoctorId, NurseId, Status, DeleteStatus, UserSaved } = request.body;
+      const { Id, DoctorId, NurseId, Status, DeleteStatus, UserSaved } =
+        request.body;
       // console.log('request.body:', branchId, doctorId, userId);
       const nurseDoctorUpdateResult = await executeSp({
         spName: "DoctorNurseUpdate",
@@ -400,11 +388,11 @@ const NurseController = {
       });
 
       handleResponse(
-          response,
-          200,
-          "success",
-          "Nurse doctor updated successfully",
-          nurseDoctorUpdateResult.recordset[0]
+        response,
+        200,
+        "success",
+        "Nurse doctor updated successfully",
+        nurseDoctorUpdateResult.recordset[0]
       );
     } catch (error) {
       handleError(
@@ -418,8 +406,6 @@ const NurseController = {
     }
   },
   async nurseGetAssignWards(request, response, next) {
-
-
     try {
       const { NurseId, InstituteBranchId, UserId } = request.body;
 
@@ -449,11 +435,11 @@ const NurseController = {
       assignedWardForNurseResult = assignedWardForNurseResult?.recordsets[0];
 
       handleResponse(
-          response,
-          200,
-          "sucess",
-          "Operation Success",
-          assignedWardForNurseResult
+        response,
+        200,
+        "sucess",
+        "Operation Success",
+        assignedWardForNurseResult
       );
     } catch (error) {
       handleError(
@@ -466,7 +452,6 @@ const NurseController = {
       next(error);
     }
   },
-
 };
 
 export default NurseController;

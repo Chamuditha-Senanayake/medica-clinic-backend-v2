@@ -21,4 +21,14 @@ router.post(
   NotificationScheduleController.updateNotificationSchedule
 );
 
+router.post(`/notification`,[],NotificationScheduleController.notifications);
+
+router.post(`/notificationv2`, NotificationScheduleController.notificationsv2);
+
+router.post(`/notify-patient`, NotificationScheduleController.notifyPatient);
+
+router.post(`/notify-duty-manager`, NotificationScheduleController.notifyDutyManager);
+
+
+
 export default router;

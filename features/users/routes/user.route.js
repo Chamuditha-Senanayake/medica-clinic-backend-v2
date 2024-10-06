@@ -110,4 +110,17 @@ router.post(
   check("Password").notEmpty().isString()],
   UserController.resetPassword
 );
+
+router.post(`/user-group/get-presentation-name`, [], UserController.getPresentation);
+
+router.post(`/user-groups/get-details`, [], UserController.getUserGroupDetails);
+
+router.post(`/user-groups/get`, [], UserController.getUserGroups);
+
+router.post(`/user/check-username-availability`, [], UserController.checkUsernameAvailability);
+
+router.post(`/user/temporary-registration`, [], UserController.temporaryRegistration);
+
+router.post(`/user/username-and-password/get/`, [], UserController.getUsernameAndPassword);
+
 export default router;

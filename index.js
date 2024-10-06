@@ -27,6 +27,27 @@ import analyticsRouter from "./features/analytics/routes/analytics.route.js";
 import medicalCertificateRouter from "./features/medicalCertificate/routes/medicalCertificate.route.js";
 import camiosRouter from "./features/camios/routes/camios.route.js";
 import { validateToken } from "./utils/gas.js";
+import analyticsRoutes from "./features/analytics/routes/analystics-routes.js";
+import appVersionRoutes from "./features/app-version/routes/app-version-routes.js";
+import appointmentRecordsRoutes from "./features/appointment/routes/appointment-records-routes.js";
+import appointmentRoutes from "./features/appointment/routes/appointment-routes.js";
+import appointmentVitalRoutes from "./features/appointment/routes/appointment-vital-routes.js";
+import medicalBillRoutes from "./features/bill/routes/medical-bill-routes.js";
+import doctorNoteRoutes from "./features/doctor/routes/doctor-notes-routes.js";
+import doctorRoutes from "./features/doctor/routes/doctor-routes.js";
+import employeeRoutes from "./features/employee/routes/employee-routes.js";
+import imageRoutes from "./features/images/routes/image-routes.js";
+import instituteBranchRoutes from "./features/institute/routes/institute-branch-router.js";
+import institutesRoutes from "./features/institute/routes/institute-routes.js";
+import investigationRoutes from "./features/investigation/routes/investigation-routes.js";
+import medicalCertificateRoutes from "./features/medicalCertificate/routes/medical-certificate-routes.js";
+import smsRoutes from "./features/sms/routes/sms-routes.js";
+import ratingRoutes from "./features/rating/routes/ratings-routes.js";
+import specializationsRoutes from "./features/specialization/routes/specializations-routes.js";
+import otpRoutes from "./features/otp/routes/otp-routes.js";
+import pharmacyRoutes from "./features/pharmacy/routes/pharmacy-routes.js";
+import referralLetterRoutes from "./features/referralLetter/routes/referral-letter-routes.js";
+import sessionRoutes from "./features/session/routes/session-routes.js";
 
 dotenv.config();
 
@@ -72,6 +93,33 @@ app.use(`/api/v1`, UserRouter);
 app.use(`/api/v1`, analyticsRouter);
 app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
+
+app.use(`/api/v1`, analyticsRoutes);
+app.use(`/api/v1`, appVersionRoutes);
+app.use(`/api/v1`, appointmentRoutes);
+app.use(`/api/v1`, appointmentVitalRoutes);
+app.use(`/api/v1`, medicalBillRoutes);
+app.use(`/api/v1`, doctorNoteRoutes);
+app.use(`/api/v1`, doctorRoutes);
+app.use(`/api/v1`, imageRoutes);
+app.use(`/api/v1`, institutesRoutes);
+app.use(`/api/v1`, investigationRoutes);
+app.use(`/api/v1`, medicalCertificateRoutes);
+app.use(`/api/v1`, otpRoutes);
+app.use(`/api/v1`, patientRouter);
+app.use(`/api/v1`, pharmacyRoutes);
+app.use(`/api/v1`, prescriptionRouter);
+app.use(`/api/v1`, referralLetterRoutes);
+app.use(`/api/v1`, sessionRoutes);
+
+
+//admin apis
+app.use(`/api/v1/employee`, employeeRoutes);
+app.use(`/api/v1/appointment-records`, appointmentRecordsRoutes);
+app.use(`/api/v1/institute-branch`, instituteBranchRoutes);
+app.use(`/api/v1/sms`, smsRoutes);
+app.use(`/api/v1/specializations`, specializationsRoutes);
+app.use(`/api/v1/ratings`, ratingRoutes);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

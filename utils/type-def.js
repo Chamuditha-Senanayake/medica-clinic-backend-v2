@@ -1,4 +1,3 @@
-import { StandardValidation } from "express-validator/src/context-items/standard-validation.js";
 import Validation from "./validation.js";
 import sql from "mssql";
 const {
@@ -165,7 +164,7 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
    values.map((value) => {
       table.rows.add(...value);
     });
-      
+
   return {
     name: tableName,
     type: sql.TVP(table),

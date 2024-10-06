@@ -20,7 +20,7 @@ router.post(
     check("FirstName").not().isEmpty(),
     check("MiddleName").not().isEmpty(),
     check("LastName").not().isEmpty(),
-    check("Email").not().isEmpty().isEmail(),    
+    check("Email").not().isEmpty().isEmail(),
     check("NIC").not().isEmpty(),
     check("Title").not().isEmpty(),
     check("Status").not().isEmpty(),
@@ -52,5 +52,15 @@ router.post(
   ],
   NurseController.SaveDoctorNurse
 );
+
+
+router.post(`/nurse/institute-branch/get`,[],NurseController.nurseInstituteBranchGet);
+
+router.post(`/nurse/doctor/get`,[],NurseController.nurseDoctorGet);
+
+
+router.post(`/nurse/doctor/update`, [],NurseController.nurseDoctorUpdate);
+
+router.post(`/nurse/get-assigned-wards`, [],NurseController.nurseGetAssignWards);
 
 export default router;

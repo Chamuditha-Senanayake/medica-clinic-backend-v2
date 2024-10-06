@@ -568,6 +568,327 @@ const UserController = {
       );
       next(error);
     }
+  },/**
+   *
+   * Rest Password
+   *
+   * @param {request} request object
+   * @param {response} response object
+   * @param {next} next middleware
+   * @returns
+   */
+  async getPresentation(request, response, next) {
+
+    try {
+      let connection = request.app.locals.db;
+      const {UserId} = request.body;
+
+      var params = [
+        EntityId({fieldName: "UserId", value: UserId})
+      ];
+
+      let userGroupDetailsGetResult = await executeSp({
+        spName: "UserPresentationNameByUserIdGet",
+        params: params,
+        connection,
+      });
+      userGroupDetailsGetResult = userGroupDetailsGetResult?.recordsets[0][0];
+
+      handleResponse(
+          response,
+          200,
+          "sucess",
+          "Operation Success",
+          userGroupDetailsGetResult
+      );
+
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async getUserGroupDetails(request, response, next) {
+
+    try {
+      const { UserId, Id } = request.body;
+
+      let connection = request.app.locals.db;
+
+      let userGroupDetailsGetResult = await executeSp({
+        spName: "UserGroupDetailsGetV2",
+        params: [
+          {
+            name: "UserId",
+            type: sql.TYPES.Int,
+            value: UserId,
+          },
+          {
+            name: "Id",
+            type: sql.TYPES.Int,
+            value: Id,
+          },
+        ],
+        connection,
+      });
+      userGroupDetailsGetResult = userGroupDetailsGetResult?.recordsets[0];
+
+      handleResponse(
+          response,
+          200,
+          "sucess",
+          "Operation Success",
+          userGroupDetailsGetResult
+      );
+
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async getUserGroups(request, response, next) {
+
+    try {
+      const { UserId, Id } = request.body;
+
+      let connection = request.app.locals.db;
+
+      let userGroupGetResult = await executeSp({
+        spName: "UserGroupsGetV2",
+        params: [
+          {
+            name: "UserId",
+            type: sql.TYPES.Int,
+            value: UserId,
+          },
+          {
+            name: "Id",
+            type: sql.TYPES.Int,
+            value: Id,
+          },
+        ],
+        connection,
+      });
+      userGroupGetResult = userGroupGetResult?.recordsets[0];
+
+      handleResponse(response, 200, "sucess", "Operation Success", userGroupGetResult);
+
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async checkUsernameAvailability(request, response, next) {
+
+    try {
+      const { username } = request.body;
+      let connection = request.app.locals.db;
+
+      if (username === null || username === undefined || username === "") {
+        throw new Error("Username is required");
+      }
+
+      const usernameAvaialability = await executeSp({
+        spName: "UserNameAvailabilityGet",
+        params: [
+          {
+            name: "UserName",
+            type: sql.TYPES.NVarChar,
+            value: username,
+          },
+        ],
+        connection,
+      });
+
+      handleResponse(
+          response,
+          200,
+          "success",
+          "Username avaialbility retrived",
+          usernameAvaialability?.recordsets[0][0]
+      );
+
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async temporaryRegistration(request, response, next) {
+
+    try {
+      const {
+        Id,
+        FirstName,
+        LastName,
+        PhoneNumber,
+        NIC,
+        EmailAddress,
+        Type,
+        DateOfBirth,
+        Gender,
+        Language,
+        UserCreated,
+        UserModified,
+      } = request.body;
+
+      let connection = request.app.locals.db;
+
+      let temporaryRegistrationResult = await executeSp({
+        spName: "TemporaryRegistrationSave",
+        params: [
+          {
+            name: "Id",
+            type: sql.TYPES.Int,
+            value: Id,
+          },
+          {
+            name: "FirstName",
+            type: sql.TYPES.NVarChar(100),
+            value: FirstName,
+          },
+          {
+            name: "LastName",
+            type: sql.TYPES.NVarChar(100),
+            value: LastName,
+          },
+          {
+            name: "PhoneNumber",
+            type: sql.TYPES.NVarChar(50),
+            value: PhoneNumber,
+          },
+          {
+            name: "NIC",
+            type: sql.TYPES.NVarChar(15),
+            value: NIC,
+          },
+          {
+            name: "EmailAddress",
+            type: sql.TYPES.NVarChar(100),
+            value: EmailAddress,
+          },
+          {
+            name: "Type",
+            type: sql.TYPES.NVarChar(50),
+            value: Type,
+          },
+          {
+            name: "DateOfBirth",
+            type: sql.TYPES.Date,
+            value: DateOfBirth,
+          },
+          {
+            name: "Gender",
+            type: sql.TYPES.NVarChar(50),
+            value: Gender,
+          },
+          {
+            name: "Language",
+            type: sql.TYPES.NVarChar(50),
+            value: Language,
+          },
+          {
+            name: "UserCreated",
+            type: sql.TYPES.Int,
+            value: UserCreated,
+          },
+          {
+            name: "UserModified",
+            type: sql.TYPES.Int,
+            value: UserModified,
+          },
+        ],
+        connection,
+      });
+      temporaryRegistrationResult = temporaryRegistrationResult?.recordsets[0][0];
+
+      handleResponse(
+          response,
+          200,
+          "sucess",
+          "Operation Success",
+          temporaryRegistrationResult
+      );
+
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async getUsernameAndPassword(request, response, next) {
+
+    try {
+      let connection = request.app.locals.db;
+      const { userId, userTypeId } = request.body;
+      // console.log('request.body:', userId, userTypeId);
+      const usernameAndPasswordGetResult = await executeSp({
+        spName: "UserUsernameAndPasswordGet",
+        params: [
+          {
+            name: "UserId",
+            type: sql.TYPES.Int,
+            value: userId ? userId : null,
+          },
+          {
+            name: "UserTypeId",
+            type: sql.TYPES.Int,
+            value: userTypeId ? userTypeId : null,
+          },
+        ],
+        connection,
+      });
+
+      handleResponse(
+          response,
+          200,
+          "success",
+          "Data retrieved successfully",
+          usernameAndPasswordGetResult.recordset
+      );
+
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
   },
 };
 

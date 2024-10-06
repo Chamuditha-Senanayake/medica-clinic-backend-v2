@@ -259,6 +259,213 @@ const NurseController = {
       next(error);
     }
   },
+  async nurseInstituteBranchGet(request, response, next) {
+
+
+    try {
+      let connection = request.app.locals.db;
+      const { nurseId, userId } = request.body;
+      // console.log('request.body:', nurseId, userId);
+      const nurseBranchGetResult = await executeSp({
+        spName: "NurseBranchGetV2",
+        params: [
+          {
+            name: "NurseId",
+            type: sql.TYPES.Int,
+            value: nurseId,
+          },
+          {
+            name: "UserId",
+            type: sql.TYPES.Int,
+            value: userId,
+          },
+        ],
+        connection,
+      });
+
+      handleResponse(
+          response,
+          200,
+          "success",
+          "Institute branch retrieved successfully",
+          nurseBranchGetResult.recordset
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+  async nurseDoctorGet(request, response, next) {
+
+
+    try {
+      const { Id, NurseId, DoctorId, UserId } = request.body;
+
+      let connection = request.app.locals.db;
+
+      let doctorNurseGetResult = await executeSp({
+        spName: "DoctorNurseGetV2",
+        params: [
+          {
+            name: "Id",
+            type: sql.TYPES.Int,
+            value: Id ? Id : null,
+          },
+          {
+            name: "NurseId",
+            type: sql.TYPES.Int,
+            value: NurseId,
+          },
+          {
+            name: "UserId",
+            type: sql.TYPES.Int,
+            value: UserId,
+          },
+          {
+            name: "DoctorId",
+            type: sql.TYPES.Int,
+            value: DoctorId,
+          },
+        ],
+        connection,
+      });
+      doctorNurseGetResult = doctorNurseGetResult?.recordsets[0];
+
+      handleResponse(
+          response,
+          200,
+          "success",
+          "Operation Success",
+          doctorNurseGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+  async nurseDoctorUpdate(request, response, next) {
+
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, DoctorId, NurseId, Status, DeleteStatus, UserSaved } = request.body;
+      // console.log('request.body:', branchId, doctorId, userId);
+      const nurseDoctorUpdateResult = await executeSp({
+        spName: "DoctorNurseUpdate",
+        params: [
+          {
+            name: "Id",
+            type: sql.TYPES.Int,
+            value: Id,
+          },
+          {
+            name: "DoctorId",
+            type: sql.TYPES.Int,
+            value: DoctorId,
+          },
+          {
+            name: "NurseId",
+            type: sql.TYPES.Int,
+            value: NurseId,
+          },
+          {
+            name: "Status",
+            type: sql.TYPES.TinyInt,
+            value: Status,
+          },
+          {
+            name: "DeleteStatus",
+            type: sql.TYPES.TinyInt,
+            value: DeleteStatus,
+          },
+          {
+            name: "UserSaved",
+            type: sql.TYPES.Int,
+            value: UserSaved,
+          },
+        ],
+        connection,
+      });
+
+      handleResponse(
+          response,
+          200,
+          "success",
+          "Nurse doctor updated successfully",
+          nurseDoctorUpdateResult.recordset[0]
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+  async nurseGetAssignWards(request, response, next) {
+
+
+    try {
+      const { NurseId, InstituteBranchId, UserId } = request.body;
+
+      let connection = request.app.locals.db;
+
+      let assignedWardForNurseResult = await executeSp({
+        spName: "Inward.NurseInstituteBranchWardGet",
+        params: [
+          {
+            name: "NurseId",
+            type: sql.TYPES.Int,
+            value: NurseId,
+          },
+          {
+            name: "InstituteBranchId",
+            type: sql.TYPES.Int,
+            value: InstituteBranchId,
+          },
+          {
+            name: "UserId",
+            type: sql.TYPES.Int,
+            value: UserId,
+          },
+        ],
+        connection,
+      });
+      assignedWardForNurseResult = assignedWardForNurseResult?.recordsets[0];
+
+      handleResponse(
+          response,
+          200,
+          "sucess",
+          "Operation Success",
+          assignedWardForNurseResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 
 };
 

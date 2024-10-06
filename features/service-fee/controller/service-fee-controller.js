@@ -72,7 +72,7 @@ export const getServicesByInstitute = async (req, res, next) => {
     let connection = req.app.locals.db;
     const { ServiceFeeId, InstituteId } = req.body;
 
-    const serivceFeeGetResult = await executeSp({
+    let serivceFeeGetResult = await executeSp({
       spName: "ServiceFeeGetV2",
       params: [
         {

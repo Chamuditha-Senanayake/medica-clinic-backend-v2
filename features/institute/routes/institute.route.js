@@ -28,10 +28,10 @@ router.post(
 router.post(
   "/InstituteBranch/GetInstituteBranch",
   [
-    // check("Id").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    // check("InstituteId").isInt().not().isEmpty(),
-    // check("UserId").not().isEmpty(),
+    check("Id").optional().isInt(),
+    check("DoctorId").optional().isInt(),
+    check("InstituteId").optional().isInt(),
+    check("UserId").optional().isInt(),
   ],
   InstituteController.getInstituteBranch
 );

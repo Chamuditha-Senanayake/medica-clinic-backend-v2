@@ -7,7 +7,7 @@ router.post(
   "/PatientDiagnosisDocumentGet",
   [
     check("Id").isInt().not().isEmpty(),
-     check("PatientId").isInt().not().isEmpty(),
+    check("PatientId").isInt().not().isEmpty(),
     check("UserId").isInt().not().isEmpty(),
   ],
   PatientController.getPatientDiagnosisDocument
@@ -137,19 +137,19 @@ router.post(
 router.post(
   "/PatientGet",
   [
-    check("UserId").isInt().not().isEmpty(),
-    check("NIC").not().isEmpty(),
-    check("Passport").not().isEmpty(),
-    check("Mobile").not().isEmpty(),
-    check("BedHeadTicketNumber").not().isEmpty(),
-    check("ClinicId").not().isEmpty(),
-    check("UniqueId").not().isEmpty(),
-    check("Name").not().isEmpty(),
-    check("DateOfBirth").not().isEmpty(),
-    check("Address").not().isEmpty(),
-    check("ParentId").isInt().not().isEmpty(),
-    check("Guid").isInt().not().isEmpty(),
-    check("Id").isInt().not().isEmpty(),
+    check("UserId").optional({ values: "null" }).isInt(),
+    check("NIC").optional({ values: "null" }).isString(),
+    check("Passport").optional({ values: "null" }).isString(),
+    check("Mobile").optional({ values: "null" }).isString(),
+    check("BedHeadTicketNumber").optional({ values: "null" }).isString(),
+    check("ClinicId").optional({ values: "null" }).isString(),
+    check("UniqueId").optional({ values: "null" }).isString(),
+    check("Name").optional({ values: "null" }).isString(),
+    check("DateOfBirth").optional({ values: "null" }).isString(),
+    check("Address").optional({ values: "null" }).isString(),
+    check("ParentId").optional({ values: "null" }).isInt(),
+    check("Guid").optional({ values: "null" }).isString(),
+    check("Id").optional({ values: "null" }).isInt(),
   ],
   PatientController.getPatient
 );
@@ -297,17 +297,13 @@ router.post(
 
 router.post(
   "/PatientRobsonInfoGet",
-  [
-    check("PatientId").isInt().not().isEmpty(),
-  ],
+  [check("PatientId").isInt().not().isEmpty()],
   PatientController.getPatientRobsonInfo
 );
 
 router.post(
   "/PatientRobsonReportDataGet",
-  [
-    check("UserId").isInt().not().isEmpty(),
-  ],
+  [check("UserId").isInt().not().isEmpty()],
   PatientController.getPatientRobsonReportData
 );
 
@@ -467,7 +463,7 @@ router.post(
     check("PrescriptionRecordId").isInt().not().isEmpty(),
     check("Status").isInt().not().isEmpty(),
     check("UserSaved").isInt().not().isEmpty(),
-    check("Id").isInt().not().isEmpty(),    
+    check("Id").isInt().not().isEmpty(),
 
     check("PatientTitle").not().isEmpty(),
     check("PatientFirstName").not().isEmpty(),

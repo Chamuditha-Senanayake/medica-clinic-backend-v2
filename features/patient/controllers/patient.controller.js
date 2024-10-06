@@ -693,14 +693,17 @@ const PatientController = {
         StringValue({ fieldName: "ClinicId", value: ClinicId }),
         StringValue({ fieldName: "UniqueId", value: UniqueId }),
         StringValue({ fieldName: "Name", value: Name }),
-        DateOfBirth
-          ? DateString({ fieldName: "DateOfBirth", value: DateOfBirth })
-          : null,
         EntityId({ fieldName: "ParentId", value: ParentId }),
         EntityId({ fieldName: "Guid", value: Guid }),
         StringValue({ fieldName: "Address", value: Address }),
         EntityId({ fieldName: "Id", value: Id }),
       ];
+
+      if (DateOfBirth) {
+        params.push(
+          DateString({ fieldName: "DateOfBirth", value: DateOfBirth })
+        );
+      }
 
       let patientGetResult = await executeSp({
         spName: `PatientGet`,

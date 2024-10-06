@@ -109,9 +109,10 @@ app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, pharmacyRoutes);
 app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, referralLetterRoutes);
-app.use(`/api/v1`, sessionRoutes);
+
 
 //admin apis
+app.use(`/api/v1/sessions`, sessionRoutes);
 app.use(`/api/v1/employee`, employeeRoutes);
 app.use(`/api/v1/appointment-records`, appointmentRecordsRoutes);
 app.use(`/api/v1/institute-branch`, instituteBranchRoutes);

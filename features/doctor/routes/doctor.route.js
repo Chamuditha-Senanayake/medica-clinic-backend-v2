@@ -129,15 +129,15 @@ router.post(
 );
 
 router.post(
-  "/DoctorChannelingStatusSave",
+  "/DoctorChannelingStatus/Save",
   [
-    check("SessionId").not().isEmpty().isInt(),
-    check("PatientId").not().isEmpty().isInt(),
-    check("AppointmentId").not().isEmpty().isInt(),
+    check("SessionId").optional().isInt(),
+    check("PatientId").optional().isInt(),
+    check("AppointmentId").optional().isInt(),
     check("UserSaved").not().isEmpty().isInt(),
-    check("Id").optional({ values: "null" }).isInt(),
-    check("DoctorStatus").optional({ values: "null" }).isString(),
-    check("ChanalingStatus").optional({ values: "null" }).isString(),
+    check("Id").optional().isInt(),
+    check("DoctorStatus").optional().isString(),
+    check("ChanalingStatus").optional().isString(),
   ],
   DoctorController.DoctorChannelingStatusSave
 );

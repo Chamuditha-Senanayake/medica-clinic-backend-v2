@@ -129,7 +129,7 @@ router.post(
 );
 
 router.post(
-  "/DoctorChannelingStatus/Save",
+  "/DoctorChanalingStatus/Save",
   [
     check("SessionId").optional().isInt(),
     check("PatientId").optional().isInt(),

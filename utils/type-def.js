@@ -20,6 +20,14 @@ const {
  */
 export const EntityId = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    //allowing no to have a value
+    return {
+      name: fieldName,
+      type: Int,
+      value,
+    };
+  }
   Validation.entityId({ name: fieldName, value });
   return {
     name: fieldName,
@@ -34,6 +42,14 @@ export const EntityId = ({ fieldName, value }) => {
  */
 export const UnsignedInteger = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    //allowing no to have a value
+    return {
+      name: fieldName,
+      type: Int,
+      value,
+    };
+  }
   Validation.unsignedIntNumber({ name: fieldName, value });
   return {
     name: fieldName,
@@ -48,6 +64,14 @@ export const UnsignedInteger = ({ fieldName, value }) => {
  */
 export const SignedInteger = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    //allowing no to have a value
+    return {
+      name: fieldName,
+      type: Int,
+      value,
+    };
+  }
   Validation.intNumber({ name: fieldName, value });
   return {
     name: fieldName,
@@ -62,6 +86,14 @@ export const SignedInteger = ({ fieldName, value }) => {
  */
 export const StringValue = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    return {
+      name: fieldName,
+      type: NVarChar,
+      value,
+    };
+  }
+
   Validation.stringValue({ name: fieldName, value });
   return {
     name: fieldName,
@@ -72,6 +104,13 @@ export const StringValue = ({ fieldName, value }) => {
 
 export const DateString = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    return {
+      name: fieldName,
+      type: DateTime,
+      value,
+    };
+  }
   Validation.stringValue({ name: fieldName, value });
   return {
     name: fieldName,
@@ -82,6 +121,13 @@ export const DateString = ({ fieldName, value }) => {
 
 export const FloatValue = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    return {
+      name: fieldName,
+      type: Float,
+      value,
+    };
+  }
   Validation.floatValue({ name: fieldName, value });
   return {
     name: fieldName,
@@ -92,6 +138,13 @@ export const FloatValue = ({ fieldName, value }) => {
 
 export const DecimalValue = ({ fieldName, value }) => {
   Validation.fieldName({ name: fieldName });
+  if (value === null || value === undefined) {
+    return {
+      name: fieldName,
+      type: Decimal,
+      value,
+    };
+  }
   Validation.decimalValue({ name: fieldName, value });
   return {
     name: fieldName,

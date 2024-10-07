@@ -644,7 +644,7 @@ export const doctorServiceFeeGet = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Doctor service fee retrieved successfully",

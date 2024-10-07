@@ -11,6 +11,7 @@ import {
   SignedInteger,
   StringValue,
   TableValueParameters,
+  UnsignedInteger,
 } from "../../../utils/type-def.js";
 
 const BillController = {
@@ -64,12 +65,12 @@ const BillController = {
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        StringValue({
+        UnsignedInteger({
           fieldName: "AppointmentNumber",
           value: AppointmentNumber,
         }),
-        StringValue({ fieldName: "Total", value: Total }),
-        StringValue({ fieldName: "Discount", value: Discount }),
+        UnsignedInteger({ fieldName: "Total", value: Total }),
+        UnsignedInteger({ fieldName: "Discount", value: Discount }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
         TableValueParameters({

@@ -4,7 +4,13 @@ class Validation {
   static number({ name, value }) {
     //if (value) throw new Error(`${name} is required`);         //throws error in save functions
     if (value == null) throw new Error(`${name} is required`);
-    if (typeof value !== "number") throw new Error(`${name} must be a number`);
+    try {
+      if (typeof value !== "number") {
+        parseInt(value);
+      }
+    } catch (error) {
+      throw new Error(`${name} must be a number`);
+    }
   }
 
   static fieldName({ name }) {

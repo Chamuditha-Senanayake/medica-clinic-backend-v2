@@ -199,21 +199,9 @@ export const billDataSave = async (req, res, next) => {
     };
 
     if (successfulInsertsCount === itemsCount) {
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Bill data added",
-        responseRecreated
-      );
+      handleResponse(res, 200, "success", "Bill data added", responseRecreated);
     } else {
-      handleError(
-        response,
-        500,
-        "error",
-        "Something went wrong",
-        responseRecreated
-      );
+      handleError(res, 500, "error", "Something went wrong", responseRecreated);
     }
   } catch (error) {
     console.log(error);
@@ -252,7 +240,7 @@ export const billDataGet = async (req, res, next) => {
     if (billGetResult.rowsAffected[0] === 0) {
       throw new Error("Invalid bill id! Retry with a valid bill id.");
     } else {
-      handleResponse(response, 200, "success", "Bill retrieved successfully", {
+      handleResponse(res, 200, "success", "Bill retrieved successfully", {
         bill: billGetResult.recordset[0],
         billData: billDataGetResult.recordset,
       });
@@ -310,7 +298,7 @@ export const billGet = async (req, res, next) => {
 
     if (billGetAllResult.rowsAffected[0] === 0) {
       handleError(
-        response,
+        res,
         200,
         "error",
         "Invalid appointment id",
@@ -318,7 +306,7 @@ export const billGet = async (req, res, next) => {
       );
     } else {
       handleResponse(
-        response,
+        res,
         200,
         "success",
         "All bills retrieved successfully",
@@ -362,7 +350,7 @@ export const billUpdatePaymentStatus = async (req, res, next) => {
       connection,
     });
 
-    handleResponse(response, 200, "success", "Payment Status Updated!", {});
+    handleResponse(res, 200, "success", "Payment Status Updated!", {});
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Could not save medical bill", error);
@@ -433,7 +421,7 @@ export const billRemarkSave = async (req, res, next) => {
     billRemarkSaveResponse = billRemarkSaveResponse?.recordsets[0][0];
 
     handleResponse(
-      response,
+      res,
       200,
       "sucess",
       "Operation Success",
@@ -477,7 +465,7 @@ export const billRemarkGet = async (req, res, next) => {
     billRemarkGetResponse = billRemarkGetResponse?.recordsets[0][0];
 
     handleResponse(
-      response,
+      res,
       200,
       "sucess",
       "Operation Success",
@@ -534,20 +522,14 @@ export const refundBillDataSave = async (req, res, next) => {
 
     if (successfulInsertsCount === itemsCount) {
       handleResponse(
-        response,
+        res,
         200,
         "success",
         "Refund data added",
         responseRecreated
       );
     } else {
-      handleError(
-        response,
-        500,
-        "error",
-        "Something went wrong",
-        responseRecreated
-      );
+      handleError(res, 500, "error", "Something went wrong", responseRecreated);
     }
   } catch (error) {
     console.log(error);
@@ -590,7 +572,7 @@ export const refundBillDataGet = async (req, res, next) => {
 
     if (refundBillGetResult.rowsAffected[0] === 0) {
       handleError(
-        response,
+        res,
         200,
         "error",
         "Invalid refund bill id",
@@ -598,7 +580,7 @@ export const refundBillDataGet = async (req, res, next) => {
       );
     } else {
       handleResponse(
-        response,
+        res,
         200,
         "success",
         "Refund bill data retrieved successfully",
@@ -665,7 +647,7 @@ export const refundBillDataGet = async (req, res, next) => {
 //     });
 
 //     handleResponse(
-//         response,
+//         res,
 //         200,
 //         "success",
 //         "Service fee added successfully",

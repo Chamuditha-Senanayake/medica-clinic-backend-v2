@@ -4,6 +4,7 @@ import handleResponse from "../../../utils/handleResponse.js";
 import sql from "mssql";
 import { deHashPatientId } from "../../../utils/id-hashing.js";
 import Validation from "../../../utils/validation.js";
+import executeQuery from "../../../db/executeQuery.js";
 
 export const saveMedicalBill = async (req, res, next) => {
   try {

@@ -5,7 +5,7 @@ import AppointmentController from "../controllers/appointment.controller.js";
 const router = express.Router();
 
 router.post(
-  "/AppointmentGet",
+  "/GetAppointment",
   [
     check("UserId").not().isEmpty().isInt(),
     check("Id").optional({ values: "null" }).isInt(),

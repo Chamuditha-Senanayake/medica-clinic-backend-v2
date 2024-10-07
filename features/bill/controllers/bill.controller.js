@@ -47,7 +47,7 @@ const BillController = {
         Total = 0,
         Discount = 0,
         BillDataSet,
-        UserSaved = 0,
+        UserId = 0,
       } = request.body;
 
       const BillDataList = [];
@@ -101,9 +101,9 @@ const BillController = {
           value: Discount,
         },
         {
-          name: "UserSaved",
+          name: "UserId",
           type: sql.TYPES.Int,
-          value: UserSaved,
+          value: UserId,
         },
         TableValueParameters({
           tableName: "BillDataSet",

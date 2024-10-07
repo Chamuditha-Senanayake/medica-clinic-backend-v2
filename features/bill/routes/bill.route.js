@@ -3,21 +3,7 @@ import { check } from "express-validator";
 import BillController from "../controllers/bill.controller.js";
 const router = express.Router();
 
-router.post(
-  "/Bill/Post",
-  [
-    check("Id").optional().isInt(),
-    check("SessionId").optional({ values: "null" }).isInt(),
-    check("DoctorId").optional({ values: "null" }).isInt(),
-    check("PatientId").optional({ values: "null" }).isInt(),
-    check("AppointmentId").optional().isInt(),
-    check("AppointmentNumber").optional().isString(),
-    check("Total").not().isEmpty().isString(),
-    check("Discount").optional().isString(),
-    check("UserSaved").not().isEmpty().isInt(),
-  ],
-  BillController.saveBill
-);
+router.post("/Bill/Post", [], BillController.saveBill);
 
 router.post(
   "/MedicalBillGet",

@@ -473,8 +473,8 @@ const DoctorController = {
     try {
       let connection = request.app.locals.db;
       const {
-        SessionId,
-        PatientId,
+        SessionId = 0,
+        PatientId = 0,
         AppointmentId,
         UserId,
         Id = 0,

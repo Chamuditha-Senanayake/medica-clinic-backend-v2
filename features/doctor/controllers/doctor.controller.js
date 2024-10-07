@@ -297,7 +297,7 @@ const DoctorController = {
 
       console.log(doctorSpecializationsGetResult.recordsets);
       doctorSpecializationsGetResult =
-        doctorSpecializationsGetResult.recordsets;
+        doctorSpecializationsGetResult.recordsets[0];
 
       handleResponse(
         response,

@@ -161,9 +161,9 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
    * ]
    */
 
-   values.map((value) => {
-      table.rows.add(...value);
-    });
+  values.map((value) => {
+    table.rows.add(...value);
+  });
 
   return {
     name: tableName,

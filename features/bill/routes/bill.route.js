@@ -4,7 +4,7 @@ import BillController from "../controllers/bill.controller.js";
 const router = express.Router();
 
 router.post(
-  "/BillSave",
+  "/Bill/Post",
   [
     check("Id").not().isEmpty().isInt(),
     check("SessionId").optional({ values: "null" }).isInt(),

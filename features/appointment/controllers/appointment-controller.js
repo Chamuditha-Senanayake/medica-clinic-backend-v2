@@ -256,7 +256,7 @@ export const savePatientResponse = async (req, res, next) => {
     patientResponseSaveResult = patientResponseSaveResult?.recordsets[0][0];
 
     handleResponse(
-      response,
+      req,
       200,
       "success",
       "Operation Success",
@@ -332,7 +332,7 @@ export const appointmentReport = async (req, res, next) => {
       }
     });
 
-    handleResponse(response, 200, "sucess", "data retrived", reportData);
+    handleResponse(req, 200, "sucess", "data retrived", reportData);
   } catch (error) {
     console.log(error);
     handleError(
@@ -396,7 +396,7 @@ export const appointmentOnGoing = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      req,
       200,
       "success",
       "All ongoing appointments retrieved successfully",

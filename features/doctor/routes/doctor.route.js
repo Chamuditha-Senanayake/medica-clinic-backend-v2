@@ -134,7 +134,7 @@ router.post(
     check("SessionId").optional().isInt(),
     check("PatientId").optional().isInt(),
     check("AppointmentId").optional().isInt(),
-    check("UserSaved").not().isEmpty().isInt(),
+    check("UserId").not().isEmpty().isInt(),
     check("Id").optional().isInt(),
     check("DoctorStatus").optional().isString(),
     check("ChanalingStatus").optional().isString(),

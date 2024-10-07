@@ -1760,7 +1760,7 @@ const PatientController = {
         EmergencyContact,
         Occupation,
         MaritalStatus,
-        Status,
+        Status = 0,
         UserSaved,
         PHIArea,
         MOH,

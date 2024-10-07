@@ -101,7 +101,7 @@ const BillController = {
           value: Discount,
         },
         {
-          name: "UserId",
+          name: "UserSaved",
           type: sql.TYPES.Int,
           value: UserId,
         },

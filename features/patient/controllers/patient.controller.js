@@ -1802,7 +1802,7 @@ const PatientController = {
         StringValue({ fieldName: "ClinicId", value: ClinicId }),
         StringValue({ fieldName: "UniqueId", value: UniqueId }),
         StringValue({ fieldName: "Email", value: Email }),
-        DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
+        StringValue({ fieldName: "DateOfBirth", value: DateOfBirth }),
         StringValue({ fieldName: "Gender", value: Gender }),
         EntityId({ fieldName: "ParentId", value: ParentId }),
         EntityId({ fieldName: "PatientTypeId", value: PatientTypeId }),
@@ -1883,6 +1883,7 @@ const PatientController = {
         patientSaveResult
       );
     } catch (error) {
+      console.log(error);
       handleError(
         response,
         500,

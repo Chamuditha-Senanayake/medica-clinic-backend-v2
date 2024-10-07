@@ -8,7 +8,7 @@ router.post(
   "/GetAppointment",
   [
     check("UserId").not().isEmpty().isInt(),
-    check("Id").optional({ values: "null" }).isAlphanumeric(),
+    check("Id").optional({ values: "null" }).isInt(),
     check("Number").optional({ values: "null" }).isInt(),
     check("SessionId").optional({ values: "null" }).isInt(),
     check("PatientId").optional({ values: "null" }).isInt(),

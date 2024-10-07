@@ -332,7 +332,7 @@ export const appointmentReport = async (req, res, next) => {
       }
     });
 
-    handleResponse(req, 200, "sucess", "data retrived", reportData);
+    handleResponse(res, 200, "sucess", "data retrived", reportData);
   } catch (error) {
     console.log(error);
     handleError(

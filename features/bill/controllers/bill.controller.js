@@ -60,19 +60,51 @@ const BillController = {
       });
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        UnsignedInteger({
-          fieldName: "AppointmentNumber",
+        {
+          name: "Id",
+          type: sql.TYPES.Int,
+          value: Id,
+        },
+        {
+          name: "SessionId",
+          type: sql.TYPES.Int,
+          value: SessionId,
+        },
+        {
+          name: "DoctorId",
+          type: sql.TYPES.Int,
+          value: DoctorId,
+        },
+        {
+          name: "PatientId",
+          type: sql.TYPES.Int,
+          value: PatientId,
+        },
+        {
+          name: "AppointmentId",
+          type: sql.TYPES.Int,
+          value: AppointmentId,
+        },
+        {
+          name: "AppointmentNumber",
+          type: sql.TYPES.Int,
           value: AppointmentNumber,
-        }),
-        UnsignedInteger({ fieldName: "Total", value: Total }),
-        UnsignedInteger({ fieldName: "Discount", value: Discount }),
-        EntityId({ fieldName: "UserSaved", value: UserSaved }),
-
+        },
+        {
+          name: "Total",
+          type: sql.TYPES.Float,
+          value: Total,
+        },
+        {
+          name: "Discount",
+          type: sql.TYPES.Float,
+          value: Discount,
+        },
+        {
+          name: "UserSaved",
+          type: sql.TYPES.Int,
+          value: UserSaved,
+        },
         TableValueParameters({
           tableName: "BillDataSet",
           columns: [

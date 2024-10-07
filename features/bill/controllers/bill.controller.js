@@ -108,7 +108,7 @@ const BillController = {
         TableValueParameters({
           tableName: "BillDataSet",
           columns: [
-            { columnName: "Amount", type: sql.VarChar(15) },
+            { columnName: "Amount", type: sql.Float },
             { columnName: "FeeType", type: sql.VarChar(20) },
             { columnName: "ItemName", type: sql.VarChar(15) },
           ],

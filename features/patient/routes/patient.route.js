@@ -340,7 +340,7 @@ router.post(
 );
 
 router.post(
-  "/PatientSave",
+  "/Patient/Save",
   [
     check("Id").isInt().not().isEmpty(),
     check("ParentId").isInt().not().isEmpty(),

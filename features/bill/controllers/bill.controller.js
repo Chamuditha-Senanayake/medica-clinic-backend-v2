@@ -10,7 +10,7 @@ import {
   EntityId,
   SignedInteger,
   StringValue,
-  TableValueParameters
+  TableValueParameters,
 } from "../../../utils/type-def.js";
 
 const BillController = {
@@ -37,22 +37,26 @@ const BillController = {
     try {
       let connection = request.app.locals.db;
       const {
-        Id,
+        Id = 0,
         SessionId = 0,
         DoctorId = 0,
         PatientId = 0,
         AppointmentId = 0,
-        AppointmentNumber,
-        Total,
-        Discount,
+        AppointmentNumber = 0,
+        Total = 0,
+        Discount = 0,
         BillDataSet,
         UserSaved = 0,
       } = request.body;
 
-    const BillDataList = [];
-    BillDataSet.forEach((BillData) => {
-    BillDataList.push([BillData.Amount, BillData.FeeType, BillData.ItemName]);
-    });
+      const BillDataList = [];
+      BillDataSet.forEach((BillData) => {
+        BillDataList.push([
+          BillData.Amount,
+          BillData.FeeType,
+          BillData.ItemName,
+        ]);
+      });
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
@@ -67,17 +71,16 @@ const BillController = {
         StringValue({ fieldName: "Total", value: Total }),
         StringValue({ fieldName: "Discount", value: Discount }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
-      
+
         TableValueParameters({
-          tableName:"BillDataSet",        
-          columns:
-          [
-            {columnName:"Amount", type: sql.VarChar(15)},
-            {columnName:"FeeType", type: sql.VarChar(20)},
-            {columnName:"ItemName", type: sql.VarChar(15)},
+          tableName: "BillDataSet",
+          columns: [
+            { columnName: "Amount", type: sql.VarChar(15) },
+            { columnName: "FeeType", type: sql.VarChar(20) },
+            { columnName: "ItemName", type: sql.VarChar(15) },
           ],
-          values:BillDataList
-        })
+          values: BillDataList,
+        }),
       ];
 
       let billSaveResult = await executeSp({

@@ -95,13 +95,12 @@ app.use(`/api/v1`, analyticsRouter);
 app.use(`/api/v1`, medicalCertificateRouter);
 app.use(`/api/v1`, camiosRouter);
 
-
 app.use(`/api/v1`, appVersionRoutes);
 
 app.use(`/api/v1`, appointmentVitalRoutes);
 app.use(`/api/v1`, medicalBillRoutes);
 app.use(`/api/v1`, doctorNoteRoutes);
-app.use(`/api/v1`, doctorRoutes);
+
 app.use(`/api/v1`, imageRoutes);
 app.use(`/api/v1`, institutesRoutes);
 app.use(`/api/v1`, investigationRoutes);
@@ -112,8 +111,8 @@ app.use(`/api/v1`, pharmacyRoutes);
 app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, referralLetterRoutes);
 
-
 //admin apis
+app.use(`/api/v1/doctor`, doctorRoutes);
 app.use(`/api/v1/appointments`, appointmentRoutes);
 app.use(`/api/v1/sessions`, sessionRoutes);
 app.use(`/api/v1/analytics`, analyticsRoutes);
@@ -125,8 +124,6 @@ app.use(`/api/v1/specializations`, specializationsRoutes);
 app.use(`/api/v1/ratings`, ratingRoutes);
 app.use(`/api/v1/service-fee`, serviceFeeRoutes);
 app.use(`/api/v1/prescriptions`, prescriptionRoutes);
-
-
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

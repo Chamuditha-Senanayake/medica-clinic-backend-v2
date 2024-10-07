@@ -11,6 +11,7 @@ import {
   TableValueParameters,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
+import { deHashPatientId } from "../../../utils/id-hashing.js";
 
 const PatientController = {
   /**
@@ -1782,7 +1783,10 @@ const PatientController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({
+          fieldName: "Id",
+          value: deHashPatientId({ patientId: Id }),
+        }),
 
         StringValue({ fieldName: "Title", value: Title }),
         StringValue({ fieldName: "FirstName", value: FirstName }),

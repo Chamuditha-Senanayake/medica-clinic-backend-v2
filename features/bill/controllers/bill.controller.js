@@ -46,12 +46,12 @@ const BillController = {
         AppointmentNumber = 0,
         Total = 0,
         Discount = 0,
-        BillDataSet,
+        BillData,
         UserId = 0,
       } = request.body;
 
       const BillDataList = [];
-      BillDataSet.forEach((BillData) => {
+      BillData.forEach((BillData) => {
         BillDataList.push([
           BillData.Amount,
           BillData.FeeType,

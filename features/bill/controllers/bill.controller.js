@@ -122,7 +122,7 @@ const BillController = {
         connection,
       });
 
-      billSaveResult = billSaveResult.recordsets;
+      billSaveResult = billSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

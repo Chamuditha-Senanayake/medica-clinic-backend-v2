@@ -6,7 +6,7 @@ class Validation {
     if (value == null) throw new Error(`${name} is required`);
     try {
       if (typeof value !== "number") {
-        parseInt(value);
+        parseFloat(value);
       }
     } catch (error) {
       throw new Error(`${name} must be a number`);
@@ -21,6 +21,7 @@ class Validation {
 
   static intNumber = ({ name, value }) => {
     this.number({ name, value });
+    value = parseInt(value);
     if (!Number.isInteger(value)) throw new Error(`${name} must be an integer`);
   };
 

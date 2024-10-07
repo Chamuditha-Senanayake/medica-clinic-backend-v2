@@ -66,7 +66,13 @@ const AppointmentController = {
         appointmentGetResult
       );
     } catch (error) {
-      handleError(res, 500, "error", error.message, "Something went wrong");
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
       next(error);
     }
   },

@@ -483,13 +483,41 @@ const DoctorController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "UserSaved", value: UserId }),
-        EntityId({ fieldName: "Id", value: Id }),
-        StringValue({ fieldName: "DoctorStatus", value: DoctorStatus }),
-        StringValue({ fieldName: "ChanalingStatus", value: ChanalingStatus }),
+        {
+          name: "SessionId",
+          type: sql.TYPES.Int,
+          value: SessionId,
+        },
+        {
+          name: "PatientId",
+          type: sql.TYPES.Int,
+          value: PatientId,
+        },
+        {
+          name: "AppointmentId",
+          type: sql.TYPES.Int,
+          value: AppointmentId,
+        },
+        {
+          name: "UserSaved",
+          type: sql.TYPES.Int,
+          value: UserId,
+        },
+        {
+          name: "Id",
+          type: sql.TYPES.Int,
+          value: Id,
+        },
+        {
+          name: "DoctorStatus",
+          type: sql.TYPES.NVarChar(255),
+          value: DoctorStatus,
+        },
+        {
+          name: "ChanalingStatus",
+          type: sql.TYPES.NVarChar(255),
+          value: ChanalingStatus,
+        },
       ];
 
       let doctorChannelingStatusSaveResult = await executeSp({

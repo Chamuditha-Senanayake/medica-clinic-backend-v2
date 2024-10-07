@@ -97,7 +97,6 @@ app.use(`/api/v1`, camiosRouter);
 
 app.use(`/api/v1`, appVersionRoutes);
 
-app.use(`/api/v1`, appointmentVitalRoutes);
 app.use(`/api/v1`, medicalBillRoutes);
 app.use(`/api/v1`, doctorNoteRoutes);
 
@@ -124,6 +123,7 @@ app.use(`/api/v1/specializations`, specializationsRoutes);
 app.use(`/api/v1/ratings`, ratingRoutes);
 app.use(`/api/v1/service-fee`, serviceFeeRoutes);
 app.use(`/api/v1/prescriptions`, prescriptionRoutes);
+app.use(`/api/v1/appointment-vitals`, appointmentVitalRoutes);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

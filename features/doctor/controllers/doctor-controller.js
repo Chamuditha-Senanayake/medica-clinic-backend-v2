@@ -450,7 +450,7 @@ export const getByUser = async (req, res, next) => {
     doctorsResult = doctorsResult.recordsets[0];
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Doctors retrived successfully",
@@ -605,7 +605,7 @@ export const doctorServiceFeeSave = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Doctor service fee added successfully",
@@ -739,7 +739,7 @@ export const notifyNewAppointment = async (req, res, next) => {
       </html>
       `,
     });
-    handleResponse(response, 200, "success", "Doctor notified!", result);
+    handleResponse(res, 200, "success", "Doctor notified!", result);
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
@@ -768,7 +768,7 @@ export const getDoctorByInstitute = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Data retrieved successfully",
@@ -802,7 +802,7 @@ export const getDoctorInstitute = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Data retrieved successfully",

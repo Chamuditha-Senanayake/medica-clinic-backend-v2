@@ -135,7 +135,7 @@ router.post(
 );
 
 router.post(
-  "/PatientGet",
+  "/Patient/GetPatient",
   [
     check("UserId").optional().isInt(),
     check("NIC").optional({ values: "" }).isString(),

@@ -79,4 +79,9 @@ router.post(
   InstituteController.saveInstitute
 );
 
+router.post(
+  "/InstituteDoctor/GetInstituteByDoctor",
+  [check("Id").isInt().not().isEmpty(), check("UserId").not().isEmpty()],
+  InstituteController.getInstituteByDoctor
+);
 export default router;

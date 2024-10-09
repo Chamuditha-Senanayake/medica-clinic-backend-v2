@@ -435,6 +435,52 @@ const InstituteController = {
       next(error);
     }
   },
+
+  async getInstituteByDoctor(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Institute.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let instituteGetResult = await executeSp({
+        spName: `DoctorInstituteGet`,
+        params: params,
+        connection,
+      });
+
+      instituteGetResult = instituteGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Institutes retrived successfully",
+        instituteGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 };
 
 export default InstituteController;

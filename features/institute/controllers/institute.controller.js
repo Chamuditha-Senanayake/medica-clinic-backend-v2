@@ -448,7 +448,7 @@ const InstituteController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id } = request.body;
+      const { Id, UserId } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),

@@ -451,7 +451,7 @@ const InstituteController = {
       const { Id, UserId } = request.body;
 
       var params = [
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "DoctorId", value: Id }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 

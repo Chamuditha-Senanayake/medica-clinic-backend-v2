@@ -13,6 +13,7 @@ import doctorRouter from "./features/doctor/routes/doctor.route.js";
 import nurseRouter from "./features/nurse/routes/nurse.route.js";
 import employeeRouter from "./features/employee/routes/employee.route.js";
 import prescriptionRouter from "./features/prescription/routes/prescription.route.js";
+import sessionRouter from "./features/session/routes/session.routes.js";
 import diseaseRouter from "./features/disease/routes/disease.route.js";
 import patientRouter from "./features/patient/routes/patient.route.js";
 import noteRouter from "./features/note/routes/note.route.js";
@@ -48,7 +49,6 @@ import otpRoutes from "./features/otp/routes/otp-routes.js";
 import pharmacyRoutes from "./features/pharmacy/routes/pharmacy-routes.js";
 import referralLetterRoutes from "./features/referralLetter/routes/referral-letter-routes.js";
 import sessionRoutes from "./features/session/routes/session-routes.js";
-import sessionRouter from "./features/session/routes/session.router.js";
 import serviceFeeRoutes from "./features/service-fee/routes/service-fee-routes.js";
 import prescriptionRoutes from "./features/prescription/routes/prescription-routes.js";
 
@@ -108,7 +108,6 @@ app.use(`/api/v1`, medicalCertificateRoutes);
 app.use(`/api/v1`, otpRoutes);
 app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, pharmacyRoutes);
-app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, referralLetterRoutes);
 app.use(`/api/v1`, sessionRouter);
 

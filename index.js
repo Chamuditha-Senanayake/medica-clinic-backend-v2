@@ -48,6 +48,7 @@ import otpRoutes from "./features/otp/routes/otp-routes.js";
 import pharmacyRoutes from "./features/pharmacy/routes/pharmacy-routes.js";
 import referralLetterRoutes from "./features/referralLetter/routes/referral-letter-routes.js";
 import sessionRoutes from "./features/session/routes/session-routes.js";
+import sessionRouter from "./features/session/routes/session.router.js";
 import serviceFeeRoutes from "./features/service-fee/routes/service-fee-routes.js";
 import prescriptionRoutes from "./features/prescription/routes/prescription-routes.js";
 
@@ -109,6 +110,7 @@ app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, pharmacyRoutes);
 app.use(`/api/v1`, prescriptionRouter);
 app.use(`/api/v1`, referralLetterRoutes);
+app.use(`/api/v1`, sessionRouter);
 
 //admin apis
 app.use(`/api/v1/doctor`, doctorRoutes);

@@ -69,4 +69,47 @@ router.post(
   PrescriptionController.getPrescriptionRecordDrugCount
 );
 
+router.post(
+  "/AppointmentPrescriptionRecordMedica/Save",
+  [
+    check("AgeMonths").optional().isInt(),
+    check("AgeYears").optional().isInt(),
+    check("AppointmentId").optional().isInt(),
+    check("AppointmentNumber").optional().isInt(),
+    check("AppointmentSessionId").optional().isInt(),
+    check("AppointmentStatus").optional().isInt(),
+    check("BloodPressureDiastolic").optional().isString(),
+    check("BloodPressureSystolic").optional().isString(),
+    check("Diagnosis").optional().isString(),
+    check("Disposition").optional().isObject(),
+    check("DispositionSave").optional().isString(),
+    check("Doctor").optional().isInt(),
+    check("FollowUp").optional().isString(),
+    check("Height").optional().isString(),
+    check("IllnessData").optional().isString(),
+    check("NegativeSx").optional().isString(),
+    check("NextVisitDate").optional().isString(),
+    check("Note").optional().isString(),
+    check("Patient").optional().isObject(),
+    check("PatientDisposition").optional().isString(),
+    check("PositiveSx").optional().isString(),
+    check("PrescriptionId").optional().isInt(),
+    check("PulseRate").optional().isString(),
+    check("RecordDrugs").optional().isString(),
+    check("RedFlag").optional().isString(),
+    check("SendEmail").optional().isBoolean(),
+    check("SendSms").optional().isBoolean(),
+    check("Status").optional().isInt(),
+    check("Temperature").optional().isString(),
+    check("Test").optional().isString(),
+    check("UserId").optional().isInt(),
+    check("UserSaved").optional().isInt(),
+    check("WaistCircumference").optional().isInt(),
+    check("Weight").optional().isInt(),
+    check("Id").optional().isInt(),
+    check("UserId").optional().isInt(),
+  ],
+  PrescriptionController.getPrescriptionRecordDrugCount
+);
+
 export default router;

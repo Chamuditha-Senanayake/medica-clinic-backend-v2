@@ -249,6 +249,98 @@ const PrescriptionController = {
     }
   },
 
+  async savePrescriptionRecord(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        AgeMonths,
+        AgeYears,
+        AppointmentId,
+        AppointmentNumber,
+        AppointmentSessionId,
+        AppointmentStatus,
+        BloodPressureDiastolic,
+        BloodPressureSystolic,
+        Diagnosis,
+        Disposition,
+        DispositionSave,
+        Doctor,
+        FollowUp,
+        Height,
+        IllnessData,
+        NegativeSx,
+        NextVisitDate,
+        Note,
+        Patient,
+        PatientDisposition,
+        PositiveSx,
+        PrescriptionId,
+        PulseRate,
+        RecordDrugs,
+        RedFlag,
+        SendEmail,
+        SendSms,
+        Status,
+        Temperature,
+        UserId,
+        Weight,
+        Test,
+        DispositionFollowUp,
+        DispositionNote,
+        DispositionId,
+      } = request.body;
+
+      var params = [
+        SignedInteger({ fieldName: "AgeMonths", value: AgeMonths }),
+        SignedInteger({ fieldName: "AgeYears", value: AgeYears }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "AppointmentNumber", value: AppointmentNumber }),
+        EntityId({ fieldName: "PrescriptionId", value: PrescriptionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "FromDate", value: FromDate }),
+        StringValue({ fieldName: "ToDate", value: ToDate }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        StringValue({ fieldName: "SearchType", value: SearchType }),
+      ];
+
+      let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
+        spName: `PrescriptionRecordGet`,
+        params: params,
+        connection,
+      });
+
+      prescriptionRecordDiseaseDetailsGetResult =
+        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        prescriptionRecordDiseaseDetailsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
   async prescriptionTemplateGet(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

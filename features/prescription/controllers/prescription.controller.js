@@ -38,8 +38,8 @@ const PrescriptionController = {
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        DateString({ fieldName: "DateTo", value: DateTo }),
+      ];
 
       let prescriptionGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordCountGet`,
@@ -95,8 +95,8 @@ const PrescriptionController = {
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        DateString({ fieldName: "DateTo", value: DateTo }),
+      ];
 
       let prescriptionRecordDiseaseCountGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordDiseaseCountGet`,
@@ -104,7 +104,8 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionRecordDiseaseCountGetResult = prescriptionRecordDiseaseCountGetResult.recordsets[0][0];
+      prescriptionRecordDiseaseCountGetResult =
+        prescriptionRecordDiseaseCountGetResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -134,7 +135,7 @@ const PrescriptionController = {
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecordDiseaseDetails(request, response, next) {
+  async getPrescriptionRecords(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -152,8 +153,8 @@ const PrescriptionController = {
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        DateString({ fieldName: "DateTo", value: DateTo }),
+      ];
 
       let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordDiseaseDetailsGet`,
@@ -161,7 +162,74 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionRecordDiseaseDetailsGetResult = prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+      prescriptionRecordDiseaseDetailsGetResult =
+        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        prescriptionRecordDiseaseDetailsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async getPrescriptionRecords(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const {
+        UserId,
+        SessionId,
+        AppointmentId,
+        PrescriptionId,
+        PatientId,
+        Id,
+        FromDate,
+        ToDate,
+        DoctorId,
+        SearchType,
+      } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "SessionId", value: SessionId }),
+        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
+        EntityId({ fieldName: "PrescriptionId", value: PrescriptionId }),
+        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "FromDate", value: FromDate }),
+        StringValue({ fieldName: "ToDate", value: ToDate }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
+        StringValue({ fieldName: "SearchType", value: SearchType }),
+      ];
+
+      let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
+        spName: `PrescriptionRecordGet`,
+        params: params,
+        connection,
+      });
+
+      prescriptionRecordDiseaseDetailsGetResult =
+        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
 
       handleResponse(
         response,
@@ -209,8 +277,8 @@ const PrescriptionController = {
         EntityId({ fieldName: "UserId", value: UserId }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo })
-    ];
+        DateString({ fieldName: "DateTo", value: DateTo }),
+      ];
 
       let prescriptionRecordDrugCountGetResult = await executeSp({
         spName: `Analytic.PrescriptionRecordDrugCountGet`,
@@ -218,7 +286,8 @@ const PrescriptionController = {
         connection,
       });
 
-      prescriptionRecordDrugCountGetResult = prescriptionRecordDrugCountGetResult.recordsets[0][0];
+      prescriptionRecordDrugCountGetResult =
+        prescriptionRecordDrugCountGetResult.recordsets[0][0];
 
       handleResponse(
         response,
@@ -238,7 +307,6 @@ const PrescriptionController = {
       next(error);
     }
   },
-
 };
 
 export default PrescriptionController;

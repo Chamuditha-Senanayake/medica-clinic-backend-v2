@@ -317,23 +317,21 @@ const PrescriptionController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+      const { UserId, Id } = request.body;
 
       var params = [
+        EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo }),
       ];
 
       let prescriptionRecordDrugCountGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDrugCountGet`,
+        spName: `PrescriptionTemplateGet`,
         params: params,
         connection,
       });
 
       prescriptionRecordDrugCountGetResult =
-        prescriptionRecordDrugCountGetResult.recordsets[0][0];
+        prescriptionRecordDrugCountGetResult.recordsets[0];
 
       handleResponse(
         response,

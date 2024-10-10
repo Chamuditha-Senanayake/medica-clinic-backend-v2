@@ -106,7 +106,6 @@ app.use(`/api/v1`, institutesRoutes);
 app.use(`/api/v1`, investigationRoutes);
 app.use(`/api/v1`, medicalCertificateRoutes);
 app.use(`/api/v1`, otpRoutes);
-app.use(`/api/v1`, patientRouter);
 app.use(`/api/v1`, pharmacyRoutes);
 app.use(`/api/v1`, referralLetterRoutes);
 app.use(`/api/v1`, sessionRouter);

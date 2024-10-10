@@ -200,7 +200,7 @@ const PrescriptionController = {
         SessionId,
         AppointmentId,
         PrescriptionId,
-        PatientId,
+        PatientId = 0,
         Id,
         FromDate,
         ToDate,

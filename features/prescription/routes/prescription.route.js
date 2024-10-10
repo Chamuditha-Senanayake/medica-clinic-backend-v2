@@ -43,7 +43,6 @@ router.post(
     check("SessionId").optional().isInt(),
     check("AppointmentId").optional().isInt(),
     check("PrescriptionId").optional().isInt(),
-    check("PatientId").optional().isInt(),
     check("Id").optional().isInt(),
     check("FromDate").optional().isString(),
     check("ToDate").optional().isString(),

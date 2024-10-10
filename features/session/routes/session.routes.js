@@ -9,4 +9,10 @@ router.post(
   SessionController.getSessions
 );
 
+router.post(
+  "/Session/GetDefault",
+  [check("UserId").isInt().not().isEmpty()],
+  SessionController.getSessions
+);
+
 export default router;

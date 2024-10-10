@@ -72,10 +72,10 @@ router.post(
 );
 
 router.post(
-  "/PatientDrugAllergyGet",
+  "/PatientAllergyDrug/PatientDrugAllergyGet",
   [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
+    check("PatientId").optional().isInt(),
     check("UserId").isInt().not().isEmpty(),
   ],
   PatientController.getPatientDrugAllergy

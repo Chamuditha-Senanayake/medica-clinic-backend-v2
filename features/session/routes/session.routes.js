@@ -12,7 +12,7 @@ router.post(
 router.post(
   "/Session/GetDefault",
   [check("UserId").isInt().not().isEmpty()],
-  SessionController.getSessions
+  SessionController.getDefaultSession
 );
 
 export default router;

@@ -79,7 +79,9 @@ const SessionController = {
         connection,
       });
 
-      defaultSessionGetResult = defaultSessionGetResult.recordsets[0][0];
+      defaultSessionGetResult = defaultSessionGetResult.recordsets[0];
+
+      console.log("defaultSessionGetResult", defaultSessionGetResult);
 
       handleResponse(
         response,

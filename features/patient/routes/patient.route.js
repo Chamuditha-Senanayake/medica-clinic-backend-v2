@@ -72,7 +72,7 @@ router.post(
 );
 
 router.post(
-  "/PatientAllergyDrug/PatientDrugAllergyGet",
+  "/PatientAllergyDrug/GetPatientAllergyDrug",
   [
     check("Id").optional().isInt(),
     check("PatientId").optional().isInt(),

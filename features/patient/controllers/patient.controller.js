@@ -180,6 +180,57 @@ const PatientController = {
     }
   },
 
+  async getPatientDisease(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, PatientId, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: PatientId }),
+        }),
+      ];
+      console.log(params);
+
+      let patientDiseaseGetResult = await executeSp({
+        spName: `PatientDiseaseGet`,
+        params: params,
+        connection,
+      });
+
+      patientDiseaseGetResult = patientDiseaseGetResult.recordsets;
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Patient disease data retrived successfully",
+        patientDiseaseGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
   async getPatientDisposition(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

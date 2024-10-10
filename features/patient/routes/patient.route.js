@@ -471,4 +471,14 @@ router.post(
   PatientController.savePatientFoodAllergy
 );
 
+router.post(
+  "/PatientDisease/GetPatientDisease",
+  [
+    check("Id").optional().isInt(),
+    check("UserId").isInt().not().isEmpty(),
+    check("PatientId").optional().isInt(),
+  ],
+  PatientController.getPatientDisease
+);
+
 export default router;

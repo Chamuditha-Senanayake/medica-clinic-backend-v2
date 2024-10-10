@@ -113,11 +113,11 @@ router.post(
 );
 
 router.post(
-  "/PatientNewFoodAllergyGet",
+  "/PatientNewFoodAllergy/GetPatientNewFoodAllergy",
   [
-    check("PatientId").isInt().not().isEmpty(),
+    check("PatientId").optional().isInt(),
     check("UserId").isInt().not().isEmpty(),
-    check("Id").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
   ],
   PatientController.getPatientNewFoodAllergy
 );

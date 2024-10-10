@@ -25,16 +25,16 @@ router.post(
   PrescriptionController.getPrescriptionRecordDiseaseCount
 );
 
-router.post(
-  "/PrescriptionRecordDiseaseDetailsGet",
-  [
-    check("UserId").isInt().not().isEmpty(),
-    check("DoctorId").isInt().not().isEmpty(),
-    check("DateFrom").not().isEmpty(),
-    check("DateTo").not().isEmpty(),
-  ],
-  PrescriptionController.getPrescriptionRecords
-);
+// router.post(
+//   "/PrescriptionRecordDiseaseDetailsGet",
+//   [
+//     check("UserId").isInt().not().isEmpty(),
+//     check("DoctorId").isInt().not().isEmpty(),
+//     check("DateFrom").not().isEmpty(),
+//     check("DateTo").not().isEmpty(),
+//   ],
+//   PrescriptionController.getPrescriptionRecords
+// );
 
 router.post(
   "/PrescriptionRecord/GetPrescriptionRecord",
@@ -61,6 +61,12 @@ router.post(
     check("DateFrom").not().isEmpty(),
     check("DateTo").not().isEmpty(),
   ],
+  PrescriptionController.getPrescriptionRecordDrugCount
+);
+
+router.post(
+  "/PrescriptionTemplate/get",
+  [check("UserId").isInt().not().isEmpty(), check("Id").optional().isInt()],
   PrescriptionController.getPrescriptionRecordDrugCount
 );
 

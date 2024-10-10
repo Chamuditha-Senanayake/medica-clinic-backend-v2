@@ -135,54 +135,53 @@ const PrescriptionController = {
    * @param {next} next - middleware
    * @returns
    */
-  async getPrescriptionRecords(request, response, next) {
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-      return response.status(422).json({
-        error: true,
-        message: ResponseMessage.Prescription.VALIDATION_ERROR,
-        data: errors,
-      });
-    }
+  // async getPrescriptionRecords(request, response, next) {
+  //   const errors = validationResult(request);
+  //   if (!errors.isEmpty()) {
+  //     return response.status(422).json({
+  //       error: true,
+  //       message: ResponseMessage.Prescription.VALIDATION_ERROR,
+  //       data: errors,
+  //     });
+  //   }
 
-    try {
-      let connection = request.app.locals.db;
-      const { UserId, DoctorId, DateFrom, DateTo } = request.body;
+  //   try {
+  //     let connection = request.app.locals.db;
+  //     const { UserId, DoctorId, DateFrom, DateTo } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        DateString({ fieldName: "DateFrom", value: DateFrom }),
-        DateString({ fieldName: "DateTo", value: DateTo }),
-      ];
+  //     var params = [
+  //       EntityId({ fieldName: "UserId", value: UserId }),
+  //       EntityId({ fieldName: "DoctorId", value: DoctorId }),
+  //       DateString({ fieldName: "DateFrom", value: DateFrom }),
+  //       DateString({ fieldName: "DateTo", value: DateTo }),
+  //     ];
 
-      let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
-        spName: `Analytic.PrescriptionRecordDiseaseDetailsGet`,
-        params: params,
-        connection,
-      });
+  //     let prescriptionRecordsGetResult = await executeSp({
+  //       spName: `PrescriptionRecordGet`,
+  //       params: params,
+  //       connection,
+  //     });
 
-      prescriptionRecordDiseaseDetailsGetResult =
-        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+  //     prescriptionRecordsGetResult = prescriptionRecordsGetResult.recordsets[0];
 
-      handleResponse(
-        response,
-        200,
-        "success",
-        "Data retrived successfully",
-        prescriptionRecordDiseaseDetailsGetResult
-      );
-    } catch (error) {
-      handleError(
-        response,
-        500,
-        "error",
-        error.message,
-        "Something went wrong"
-      );
-      next(error);
-    }
-  },
+  //     handleResponse(
+  //       response,
+  //       200,
+  //       "success",
+  //       "Data retrived successfully",
+  //       prescriptionRecordsGetResult
+  //     );
+  //   } catch (error) {
+  //     handleError(
+  //       response,
+  //       500,
+  //       "error",
+  //       error.message,
+  //       "Something went wrong"
+  //     );
+  //     next(error);
+  //   }
+  // },
 
   async getPrescriptionRecords(request, response, next) {
     const errors = validationResult(request);
@@ -224,6 +223,53 @@ const PrescriptionController = {
 
       let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
         spName: `PrescriptionRecordGet`,
+        params: params,
+        connection,
+      });
+
+      prescriptionRecordDiseaseDetailsGetResult =
+        prescriptionRecordDiseaseDetailsGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Data retrived successfully",
+        prescriptionRecordDiseaseDetailsGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async prescriptionTemplateGet(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Prescription.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { UserId, Id } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "Id", value: Id }),
+      ];
+
+      let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
+        spName: `PrescriptionTemplateGet`,
         params: params,
         connection,
       });

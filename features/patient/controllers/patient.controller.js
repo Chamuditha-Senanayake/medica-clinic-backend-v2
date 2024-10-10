@@ -556,7 +556,10 @@ const PatientController = {
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: PatientId }),
+        }),
         EntityId({ fieldName: "UserId", value: UserId }),
       ];
 

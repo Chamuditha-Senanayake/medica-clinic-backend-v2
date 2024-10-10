@@ -31,7 +31,7 @@ router.post(
 );
 
 router.post(
-  "/AppointmentGetNext",
+  "/Appointment/GetNext",
   [
     check("UserId").not().isEmpty().isInt(),
     check("SessionId").not().isEmpty().isInt(),

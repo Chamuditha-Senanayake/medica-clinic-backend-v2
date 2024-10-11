@@ -125,6 +125,7 @@ app.use(`/api/v1/prescriptions`, prescriptionRoutes);
 app.use(`/api/v1/appointment-vitals`, appointmentVitalRoutes);
 app.use(`/api/v1/medical-certificate`, medicalCertificateRoutes);
 app.use(`/api/v1/referral-letters`, referralLetterRoutes);
+app.use(`/api/v1/medical-bill`, medicalBillRoutes);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

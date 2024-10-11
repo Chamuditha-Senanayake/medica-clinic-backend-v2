@@ -146,21 +146,33 @@ const PatientController = {
       let connection = request.app.locals.db;
       const { PatientId, UserSaved, Diseases } = request.body;
 
+      const DiseasesTable = new sql.Table();
+      contactNumberTable.columns.add("Id", sql.Int);
+      contactNumberTable.columns.add("DiseaseId", sql.Int);
+      contactNumberTable.columns.add("Name", sql.NVarChar(200));
+      contactNumberTable.columns.add("YearFrom", sql.Int);
+      contactNumberTable.columns.add("Comments", sql.NVarChar(sql.MAX));
+      contactNumberTable.columns.add("Status", sql.TinyInt);
+
+      Diseases.forEach((data) => {
+        contactNumberTable.rows.add(
+          data.Id,
+          data.DiseaseId,
+          data.Name,
+          data.YearFrom,
+          data.Comments,
+          data.Status
+        );
+      });
+
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        TableValueParameters({
-          tableName: "PatientDisease",
-          columns: [
-            { columnName: "Id", type: sql.Int },
-            { columnName: "DiseaseId", type: sql.Int },
-            { columnName: "Name", type: sql.NVarChar(200) },
-            { columnName: "YearFrom", type: sql.Int },
-            { columnName: "Comments", type: sql.NVarChar(sql.MAX) },
-            { columnName: "Status", type: sql.TinyInt },
-          ],
-          values: Diseases,
-        }),
+        {
+          name: "ContactNumbers",
+          type: sql.TVP("PatientDisease"),
+          value: DiseasesTable,
+        },
       ];
       console.log(params);
 

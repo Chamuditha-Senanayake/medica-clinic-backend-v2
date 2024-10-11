@@ -94,7 +94,7 @@ router.post(
   "/AllergyDrug/Get",
   [
     check("Id").isInt().optional().isInt(),
-    check("UserSaved").isInt().not().isEmpty(),
+    check("UserId").isInt().not().isEmpty(),
   ],
   DrugController.getAllDrugAllergy
 );

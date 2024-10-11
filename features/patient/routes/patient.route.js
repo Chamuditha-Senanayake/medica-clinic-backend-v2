@@ -82,10 +82,10 @@ router.post(
 );
 
 router.post(
-  "/GynoObstetricsHistoryGet",
+  "/GynoObstetricsHistory/GetGynoObstetricsHistory",
   [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
+    check("PatientId").optional().isInt(),
     check("UserId").isInt().not().isEmpty(),
   ],
   PatientController.getGynoObstetricsHistory
@@ -155,10 +155,10 @@ router.post(
 );
 
 router.post(
-  "/PatientNewSurgeryGet",
+  "/PatientNewSurgery/GetPatientNewSurgery",
   [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
+    check("PatientId").optional().isInt(),
     check("UserId").isInt().not().isEmpty(),
   ],
   PatientController.getPatientNewSurgery

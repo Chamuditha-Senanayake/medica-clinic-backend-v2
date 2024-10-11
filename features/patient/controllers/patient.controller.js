@@ -384,7 +384,7 @@ const PatientController = {
         connection,
       });
 
-      patientDrugAllergyGetResult = patientDrugAllergyGetResult.recordsets;
+      patientDrugAllergyGetResult = patientDrugAllergyGetResult.recordsets[0];
 
       handleResponse(
         response,

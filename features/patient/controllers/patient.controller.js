@@ -147,12 +147,12 @@ const PatientController = {
       const { PatientId, UserSaved, Diseases } = request.body;
 
       const DiseasesTable = new sql.Table();
-      contactNumberTable.columns.add("Id", sql.Int);
-      contactNumberTable.columns.add("DiseaseId", sql.Int);
-      contactNumberTable.columns.add("Name", sql.NVarChar(200));
-      contactNumberTable.columns.add("YearFrom", sql.Int);
-      contactNumberTable.columns.add("Comments", sql.NVarChar(sql.MAX));
-      contactNumberTable.columns.add("Status", sql.TinyInt);
+      DiseasesTable.columns.add("Id", sql.Int);
+      DiseasesTable.columns.add("DiseaseId", sql.Int);
+      DiseasesTable.columns.add("Name", sql.NVarChar(200));
+      DiseasesTable.columns.add("YearFrom", sql.Int);
+      DiseasesTable.columns.add("Comments", sql.NVarChar(sql.MAX));
+      DiseasesTable.columns.add("Status", sql.TinyInt);
 
       Diseases.forEach((data) => {
         DiseasesTable.rows.add(

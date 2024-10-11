@@ -102,9 +102,9 @@ router.post(
 );
 
 router.post(
-  "/GynoObstetricsHistorySave",
+  "/GynoObstetricsHistory/Post",
   [
-    check("Id").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
     check("PatientId").isInt().not().isEmpty(),
     check("GynoObstetricsHistory").not().isEmpty(),
     check("Status").isInt().not().isEmpty(),

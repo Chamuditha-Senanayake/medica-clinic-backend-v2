@@ -497,6 +497,52 @@ const DrugController = {
       next(error);
     }
   },
+
+  async getAllDrugAllergy(request, response, next) {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(422).json({
+        error: true,
+        message: ResponseMessage.Patient.VALIDATION_ERROR,
+        data: errors,
+      });
+    }
+
+    try {
+      let connection = request.app.locals.db;
+      const { Id, UserId } = request.body;
+
+      var params = [
+        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+      ];
+
+      let allDrugAllergyGetResult = await executeSp({
+        spName: `DrugAllergyGet`,
+        params: params,
+        connection,
+      });
+
+      allDrugAllergyGetResult = allDrugAllergyGetResult.recordsets[0];
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Drug allergy data retrived successfully",
+        allDrugAllergyGetResult
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 };
 
 export default DrugController;

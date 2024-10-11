@@ -90,4 +90,13 @@ router.post(
   DrugController.saveDrugTemplate
 );
 
+router.post(
+  "/AllergyDrug/Get",
+  [
+    check("Id").isInt().optional().isInt(),
+    check("UserSaved").isInt().not().isEmpty(),
+  ],
+  DrugController.getAllDrugAllergy
+);
+
 export default router;

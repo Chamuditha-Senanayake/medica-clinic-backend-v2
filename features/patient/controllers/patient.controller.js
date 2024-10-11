@@ -210,7 +210,7 @@ const PatientController = {
         connection,
       });
 
-      patientDiseaseGetResult = patientDiseaseGetResult.recordsets;
+      patientDiseaseGetResult = patientDiseaseGetResult.recordsets[0];
 
       handleResponse(
         response,

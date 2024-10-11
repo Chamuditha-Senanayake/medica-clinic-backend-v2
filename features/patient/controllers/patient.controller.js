@@ -155,7 +155,7 @@ const PatientController = {
       contactNumberTable.columns.add("Status", sql.TinyInt);
 
       Diseases.forEach((data) => {
-        contactNumberTable.rows.add(
+        DiseasesTable.rows.add(
           data.Id,
           data.DiseaseId,
           data.Name,

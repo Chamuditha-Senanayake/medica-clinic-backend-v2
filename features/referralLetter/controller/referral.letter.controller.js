@@ -5,7 +5,7 @@ import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
 import { EntityId } from "../../../utils/type-def.js";
 
-const MedicalCertificateController = {
+const ReferralLetterController = {
   /**
    *
    * get medical certificate
@@ -15,7 +15,7 @@ const MedicalCertificateController = {
    * @param {next} next - middleware
    * @returns
    */
-  async getMedicalCertificate(request, response, next) {
+  async getReferralLetterTemplate(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -27,32 +27,30 @@ const MedicalCertificateController = {
 
     try {
       let connection = request.app.locals.db;
-      const { UserId, SessionId, AppointmentId, DoctorId, PatientId, Id } =
-        request.body;
+      const { TypeId, UserId, Id, Name } = request.body;
 
       var params = [
+        EntityId({ fieldName: "TypeId", value: TypeId }),
         EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "SessionId", value: SessionId }),
-        EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "Id", value: Id }),
+        StringValue({ fieldName: "Name", value: Name }),
       ];
 
-      let medicalCertificateGetResult = await executeSp({
-        spName: `MedicalCertificateGet`,
+      let referralLetterTemplateGetResult = await executeSp({
+        spName: `TemplateGet`,
         params: params,
         connection,
       });
 
-      medicalCertificateGetResult = medicalCertificateGetResult.recordsets[0];
+      referralLetterTemplateGetResult =
+        referralLetterTemplateGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
         "success",
         "Data retrived successfully",
-        medicalCertificateGetResult
+        referralLetterTemplateGetResult
       );
     } catch (error) {
       handleError(
@@ -67,4 +65,6 @@ const MedicalCertificateController = {
   },
 };
 
-export default MedicalCertificateController;
+// Template/Get/
+
+export default ReferralLetterController;

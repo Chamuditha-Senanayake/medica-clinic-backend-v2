@@ -106,7 +106,7 @@ app.use(`/api/v1`, institutesRoutes);
 app.use(`/api/v1`, investigationRoutes);
 app.use(`/api/v1`, otpRoutes);
 app.use(`/api/v1`, pharmacyRoutes);
-app.use(`/api/v1`, referralLetterRoutes);
+
 app.use(`/api/v1`, sessionRouter);
 
 //admin apis
@@ -124,6 +124,7 @@ app.use(`/api/v1/service-fee`, serviceFeeRoutes);
 app.use(`/api/v1/prescriptions`, prescriptionRoutes);
 app.use(`/api/v1/appointment-vitals`, appointmentVitalRoutes);
 app.use(`/api/v1/medical-certificate`, medicalCertificateRoutes);
+app.use(`/api/v1/referral-letters`, referralLetterRoutes);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

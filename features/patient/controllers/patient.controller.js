@@ -1331,7 +1331,10 @@ const PatientController = {
       const { PatientId, Details, Status, UserSaved, Id } = request.body;
 
       var params = [
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: PatientId }),
+        }),
         StringValue({ fieldName: "Details", value: Details }),
         EntityId({ fieldName: "Status", value: Status }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),

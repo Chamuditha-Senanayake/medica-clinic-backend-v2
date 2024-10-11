@@ -254,9 +254,9 @@ router.post(
 );
 
 router.post(
-  "/PatientRemarkSave",
+  "/PatientRemark/Post",
   [
-    check("Id").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
     check("PatientId").isInt().not().isEmpty(),
     check("Details").not().isEmpty(),
     check("UserSaved").isInt().not().isEmpty(),

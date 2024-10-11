@@ -3,7 +3,7 @@ import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
-import { EntityId } from "../../../utils/type-def.js";
+import { EntityId, StringValue } from "../../../utils/type-def.js";
 
 const ReferralLetterController = {
   /**

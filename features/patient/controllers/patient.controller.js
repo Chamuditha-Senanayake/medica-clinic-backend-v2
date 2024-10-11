@@ -2517,7 +2517,10 @@ const PatientController = {
       });
 
       var params = [
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: PatientId }),
+        }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
 
         TableValueParameters({
@@ -2539,8 +2542,7 @@ const PatientController = {
         connection,
       });
 
-      patientDrugAllergySaveResult =
-        patientDrugAllergySaveResult.recordsets[0][0];
+      patientDrugAllergySaveResult = patientDrugAllergySaveResult.recordsets[0];
 
       handleResponse(
         response,

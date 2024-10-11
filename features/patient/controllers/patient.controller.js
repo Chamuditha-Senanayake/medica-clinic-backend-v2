@@ -149,7 +149,6 @@ const PatientController = {
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
-        StringValue({ fieldName: "PatientDisease", value: PatientDisease }),
         TableValueParameters({
           tableName: "PatientDisease",
           columns: [

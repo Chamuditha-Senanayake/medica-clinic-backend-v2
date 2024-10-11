@@ -27,7 +27,7 @@ router.post(
 );
 
 router.post(
-  "/PatientDiseaseSave",
+  "/PatientDisease/Post",
   [
     check("PatientId").isInt().not().isEmpty(),
     check("UserSaved").isInt().not().isEmpty(),

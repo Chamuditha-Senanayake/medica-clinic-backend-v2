@@ -159,7 +159,7 @@ const PatientController = {
         connection,
       });
 
-      patientDiseaseSaveResult = patientDiseaseSaveResult.recordsets;
+      patientDiseaseSaveResult = patientDiseaseSaveResult.recordsets[0];
 
       handleResponse(
         response,

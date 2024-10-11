@@ -144,7 +144,7 @@ const PatientController = {
 
     try {
       let connection = request.app.locals.db;
-      const { PatientId, UserSaved, PatientDisease } = request.body;
+      const { PatientId, UserSaved, Diseases } = request.body;
 
       var params = [
         EntityId({ fieldName: "PatientId", value: PatientId }),
@@ -159,7 +159,7 @@ const PatientController = {
             { columnName: "Comments", type: sql.NVarChar(sql.MAX) },
             { columnName: "Status", type: sql.TinyInt },
           ],
-          values: PatientDisease,
+          values: Diseases,
         }),
       ];
       console.log(params);

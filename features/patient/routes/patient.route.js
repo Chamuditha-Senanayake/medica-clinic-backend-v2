@@ -31,7 +31,7 @@ router.post(
   [
     check("PatientId").isInt().not().isEmpty(),
     check("UserSaved").isInt().not().isEmpty(),
-    check("PatientDisease").not().isEmpty(),
+    check("Diseases").isArray(),
   ],
   PatientController.savePatientDisease
 );

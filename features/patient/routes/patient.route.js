@@ -209,6 +209,19 @@ router.post(
 );
 
 router.post(
+  "/PatientOtherDisease/Post",
+  [
+    check("Id").optional().isInt(),
+    check("Diseases	").optional().isString(),
+    check("PatientId").optional().isInt(),
+    check("UserId").isInt().not().isEmpty(),
+    check("Status").optional().isInt(),
+    check("UserSaved").optional().isInt(),
+  ],
+  PatientController.savePatientOtherDiseases
+);
+
+router.post(
   "/PatientOtherDiseasesSave",
   [
     check("Id").isInt().not().isEmpty(),

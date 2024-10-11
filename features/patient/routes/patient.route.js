@@ -222,18 +222,6 @@ router.post(
 );
 
 router.post(
-  "/PatientOtherDiseasesSave",
-  [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
-    check("Diseases").not().isEmpty(),
-    check("Status").isInt().not().isEmpty(),
-    check("UserSaved").isInt().not().isEmpty(),
-  ],
-  PatientController.savePatientOtherDiseases
-);
-
-router.post(
   "/PatientRelativesGet",
   [
     check("Id").isInt().not().isEmpty(),

@@ -233,10 +233,10 @@ router.post(
 );
 
 router.post(
-  "/PatientRemarkGet",
+  "/PatientRemark/GetRemark",
   [
-    check("Id").isInt().not().isEmpty(),
-    check("PatientId").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
+    check("PatientId").optional().isInt(),
     check("UserId").isInt().not().isEmpty(),
   ],
   PatientController.getPatientRemark

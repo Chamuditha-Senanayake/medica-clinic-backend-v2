@@ -174,7 +174,7 @@ const PatientController = {
         }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),
         {
-          name: "ContactNumbers",
+          name: "PatientDisease",
           type: sql.TVP("PatientDisease"),
           value: DiseasesTable,
         },

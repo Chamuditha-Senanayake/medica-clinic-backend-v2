@@ -143,7 +143,7 @@ router.post(
 );
 
 router.post(
-  "/DoctorContactNumberGet",
+  "/DoctorContactNumber/GetContactNumber",
   [
     check("Id").optional({ values: "null" }).isInt(),
     check("DoctorId").optional({ values: "null" }).isInt(),

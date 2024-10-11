@@ -197,9 +197,9 @@ router.post(
 );
 
 router.post(
-  "/PatientOtherAllergySave",
+  "/PatientOtherAllergy/post",
   [
-    check("Id").isInt().not().isEmpty(),
+    check("Id").optional().isInt(),
     check("PatientId").isInt().not().isEmpty(),
     check("Allergies").not().isEmpty(),
     check("Status").isInt().not().isEmpty(),

@@ -10,7 +10,7 @@ import {
   DateString,
   TableValueParameters,
 } from "../../../utils/type-def.js";
-import sql, { MAX } from "mssql";
+import sql from "mssql";
 import { deHashPatientId } from "../../../utils/id-hashing.js";
 
 const PatientController = {
@@ -157,7 +157,7 @@ const PatientController = {
             { columnName: "DiseaseId", type: sql.Int },
             { columnName: "Name", type: sql.NVarChar(200) },
             { columnName: "YearFrom", type: sql.Int },
-            { columnName: "Comments", type: sql.NVarChar(MAX) },
+            { columnName: "Comments", type: sql.NVarChar(sql.MAX) },
             { columnName: "Status", type: sql.TinyInt },
           ],
           values: PatientDisease,

@@ -174,49 +174,11 @@ export const TableValueParameters = ({ tableName, columns, values }) => {
     }
   });
 
-  /**
-   * [
-   *  { fieldName, value, type, options },
-   *  { fieldName, value, type, options },
-   *  { fieldName, value, type, options },
-   *  ] = ContacNumbers
-   */
-
-  /**
-   * [45666, '076610850', 0]
-   */
-
-  /**
-   * [
-    {
-      "Id": null,
-      "Number": "0766364303",
-      "Status": 0
-    },
-     {
-      "Id": null,
-      "Number": "0766364303",
-      "Status": 0
-    },
-     {
-      "Id": null,
-      "Number": "0766364303",
-      "Status": 0
-    }
-  ]
-   */
-
-  /**
-   * [
-   *  [null, "0766364303", 0],
-   *  [null, "0766364303", 0],
-   *  [null, "0766364303", 0],
-   * ]
-   */
-
   values.map((value) => {
     table.rows.add(...value);
   });
+
+  console.log(values);
 
   return {
     name: tableName,

@@ -82,6 +82,16 @@ router.post(
 );
 
 router.post(
+  "/PatientAllergyDrug/POST",
+  [
+    check("Id").optional().isInt(),
+    check("PatientId").optional().isInt(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  PatientController.getPatientDrugAllergy
+);
+
+router.post(
   "/GynoObstetricsHistory/GetGynoObstetricsHistory",
   [
     check("Id").optional().isInt(),
@@ -455,7 +465,7 @@ router.post(
 );
 
 router.post(
-  "/PatientDrugAllergySave",
+  "/PatientAllergyDrug/POST",
   [
     check("PatientId").isInt().not().isEmpty(),
     check("UserSaved").isInt().not().isEmpty(),

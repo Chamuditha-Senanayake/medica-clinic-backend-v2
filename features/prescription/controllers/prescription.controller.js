@@ -303,34 +303,29 @@ const PrescriptionController = {
       const DrugsTable = new sql.Table();
       DrugsTable.columns.add("Id", sql.Int);
       DrugsTable.columns.add("DrugId", sql.Int);
-      DrugsTable.columns.add("Weight", sql.NVarChar(10));
-      DrugsTable.columns.add("WeightType", sql.NVarChar(100));
       DrugsTable.columns.add("Frequency", sql.NVarChar(50));
       DrugsTable.columns.add("Duration", sql.NVarChar(20));
       DrugsTable.columns.add("Quantity", sql.Float);
+      DrugsTable.columns.add("Weight", sql.NVarChar(10));
+      DrugsTable.columns.add("WeightType", sql.NVarChar(100));
+      DrugsTable.columns.add("Description", sql.NVarChar(sql.MAX));
       DrugsTable.columns.add("Status", sql.TinyInt);
-      DrugsTable.columns.add("Description", sql.NVarChar(5000));
 
       if (Array.isArray(RecordDrugs) && RecordDrugs.length > 0) {
         RecordDrugs.forEach((data) => {
           DrugsTable.rows.add(
             data.Id,
             data.DrugId,
-            data.Weight,
-            "",
             data.Frequency,
             data.Duration,
             data.Quentity,
-            data.Status,
-            data.Description
+            data.Weight,
+            "",
+            data.Description,
+            data.Status
           );
         });
       }
-
-      console.log(
-        "ksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjak",
-        DrugsTable
-      );
 
       var params = [
         SignedInteger({ fieldName: "AgeMonths", value: AgeMonths }),

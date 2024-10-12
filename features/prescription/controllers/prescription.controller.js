@@ -396,7 +396,7 @@ const PrescriptionController = {
           fieldName: "PatientId",
           value: deHashPatientId({ patientId: Patient.Id }),
         }),
-        EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "Id", value: PrescriptionId }),
         {
           name: "PrescriptionRecordDrugs",
           type: sql.TVP("PrescriptionRecordDrug"),

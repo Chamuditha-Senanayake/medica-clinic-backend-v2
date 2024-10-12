@@ -315,16 +315,11 @@ const PrescriptionController = {
           DrugsTable.rows.add(
             data.Id,
             data.DrugId,
-            data.TradeName,
-            data.GenericName,
             data.Weight,
             data.Frequency,
             data.Duration,
-            data.Counter,
-            data.InHouse,
-            data.Quentity,
+            data.Quantity,
             data.Status,
-            data.Category,
             data.Description
           );
         });

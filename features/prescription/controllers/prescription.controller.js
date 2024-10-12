@@ -327,7 +327,10 @@ const PrescriptionController = {
         });
       }
 
-      console.log(DrugsTable);
+      console.log(
+        "ksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjakksjbdajkbdjak",
+        DrugsTable
+      );
 
       var params = [
         SignedInteger({ fieldName: "AgeMonths", value: AgeMonths }),

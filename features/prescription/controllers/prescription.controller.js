@@ -317,15 +317,17 @@ const PrescriptionController = {
             data.Id,
             data.DrugId,
             data.Weight,
-            data.WeightType,
+            "",
             data.Frequency,
             data.Duration,
-            1.0,
+            data.Quentity,
             data.Status,
             data.Description
           );
         });
       }
+
+      console.log(DrugsTable);
 
       var params = [
         SignedInteger({ fieldName: "AgeMonths", value: AgeMonths }),

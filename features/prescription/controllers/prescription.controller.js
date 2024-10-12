@@ -362,11 +362,6 @@ const PrescriptionController = {
           value: BloodPressureSystolic,
         }),
         StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
-        StringValue({
-          fieldName: "DispositionFollowUp",
-          value: DispositionFollowUp,
-        }),
-        StringValue({ fieldName: "DispositionSave", value: DispositionSave }),
         StringValue({ fieldName: "FollowUp", value: FollowUp }),
         StringValue({ fieldName: "Height", value: Height }),
         StringValue({ fieldName: "IllnessData", value: IllnessData }),

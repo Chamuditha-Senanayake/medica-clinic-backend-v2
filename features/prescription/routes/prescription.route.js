@@ -102,7 +102,7 @@ router.post(
     check("UserSaved").optional().isInt(),
     check("Id").optional().isInt(),
   ],
-  PrescriptionController.getPrescriptionRecordDrugCount
+  PrescriptionController.savePrescriptionRecord
 );
 
 export default router;

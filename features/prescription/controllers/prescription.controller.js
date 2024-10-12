@@ -9,6 +9,8 @@ import {
   StringValue,
   SignedInteger,
 } from "../../../utils/type-def.js";
+import { deHashPatientId } from "../../../utils/id-hashing.js";
+import sql from "mssql";
 
 const PrescriptionController = {
   /**
@@ -299,18 +301,97 @@ const PrescriptionController = {
         DispositionId,
       } = request.body;
 
+      const DrugsTable = new sql.Table();
+      DrugsTable.columns.add("Id", sql.Int);
+      DrugsTable.columns.add("DrugId", sql.Int);
+      DrugsTable.columns.add("TradeName", sql.NVarChar(255));
+      DrugsTable.columns.add("GenericName", sql.NVarChar(255));
+      DrugsTable.columns.add("Weight", sql.NVarChar(255));
+      DrugsTable.columns.add("Frequency", sql.NVarChar(255));
+      DrugsTable.columns.add("Duration", sql.NVarChar(255));
+      DrugsTable.columns.add("Counter", sql.Int);
+      DrugsTable.columns.add("InHouse", sql.Bit);
+      DrugsTable.columns.add("Quentity", sql.Int);
+      DrugsTable.columns.add("Status", sql.Int);
+      DrugsTable.columns.add("Category", sql.NVarChar(255));
+      DrugsTable.columns.add("Description", sql.NVarChar(255));
+
+      if (Array.isArray(RecordDrugs) && RecordDrugs.length > 0) {
+        RecordDrugs.forEach((data) => {
+          DrugsTable.rows.add(
+            data.Id,
+            data.DrugId,
+            data.TradeName,
+            data.GenericName,
+            data.Weight,
+            data.Frequency,
+            data.Duration,
+            data.Counter,
+            data.InHouse,
+            data.Quentity,
+            data.Status,
+            data.Category,
+            data.Description
+          );
+        });
+      }
+
       var params = [
         SignedInteger({ fieldName: "AgeMonths", value: AgeMonths }),
         SignedInteger({ fieldName: "AgeYears", value: AgeYears }),
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "AppointmentNumber", value: AppointmentNumber }),
+
+        SignedInteger({
+          fieldName: "AppointmentNumber",
+          value: AppointmentNumber,
+        }),
+
+        EntityId({
+          fieldName: "AppointmentSessionId",
+          value: AppointmentSessionId,
+        }),
+        SignedInteger({
+          fieldName: "AppointmentStatus",
+          value: AppointmentStatus,
+        }),
+        StringValue({
+          fieldName: "BloodPressureDiastolic",
+          value: BloodPressureDiastolic,
+        }),
+        StringValue({
+          fieldName: "BloodPressureSystolic",
+          value: BloodPressureSystolic,
+        }),
+        StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
+        StringValue({ fieldName: "Disposition", value: Disposition }),
+        StringValue({ fieldName: "DispositionSave", value: DispositionSave }),
+        StringValue({ fieldName: "FollowUp", value: FollowUp }),
+        StringValue({ fieldName: "Height", value: Height }),
+        StringValue({ fieldName: "IllnessData", value: IllnessData }),
+        EntityId({ fieldName: "Doctor", value: Doctor }),
+        StringValue({ fieldName: "NegativeSx", value: NegativeSx }),
+        StringValue({ fieldName: "NextVisitDate", value: NextVisitDate }),
+        StringValue({ fieldName: "Note", value: Note }),
+        StringValue({ fieldName: "PositiveSx", value: PositiveSx }),
         EntityId({ fieldName: "PrescriptionId", value: PrescriptionId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        StringValue({ fieldName: "PulseRate", value: PulseRate }),
+
+        StringValue({ fieldName: "RedFlag", value: RedFlag }),
+        SignedInteger({ fieldName: "Status", value: Status }),
+        StringValue({ fieldName: "Test", value: Test }),
+        EntityId({ fieldName: "UserId", value: UserId }),
+        StringValue({ fieldName: "Temperature", value: Temperature }),
+        StringValue({ fieldName: "Weight", value: Weight }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: Patient.Id }),
+        }),
         EntityId({ fieldName: "Id", value: Id }),
-        StringValue({ fieldName: "FromDate", value: FromDate }),
-        StringValue({ fieldName: "ToDate", value: ToDate }),
-        EntityId({ fieldName: "DoctorId", value: DoctorId }),
-        StringValue({ fieldName: "SearchType", value: SearchType }),
+        {
+          name: "PrescriptionRecordDrugs",
+          type: sql.TVP("PrescriptionRecordDrug"),
+          value: DrugsTable,
+        },
       ];
 
       let prescriptionRecordDiseaseDetailsGetResult = await executeSp({

@@ -4,8 +4,8 @@ import ReferralLetterController from "../controller/referral.letter.controller.j
 const router = express.Router();
 
 router.post(
-  "/Template/Get",
-  [check("TypeId").optional().isInt(), check("UserId").optional().isInt()],
+  "/Template",
+  [check("Id").optional().isInt(), check("UserId").optional().isInt()],
   ReferralLetterController.getReferralLetterTemplate
 );
 

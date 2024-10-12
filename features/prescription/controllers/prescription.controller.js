@@ -320,7 +320,7 @@ const PrescriptionController = {
             data.WeightType,
             data.Frequency,
             data.Duration,
-            data.Quentity,
+            1.0,
             data.Status,
             data.Description
           );

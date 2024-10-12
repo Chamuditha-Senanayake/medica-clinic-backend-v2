@@ -304,6 +304,7 @@ const PrescriptionController = {
       DrugsTable.columns.add("Id", sql.Int);
       DrugsTable.columns.add("DrugId", sql.Int);
       DrugsTable.columns.add("Weight", sql.NVarChar(10));
+      DrugsTable.columns.add("WeightType", sql.NVarChar(100));
       DrugsTable.columns.add("Frequency", sql.NVarChar(50));
       DrugsTable.columns.add("Duration", sql.NVarChar(20));
       DrugsTable.columns.add("Quantity", sql.Float);
@@ -316,6 +317,7 @@ const PrescriptionController = {
             data.Id,
             data.DrugId,
             data.Weight,
+            data.WeightType,
             data.Frequency,
             data.Duration,
             data.Quantity,

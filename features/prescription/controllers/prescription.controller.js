@@ -357,7 +357,6 @@ const PrescriptionController = {
         StringValue({ fieldName: "FollowUp", value: FollowUp }),
         StringValue({ fieldName: "Height", value: Height }),
         StringValue({ fieldName: "IllnessData", value: IllnessData }),
-        EntityId({ fieldName: "Doctor", value: Doctor }),
         StringValue({ fieldName: "NegativeSx", value: NegativeSx }),
         StringValue({ fieldName: "NextVisitDate", value: NextVisitDate }),
         StringValue({ fieldName: "Note", value: Note }),

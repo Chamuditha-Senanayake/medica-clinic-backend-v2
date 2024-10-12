@@ -405,7 +405,7 @@ const PrescriptionController = {
       ];
 
       let prescriptionRecordDiseaseDetailsGetResult = await executeSp({
-        spName: `PrescriptionRecordGet`,
+        spName: `PrescriptionRecordSave`,
         params: params,
         connection,
       });

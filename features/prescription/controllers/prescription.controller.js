@@ -376,7 +376,7 @@ const PrescriptionController = {
         StringValue({ fieldName: "RedFlag", value: RedFlag }),
         SignedInteger({ fieldName: "Status", value: Status }),
         StringValue({ fieldName: "Test", value: Test }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "UserSaved", value: UserId }),
         StringValue({ fieldName: "Temperature", value: Temperature }),
         StringValue({ fieldName: "Weight", value: Weight }),
         EntityId({

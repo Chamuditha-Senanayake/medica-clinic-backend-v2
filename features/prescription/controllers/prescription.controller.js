@@ -298,7 +298,6 @@ const PrescriptionController = {
         Test,
         DispositionFollowUp,
         DispositionNote,
-        DispositionId,
       } = request.body;
 
       const DrugsTable = new sql.Table();
@@ -363,7 +362,10 @@ const PrescriptionController = {
           value: BloodPressureSystolic,
         }),
         StringValue({ fieldName: "Diagnosis", value: Diagnosis }),
-        StringValue({ fieldName: "Disposition", value: Disposition }),
+        StringValue({
+          fieldName: "DispositionFollowUp",
+          value: DispositionFollowUp,
+        }),
         StringValue({ fieldName: "DispositionSave", value: DispositionSave }),
         StringValue({ fieldName: "FollowUp", value: FollowUp }),
         StringValue({ fieldName: "Height", value: Height }),
@@ -375,6 +377,14 @@ const PrescriptionController = {
         StringValue({ fieldName: "PositiveSx", value: PositiveSx }),
         EntityId({ fieldName: "PrescriptionId", value: PrescriptionId }),
         StringValue({ fieldName: "PulseRate", value: PulseRate }),
+        StringValue({
+          fieldName: "DispositionNote",
+          value: Disposition?.Note,
+        }),
+        StringValue({
+          fieldName: "DispositionFollowUp",
+          value: Disposition?.FollowUp,
+        }),
 
         StringValue({ fieldName: "RedFlag", value: RedFlag }),
         SignedInteger({ fieldName: "Status", value: Status }),
@@ -391,6 +401,11 @@ const PrescriptionController = {
           name: "PrescriptionRecordDrugs",
           type: sql.TVP("PrescriptionRecordDrug"),
           value: DrugsTable,
+        },
+        {
+          name: "DispositionSave",
+          type: sql.TYPES.Bit,
+          value: DispositionSave,
         },
       ];
 

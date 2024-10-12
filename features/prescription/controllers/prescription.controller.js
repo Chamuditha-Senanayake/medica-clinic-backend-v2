@@ -303,17 +303,12 @@ const PrescriptionController = {
       const DrugsTable = new sql.Table();
       DrugsTable.columns.add("Id", sql.Int);
       DrugsTable.columns.add("DrugId", sql.Int);
-      DrugsTable.columns.add("TradeName", sql.NVarChar(255));
-      DrugsTable.columns.add("GenericName", sql.NVarChar(255));
-      DrugsTable.columns.add("Weight", sql.NVarChar(255));
-      DrugsTable.columns.add("Frequency", sql.NVarChar(255));
-      DrugsTable.columns.add("Duration", sql.NVarChar(255));
-      DrugsTable.columns.add("Counter", sql.Int);
-      DrugsTable.columns.add("InHouse", sql.Bit);
-      DrugsTable.columns.add("Quentity", sql.Int);
-      DrugsTable.columns.add("Status", sql.Int);
-      DrugsTable.columns.add("Category", sql.NVarChar(255));
-      DrugsTable.columns.add("Description", sql.NVarChar(255));
+      DrugsTable.columns.add("Weight", sql.NVarChar(10));
+      DrugsTable.columns.add("Frequency", sql.NVarChar(50));
+      DrugsTable.columns.add("Duration", sql.NVarChar(20));
+      DrugsTable.columns.add("Quantity", sql.Float);
+      DrugsTable.columns.add("Status", sql.TinyInt);
+      DrugsTable.columns.add("Description", sql.NVarChar(sql.MAX));
 
       if (Array.isArray(RecordDrugs) && RecordDrugs.length > 0) {
         RecordDrugs.forEach((data) => {

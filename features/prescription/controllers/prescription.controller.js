@@ -308,7 +308,7 @@ const PrescriptionController = {
       DrugsTable.columns.add("Duration", sql.NVarChar(20));
       DrugsTable.columns.add("Quantity", sql.Float);
       DrugsTable.columns.add("Status", sql.TinyInt);
-      DrugsTable.columns.add("Description", sql.NVarChar(sql.MAX));
+      DrugsTable.columns.add("Description", sql.NVarChar(5000));
 
       if (Array.isArray(RecordDrugs) && RecordDrugs.length > 0) {
         RecordDrugs.forEach((data) => {

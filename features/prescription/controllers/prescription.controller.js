@@ -307,7 +307,7 @@ const PrescriptionController = {
       DrugsTable.columns.add("WeightType", sql.NVarChar(100));
       DrugsTable.columns.add("Frequency", sql.NVarChar(50));
       DrugsTable.columns.add("Duration", sql.NVarChar(20));
-      DrugsTable.columns.add("Quentity", sql.Float);
+      DrugsTable.columns.add("Quantity", sql.Float);
       DrugsTable.columns.add("Status", sql.TinyInt);
       DrugsTable.columns.add("Description", sql.NVarChar(5000));
 

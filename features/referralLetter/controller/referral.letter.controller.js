@@ -105,7 +105,6 @@ const ReferralLetterController = {
       } = request.body;
 
       var params = [
-        EntityId({ fieldName: "TypeId", value: TypeId }),
         SignedInteger({
           fieldName: "AppointmentNumber",
           value: AppointmentNumber,

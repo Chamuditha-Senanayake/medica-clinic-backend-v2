@@ -154,13 +154,13 @@ router.post(
 );
 
 router.post(
-  "/DoctorDispositionReminderGet",
+  "/DoctorDispositionReminder/Get",
   [check("UserId").not().isEmpty().isInt(), check("PatientId").isInt()],
   DoctorController.DoctorDispositionReminderGet
 );
 
 router.post(
-  "/DoctorDispositionReminderSave",
+  "/DoctorDispositionReminder/Save",
   [
     check("Id").optional({ values: "null" }).isInt(),
     check("PrescriptionRecordId").optional({ values: "null" }).isInt(),

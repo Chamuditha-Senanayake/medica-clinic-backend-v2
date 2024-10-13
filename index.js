@@ -53,6 +53,10 @@ import sessionRoutes from "./features/session/routes/session-routes.js";
 import serviceFeeRoutes from "./features/service-fee/routes/service-fee-routes.js";
 import prescriptionRoutes from "./features/prescription/routes/prescription-routes.js";
 
+if (!global.__dirname) {
+  global.__dirname = process.cwd();
+}
+
 dotenv.config();
 
 const app = express();

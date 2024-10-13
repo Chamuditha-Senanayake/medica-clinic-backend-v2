@@ -85,6 +85,7 @@ const ReferralLetterController = {
         AppointmentId,
         AppointmentNumber,
         AppointmentSessionId,
+        AppointmentStatus = 1,
         IssuingDate,
         Message,
         PatientBloodGroup,
@@ -108,6 +109,10 @@ const ReferralLetterController = {
         SignedInteger({
           fieldName: "AppointmentNumber",
           value: AppointmentNumber,
+        }),
+        SignedInteger({
+          fieldName: "AppointmentStatus",
+          value: AppointmentStatus,
         }),
         EntityId({
           fieldName: "AppointmentId",

@@ -189,7 +189,7 @@ const ReferralLetterController = {
       });
 
       referralLetterTemplateGetResult =
-        referralLetterTemplateGetResult.recordsets[0];
+        referralLetterTemplateGetResult.recordsets[0][0];
 
       handleResponse(
         response,

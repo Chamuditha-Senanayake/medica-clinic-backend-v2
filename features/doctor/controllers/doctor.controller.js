@@ -711,11 +711,11 @@ const DoctorController = {
           fieldName: "PatientId",
           value: deHashPatientId({ patientId: PatientId }),
         }),
-        SignedInteger({
+        StringValue({
           fieldName: "RemindOn",
           value: RemindOn,
         }),
-        DateString({ fieldName: "RemindFromDate", value: RemindFromDate }),
+        StringValue({ fieldName: "RemindFromDate", value: RemindFromDate }),
         StringValue({ fieldName: "RemindType", value: RemindType }),
         StringValue({ fieldName: "Message", value: Message }),
         EntityId({ fieldName: "UserSaved", value: UserSaved }),

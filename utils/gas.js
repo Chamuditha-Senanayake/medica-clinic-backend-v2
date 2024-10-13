@@ -36,8 +36,7 @@ export const validateToken = async (req, res, next) => {
   try {
     if (
       req.path.endsWith("/Authenticate") ||
-      req.path.endsWith("/RefreshToken") ||
-      req.path.endsWith("/uploads")
+      req.path.endsWith("/RefreshToken")
     ) {
       console.log("fileter");
       next();

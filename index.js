@@ -83,6 +83,13 @@ app.use(function (request, response, next) {
   response.setHeader("Cache-Control", "no-cache, no-store");
   next();
 });
+console.log(
+  path.join(
+    __dirname,
+    UPLOADED_FILES_FOLDER_PATH,
+    INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH
+  )
+);
 
 app.use(
   `/api/v1/${UPLOADED_FILES_FOLDER_PATH}${INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH}`,

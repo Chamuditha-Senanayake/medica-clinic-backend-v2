@@ -83,11 +83,6 @@ app.use(function (request, response, next) {
   next();
 });
 
-// Routes
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to application." });
-});
-
 app.use(
   `/api/v1/${UPLOADED_FILES_FOLDER_PATH}${INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH}`,
   express.static(
@@ -109,6 +104,11 @@ app.use(
     )
   )
 );
+
+// Routes
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to application." });
+});
 
 app.use(validateToken);
 app.use(`/api/v1`, doctorRouter);

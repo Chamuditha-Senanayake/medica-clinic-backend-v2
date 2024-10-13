@@ -92,7 +92,7 @@ console.log(
 );
 
 app.use(
-  `/api/v1/${UPLOADED_FILES_FOLDER_PATH}${INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH}`,
+  `/api/v1${UPLOADED_FILES_FOLDER_PATH}${INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH}`,
   express.static(
     path.join(
       __dirname,
@@ -103,7 +103,7 @@ app.use(
 );
 
 app.use(
-  `/api/v1/${UPLOADED_FILES_FOLDER_PATH}${INSTITUTE_BRANCH_IMAGE_FOLDER_PATH}`,
+  `/api/v1${UPLOADED_FILES_FOLDER_PATH}${INSTITUTE_BRANCH_IMAGE_FOLDER_PATH}`,
   express.static(
     path.join(
       __dirname,

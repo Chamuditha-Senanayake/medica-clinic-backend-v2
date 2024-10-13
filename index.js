@@ -52,6 +52,11 @@ import referralLetterRoutes from "./features/referralLetter/routes/referral-lett
 import sessionRoutes from "./features/session/routes/session-routes.js";
 import serviceFeeRoutes from "./features/service-fee/routes/service-fee-routes.js";
 import prescriptionRoutes from "./features/prescription/routes/prescription-routes.js";
+import {
+  INSTITUTE_BRANCH_IMAGE_FOLDER_PATH,
+  INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH,
+  UPLOADED_FILES_FOLDER_PATH,
+} from "./constants/shared-constants.js";
 
 if (!global.__dirname) {
   global.__dirname = process.cwd();
@@ -81,6 +86,28 @@ app.use(function (request, response, next) {
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
+
+app.use(
+  `${baseUrl}${UPLOADED_FILES_FOLDER_PATH}${INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH}`,
+  express.static(
+    path.join(
+      __dirname,
+      UPLOADED_FILES_FOLDER_PATH,
+      INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH
+    )
+  )
+);
+
+app.use(
+  `${baseUrl}${UPLOADED_FILES_FOLDER_PATH}${INSTITUTE_BRANCH_IMAGE_FOLDER_PATH}`,
+  express.static(
+    path.join(
+      __dirname,
+      UPLOADED_FILES_FOLDER_PATH,
+      INSTITUTE_BRANCH_IMAGE_FOLDER_PATH
+    )
+  )
+);
 
 app.use(validateToken);
 app.use(`/api/v1`, doctorRouter);

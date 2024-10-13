@@ -62,6 +62,7 @@ import path from "path";
 if (!global.__dirname) {
   global.__dirname = process.cwd();
 }
+console.log(__dirname);
 
 dotenv.config();
 

@@ -688,16 +688,16 @@ const DoctorController = {
     try {
       let connection = request.app.locals.db;
       const {
-        Id = 0,
-        PrescriptionRecordId = 0,
-        AppointmentId = 0,
-        PatientId = 0,
+        Id,
+        PrescriptionRecordId,
+        AppointmentId,
+        PatientId,
         RemindOn = 0,
         RemindFromDate = "",
         RemindType = "",
         Message = "",
         Status = 0,
-        UserSaved = 0,
+        UserSaved,
       } = request.body;
 
       var params = [

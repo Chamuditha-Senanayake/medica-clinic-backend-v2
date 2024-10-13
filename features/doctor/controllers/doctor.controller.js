@@ -711,7 +711,7 @@ const DoctorController = {
           fieldName: "PatientId",
           value: deHashPatientId({ patientId: PatientId }),
         }),
-        StringValue({
+        SignedInteger({
           fieldName: "RemindOn",
           value: RemindOn,
         }),

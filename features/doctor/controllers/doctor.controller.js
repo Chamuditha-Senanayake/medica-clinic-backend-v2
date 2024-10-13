@@ -707,7 +707,10 @@ const DoctorController = {
           value: PrescriptionRecordId,
         }),
         EntityId({ fieldName: "AppointmentId", value: AppointmentId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: PatientId }),
+        }),
         SignedInteger({
           fieldName: "RemindOn",
           value: RemindOn,

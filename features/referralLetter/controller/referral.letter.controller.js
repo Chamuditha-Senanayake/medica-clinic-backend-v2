@@ -198,6 +198,7 @@ const ReferralLetterController = {
         referralLetterTemplateGetResult
       );
     } catch (error) {
+      console.log(error);
       handleError(
         response,
         500,

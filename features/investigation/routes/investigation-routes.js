@@ -5,9 +5,9 @@ import {
   handleUploadedFile,
   saveInvestigationResults,
 } from "../controller/investigation-controller.js";
-import uploadFile from "../../../middleware/upload-middleware.js";
+import uploadFile from "../../../middleware/upload-middleware-v2.js";
 import { INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH } from "../../../constants/shared-constants.js";
-import path from 'path'
+import path from "path";
 
 const fileFilter = (req, file, cb) => {
   // Allowed file types

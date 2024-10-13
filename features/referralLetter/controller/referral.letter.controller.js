@@ -8,6 +8,7 @@ import {
   SignedInteger,
   StringValue,
 } from "../../../utils/type-def.js";
+import { deHashPatientId } from "../../../utils/id-hashing.js";
 
 const ReferralLetterController = {
   /**
@@ -136,9 +137,9 @@ const ReferralLetterController = {
           fieldName: "PatientFirstName",
           value: PatientFirstName,
         }),
-        StringValue({
+        EntityId({
           fieldName: "PatientId",
-          value: PatientId,
+          value: deHashPatientId({ patientId: PatientId }),
         }),
         StringValue({
           fieldName: "PatientLastName",

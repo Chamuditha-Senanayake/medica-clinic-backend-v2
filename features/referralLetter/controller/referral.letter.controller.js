@@ -175,7 +175,7 @@ const ReferralLetterController = {
         }),
         SignedInteger({
           fieldName: "Status",
-          value: Status,
+          value: parseInt(Status),
         }),
         EntityId({ fieldName: "UserSaved", value: UserId }),
         EntityId({ fieldName: "Id", value: Id }),

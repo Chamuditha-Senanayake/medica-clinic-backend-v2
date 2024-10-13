@@ -166,7 +166,7 @@ router.post(
     check("PrescriptionRecordId").optional().isInt(),
     check("AppointmentId").optional().isInt(),
     check("PatientId").optional().isInt(),
-    check("RemindOn").optional().isString(),
+    check("RemindOn").optional().isInt(),
     check("RemindFromDate").optional().isString(),
     check("RemindType").optional().isString(),
     check("Message").optional().isString(),

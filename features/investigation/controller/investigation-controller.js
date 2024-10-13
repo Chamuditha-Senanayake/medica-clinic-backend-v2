@@ -223,7 +223,7 @@ export const handleUploadedFile = async (req, res) => {
       res,
       200,
       "success",
-      "Investigation result document uploaded",
+      "Investigation result document uploaded!",
       {
         filename,
       }

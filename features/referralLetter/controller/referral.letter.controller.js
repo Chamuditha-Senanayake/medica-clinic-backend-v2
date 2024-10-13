@@ -108,7 +108,7 @@ const ReferralLetterController = {
       var params = [
         SignedInteger({
           fieldName: "AppointmentNumber",
-          value: AppointmentNumber,
+          value: parseInt(AppointmentNumber),
         }),
         SignedInteger({
           fieldName: "AppointmentStatus",

@@ -35,7 +35,7 @@ router.post(
     check("Status").optional().isInt(),
     check("UserId").optional().isInt(),
   ],
-  ReferralLetterController.getReferralLetterTemplate
+  ReferralLetterController.saveReferralLetter
 );
 
 export default router;

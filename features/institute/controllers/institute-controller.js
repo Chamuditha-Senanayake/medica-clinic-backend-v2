@@ -34,7 +34,7 @@ export const searchInstitutes = async (req, res, next) => {
     searchInstituteResult = searchInstituteResult?.recordsets[0];
 
     handleResponse(res, 200, "success", "Operation Success", {
-      insitutes:searchInstituteResult,
+      insitutes: searchInstituteResult,
       totalRows,
       pages: Math.ceil(totalRows / PageSize),
     });
@@ -167,7 +167,13 @@ export const instituteBranchSave = async (req, res, next) => {
       data.Address = JSON.parse(data.Address);
       data.ContactNumbers = JSON.parse(data.ContactNumbers);
     });
-    handleResponse(response, 200, "sucess", "data retrived", instituteBranch[0]);
+    handleResponse(
+      response,
+      200,
+      "success",
+      "data retrived",
+      instituteBranch[0]
+    );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
@@ -207,7 +213,7 @@ export const instituteBranchNurseGet = async (req, res, next) => {
     });
     let branchNurses = branchNurseResult?.recordsets[0];
 
-    handleResponse(response, 200, "sucess", "data retrived", branchNurses);
+    handleResponse(response, 200, "success", "data retrived", branchNurses);
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
@@ -240,11 +246,11 @@ export const instituteBranchDoctorAssignGet = async (req, res, next) => {
       connection,
     });
     handleResponse(
-        response,
-        200,
-        "success",
-        "Data retrieved successfully",
-        InstituteBranchDoctorAssignsGetResult.recordset
+      response,
+      200,
+      "success",
+      "Data retrieved successfully",
+      InstituteBranchDoctorAssignsGetResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -274,11 +280,11 @@ export const instituteGet = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Data retrived successfully",
-        instituteGetResult.recordset
+      response,
+      200,
+      "success",
+      "Data retrived successfully",
+      instituteGetResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -371,11 +377,11 @@ export const instituteSave = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Institute saved successfully",
-        instituteSaveResult.recordset
+      response,
+      200,
+      "success",
+      "Institute saved successfully",
+      instituteSaveResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -410,11 +416,11 @@ export const instituteAllDoctors = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Institute doctors retrived successfully",
-        instituteBranchDoctorGetResult.recordset
+      response,
+      200,
+      "success",
+      "Institute doctors retrived successfully",
+      instituteBranchDoctorGetResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -490,11 +496,11 @@ export const instituteBranchDoctorSave = async (req, res, next) => {
     }
 
     handleResponse(
-        response,
-        200,
-        "success",
-        responseMessage,
-        InstituteBranchDoctorSaveResult.recordset
+      response,
+      200,
+      "success",
+      responseMessage,
+      InstituteBranchDoctorSaveResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -539,17 +545,17 @@ export const instituteBranchDoctorGet = async (req, res, next) => {
         Institute: JSON.parse(doctorBranchGetResult.recordset[0].Institute),
         Branch: JSON.parse(doctorBranchGetResult.recordset[0].Branch),
         InstituteBranchDoctor: JSON.parse(
-            doctorBranchGetResult.recordset[0].InstituteBranchDoctor
+          doctorBranchGetResult.recordset[0].InstituteBranchDoctor
         ),
       };
     }
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Institute branch doctor retrieved successfully",
-        response
+      response,
+      200,
+      "success",
+      "Institute branch doctor retrieved successfully",
+      response
     );
   } catch (error) {
     console.log(error);
@@ -589,11 +595,11 @@ export const instituteBranchWardGet = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Institute branch doctor retrieved successfully",
-        instituteBranchWardGetResult.recordset
+      response,
+      200,
+      "success",
+      "Institute branch doctor retrieved successfully",
+      instituteBranchWardGetResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -622,7 +628,7 @@ export const instituteBranchGet = async (req, res, next) => {
       connection,
     });
     instituteAndBranchesGetResult =
-        instituteAndBranchesGetResult?.recordsets[0];
+      instituteAndBranchesGetResult?.recordsets[0];
 
     instituteAndBranchesGetResult.forEach((element) => {
       if (element?.Branches) {
@@ -633,11 +639,11 @@ export const instituteBranchGet = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Operation Success",
-        instituteAndBranchesGetResult
+      response,
+      200,
+      "success",
+      "Operation Success",
+      instituteAndBranchesGetResult
     );
   } catch (error) {
     console.log(error);
@@ -680,13 +686,13 @@ export const instituteOrderedBranchGet = async (req, res, next) => {
     console.log(orderedBranchGetResult);
     orderedBranchGetResult = orderedBranchGetResult?.recordsets[0];
     if (
-        Array.isArray(orderedBranchGetResult) &&
-        orderedBranchGetResult.length > 0
+      Array.isArray(orderedBranchGetResult) &&
+      orderedBranchGetResult.length > 0
     ) {
       orderedBranchGetResult.forEach((orderedBranchResult) => {
         if (orderedBranchResult.ContactNumbers) {
           orderedBranchResult.ContactNumbers = JSON.parse(
-              orderedBranchResult.ContactNumbers
+            orderedBranchResult.ContactNumbers
           );
         } else {
           orderedBranchResult.ContactNumbers = [];
@@ -694,7 +700,7 @@ export const instituteOrderedBranchGet = async (req, res, next) => {
 
         if (orderedBranchResult.Addresses) {
           orderedBranchResult.Addresses = JSON.parse(
-              orderedBranchResult.Addresses
+            orderedBranchResult.Addresses
           );
         } else {
           orderedBranchResult.Addresses = [];
@@ -703,11 +709,11 @@ export const instituteOrderedBranchGet = async (req, res, next) => {
     }
 
     handleResponse(
-        response,
-        200,
-        "sucess",
-        "Operation Success",
-        orderedBranchGetResult
+      response,
+      200,
+      "success",
+      "Operation Success",
+      orderedBranchGetResult
     );
   } catch (error) {
     console.log(error);

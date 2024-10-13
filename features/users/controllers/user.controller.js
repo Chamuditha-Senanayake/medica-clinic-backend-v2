@@ -11,8 +11,7 @@ import {
   DateString,
 } from "../../../utils/type-def.js";
 import sql from "mssql";
-import {getToken, refreshTokenGAS} from "../../../utils/gas.js";
-
+import { getToken, refreshTokenGAS } from "../../../utils/gas.js";
 
 const UserController = {
   /**
@@ -330,16 +329,14 @@ const UserController = {
 
       const tokenResponse = await getToken(request);
       console.log(tokenResponse);
-      const {token,refreshToken} = tokenResponse.data;
-
-
+      const { token, refreshToken } = tokenResponse.data;
 
       handleResponse(
         response,
         200,
         "success",
         "User authenticated successfully",
-          {...authenticateResult,token,refreshToken}
+        { ...authenticateResult, token, refreshToken }
       );
     } catch (error) {
       handleError(
@@ -363,35 +360,26 @@ const UserController = {
    * @returns
    */
   async refreshTokenAPI(request, response, next) {
-
-
     try {
-      const {Token} = request.body;
-      console.log(request.body)
+      const { Token } = request.body;
+      console.log(request.body);
 
       const tokenResponse = await refreshTokenGAS(Token);
       console.log("tokenResponse");
       console.log(tokenResponse);
 
-      if(tokenResponse!=null){
-        const {token,refreshToken} = tokenResponse.data;
+      if (tokenResponse != null) {
+        const { token, refreshToken } = tokenResponse.data;
         handleResponse(
-            response,
-            200,
-            "success",
-            "User authenticated successfully",
-            {token,refreshToken}
+          response,
+          200,
+          "success",
+          "User authenticated successfully",
+          { token, refreshToken }
         );
-      }else {
-        handleResponse(
-            response,
-            401,
-            "success",
-            "invalid token",
-            {}
-        );
+      } else {
+        handleResponse(response, 401, "success", "invalid token", {});
       }
-
     } catch (error) {
       handleError(
         response,
@@ -568,7 +556,8 @@ const UserController = {
       );
       next(error);
     }
-  },/**
+  }
+  /**
    *
    * Rest Password
    *
@@ -576,16 +565,13 @@ const UserController = {
    * @param {response} response object
    * @param {next} next middleware
    * @returns
-   */
+   */,
   async getPresentation(request, response, next) {
-
     try {
       let connection = request.app.locals.db;
-      const {UserId} = request.body;
+      const { UserId } = request.body;
 
-      var params = [
-        EntityId({fieldName: "UserId", value: UserId})
-      ];
+      var params = [EntityId({ fieldName: "UserId", value: UserId })];
 
       let userGroupDetailsGetResult = await executeSp({
         spName: "UserPresentationNameByUserIdGet",
@@ -595,13 +581,12 @@ const UserController = {
       userGroupDetailsGetResult = userGroupDetailsGetResult?.recordsets[0][0];
 
       handleResponse(
-          response,
-          200,
-          "sucess",
-          "Operation Success",
-          userGroupDetailsGetResult
+        response,
+        200,
+        "success",
+        "Operation Success",
+        userGroupDetailsGetResult
       );
-
     } catch (error) {
       handleError(
         response,
@@ -615,7 +600,6 @@ const UserController = {
   },
 
   async getUserGroupDetails(request, response, next) {
-
     try {
       const { UserId, Id } = request.body;
 
@@ -640,13 +624,12 @@ const UserController = {
       userGroupDetailsGetResult = userGroupDetailsGetResult?.recordsets[0];
 
       handleResponse(
-          response,
-          200,
-          "sucess",
-          "Operation Success",
-          userGroupDetailsGetResult
+        response,
+        200,
+        "success",
+        "Operation Success",
+        userGroupDetailsGetResult
       );
-
     } catch (error) {
       handleError(
         response,
@@ -660,7 +643,6 @@ const UserController = {
   },
 
   async getUserGroups(request, response, next) {
-
     try {
       const { UserId, Id } = request.body;
 
@@ -684,8 +666,13 @@ const UserController = {
       });
       userGroupGetResult = userGroupGetResult?.recordsets[0];
 
-      handleResponse(response, 200, "sucess", "Operation Success", userGroupGetResult);
-
+      handleResponse(
+        response,
+        200,
+        "success",
+        "Operation Success",
+        userGroupGetResult
+      );
     } catch (error) {
       handleError(
         response,
@@ -699,7 +686,6 @@ const UserController = {
   },
 
   async checkUsernameAvailability(request, response, next) {
-
     try {
       const { username } = request.body;
       let connection = request.app.locals.db;
@@ -721,13 +707,12 @@ const UserController = {
       });
 
       handleResponse(
-          response,
-          200,
-          "success",
-          "Username avaialbility retrived",
-          usernameAvaialability?.recordsets[0][0]
+        response,
+        200,
+        "success",
+        "Username avaialbility retrived",
+        usernameAvaialability?.recordsets[0][0]
       );
-
     } catch (error) {
       handleError(
         response,
@@ -741,7 +726,6 @@ const UserController = {
   },
 
   async temporaryRegistration(request, response, next) {
-
     try {
       const {
         Id,
@@ -826,16 +810,16 @@ const UserController = {
         ],
         connection,
       });
-      temporaryRegistrationResult = temporaryRegistrationResult?.recordsets[0][0];
+      temporaryRegistrationResult =
+        temporaryRegistrationResult?.recordsets[0][0];
 
       handleResponse(
-          response,
-          200,
-          "sucess",
-          "Operation Success",
-          temporaryRegistrationResult
+        response,
+        200,
+        "success",
+        "Operation Success",
+        temporaryRegistrationResult
       );
-
     } catch (error) {
       handleError(
         response,
@@ -849,7 +833,6 @@ const UserController = {
   },
 
   async getUsernameAndPassword(request, response, next) {
-
     try {
       let connection = request.app.locals.db;
       const { userId, userTypeId } = request.body;
@@ -872,13 +855,12 @@ const UserController = {
       });
 
       handleResponse(
-          response,
-          200,
-          "success",
-          "Data retrieved successfully",
-          usernameAndPasswordGetResult.recordset
+        response,
+        200,
+        "success",
+        "Data retrieved successfully",
+        usernameAndPasswordGetResult.recordset
       );
-
     } catch (error) {
       handleError(
         response,

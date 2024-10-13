@@ -101,7 +101,7 @@ export const saveInvestigationResults = async (req, res, next) => {
     handleResponse(
       res,
       200,
-      "sucess",
+      "success",
       "Investigation saved",
       investigationResults
     );
@@ -143,7 +143,7 @@ export const getInvestigationsByPrescription = async (req, res, next) => {
     handleResponse(
       res,
       200,
-      "sucess",
+      "success",
       "Investigations retrieved",
       investigationResults
     );

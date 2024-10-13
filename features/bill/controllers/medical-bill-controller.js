@@ -423,7 +423,7 @@ export const billRemarkSave = async (req, res, next) => {
     handleResponse(
       res,
       200,
-      "sucess",
+      "success",
       "Operation Success",
       billRemarkSaveResponse
     );
@@ -467,7 +467,7 @@ export const billRemarkGet = async (req, res, next) => {
     handleResponse(
       res,
       200,
-      "sucess",
+      "success",
       "Operation Success",
       billRemarkGetResponse
     );

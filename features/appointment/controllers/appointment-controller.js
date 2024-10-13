@@ -201,7 +201,7 @@ export const appointmentsForSms = async (req, res, next) => {
       data.AppointmentList = JSON.parse(data.AppointmentList);
     });
 
-    handleResponse(res, 200, "sucess", "data retrived", appointments);
+    handleResponse(res, 200, "success", "data retrived", appointments);
   } catch (error) {
     console.log(error);
     handleError(
@@ -332,7 +332,7 @@ export const appointmentReport = async (req, res, next) => {
       }
     });
 
-    handleResponse(res, 200, "sucess", "data retrived", reportData);
+    handleResponse(res, 200, "success", "data retrived", reportData);
   } catch (error) {
     console.log(error);
     handleError(

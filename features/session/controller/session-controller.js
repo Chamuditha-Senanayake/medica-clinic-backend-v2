@@ -44,7 +44,7 @@ export const getSessionsByDateRange = async (req, res, next) => {
       data.AppointmentList = JSON.parse(data.AppointmentList);
     });
 
-    handleResponse(res, 200, "sucess", "Session data retrived", sessions);
+    handleResponse(res, 200, "success", "Session data retrived", sessions);
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
@@ -761,7 +761,7 @@ export const sessionsToday = async (req, res, next) => {
 
     const sessionsOnToday = doctorsResult.map((doctor) => {
       const sessions = sessionResult.filter(
-          (session) => session.doctor === doctor.doctorId
+        (session) => session.doctor === doctor.doctorId
       );
       return {
         ...doctor,
@@ -770,11 +770,11 @@ export const sessionsToday = async (req, res, next) => {
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "Sessions retrived successfully",
-        sessionsOnToday
+      res,
+      200,
+      "success",
+      "Sessions retrived successfully",
+      sessionsOnToday
     );
   } catch (error) {
     console.log(error);
@@ -843,7 +843,6 @@ export const sessionsTodayV2 = async (req, res, next) => {
 
     sessionResult = sessionResult.recordsets[0];
 
-
     if (Array.isArray(sessionResult) && sessionResult.length > 0) {
       sessionResult.forEach((data) => {
         if (data.sessionServices) {
@@ -856,7 +855,7 @@ export const sessionsTodayV2 = async (req, res, next) => {
 
     const sessionsOnToday = doctorsResult.map((doctor) => {
       const sessions = sessionResult.filter(
-          (session) => session.doctor === doctor.doctorId
+        (session) => session.doctor === doctor.doctorId
       );
       return {
         ...doctor,
@@ -865,11 +864,11 @@ export const sessionsTodayV2 = async (req, res, next) => {
     });
 
     handleResponse(
-        response,
-        200,
-        "success",
-        "Sessions retrived successfully",
-        sessionsOnToday
+      response,
+      200,
+      "success",
+      "Sessions retrived successfully",
+      sessionsOnToday
     );
   } catch (error) {
     console.log(error);
@@ -883,9 +882,9 @@ export const sessionsByInstitute = async (req, res, next) => {
     // console.log('request.body:', serviceName, userId, instituteId);
 
     if (
-        instituteId === null ||
-        instituteId === undefined ||
-        instituteId === ""
+      instituteId === null ||
+      instituteId === undefined ||
+      instituteId === ""
     ) {
       throw new Error("Institute id is required");
     }
@@ -907,11 +906,11 @@ export const sessionsByInstitute = async (req, res, next) => {
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "DoctorSessionGetByInstituteId successfully",
-        data
+      res,
+      200,
+      "success",
+      "DoctorSessionGetByInstituteId successfully",
+      data
     );
   } catch (error) {
     console.log(error);

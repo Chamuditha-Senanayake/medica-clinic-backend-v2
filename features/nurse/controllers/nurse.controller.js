@@ -437,7 +437,7 @@ const NurseController = {
       handleResponse(
         response,
         200,
-        "sucess",
+        "success",
         "Operation Success",
         assignedWardForNurseResult
       );

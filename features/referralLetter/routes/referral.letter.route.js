@@ -27,7 +27,6 @@ router.post(
     check("PatientLastName").optional().isString(),
     check("PatientMiddleName").optional().isString(),
     check("PatientNIC").optional().isString(),
-    check("PatientPassport").optional().isString(),
     check("PatientPatientTypeId").optional().isInt(),
     check("PatientStatus").optional().isInt(),
     check("PrescriptionId").optional().isInt(),

@@ -57,6 +57,7 @@ import {
   INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH,
   UPLOADED_FILES_FOLDER_PATH,
 } from "./constants/shared-constants.js";
+import path from "path";
 
 if (!global.__dirname) {
   global.__dirname = process.cwd();

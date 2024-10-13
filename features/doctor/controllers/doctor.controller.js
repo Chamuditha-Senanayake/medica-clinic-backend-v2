@@ -12,6 +12,7 @@ import {
   TableValueParameters,
   FloatValue,
 } from "../../../utils/type-def.js";
+import { deHashPatientId } from "../../../utils/id-hashing.js";
 const {
   Int,
   NVarChar,
@@ -630,7 +631,10 @@ const DoctorController = {
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "PatientId", value: PatientId }),
+        EntityId({
+          fieldName: "PatientId",
+          value: deHashPatientId({ patientId: PatientId }),
+        }),
       ];
 
       let doctorDispositionReminderGetResult = await executeSp({

@@ -796,7 +796,7 @@ const PatientController = {
 
       if (DateOfBirth) {
         params.push(
-          DateString({ fieldName: "DateOfBirth", value: DateOfBirth })
+          StringValue({ fieldName: "DateOfBirth", value: DateOfBirth })
         );
       }
 

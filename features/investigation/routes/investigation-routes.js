@@ -5,7 +5,7 @@ import {
   handleUploadedFile,
   saveInvestigationResults,
 } from "../controller/investigation-controller.js";
-import uploadFile from "../../../middleware/upload-middleware-v2.js";
+import uploadFile from "../../../middleware/upload-middleware.js";
 import { INVESTIGATION_RESULTS_DOCUMENTS_FOLDER_PATH } from "../../../constants/shared-constants.js";
 import path from "path";
 

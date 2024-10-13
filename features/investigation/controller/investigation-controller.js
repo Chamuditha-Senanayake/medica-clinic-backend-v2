@@ -29,7 +29,10 @@ export const saveInvestigationResults = async (req, res, next) => {
 
     const investigationResultDocumentsTable = new sql.Table();
     investigationResultDocumentsTable.columns.add("Id", sql.Int);
-    investigationResultDocumentsTable.columns.add("FileName", sql.NVarChar(200));
+    investigationResultDocumentsTable.columns.add(
+      "FileName",
+      sql.NVarChar(200)
+    );
 
     if (Array.isArray(InvestigationDocuments)) {
       InvestigationDocuments.forEach((result) => {
@@ -192,7 +195,7 @@ export const getInvestigationsByDoctorAndPatientId = async (req, res, next) => {
     handleResponse(
       res,
       200,
-      "sucess",
+      "success",
       "Investigations retrieved",
       investigationResults
     );

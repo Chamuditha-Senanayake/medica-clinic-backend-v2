@@ -167,13 +167,7 @@ export const instituteBranchSave = async (req, res, next) => {
       data.Address = JSON.parse(data.Address);
       data.ContactNumbers = JSON.parse(data.ContactNumbers);
     });
-    handleResponse(
-      response,
-      200,
-      "success",
-      "data retrived",
-      instituteBranch[0]
-    );
+    handleResponse(res, 200, "success", "data retrived", instituteBranch[0]);
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
@@ -213,7 +207,7 @@ export const instituteBranchNurseGet = async (req, res, next) => {
     });
     let branchNurses = branchNurseResult?.recordsets[0];
 
-    handleResponse(response, 200, "success", "data retrived", branchNurses);
+    handleResponse(res, 200, "success", "data retrived", branchNurses);
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
@@ -246,7 +240,7 @@ export const instituteBranchDoctorAssignGet = async (req, res, next) => {
       connection,
     });
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Data retrieved successfully",
@@ -280,7 +274,7 @@ export const instituteGet = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Data retrived successfully",
@@ -377,7 +371,7 @@ export const instituteSave = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Institute saved successfully",
@@ -416,7 +410,7 @@ export const instituteAllDoctors = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Institute doctors retrived successfully",
@@ -496,7 +490,7 @@ export const instituteBranchDoctorSave = async (req, res, next) => {
     }
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       responseMessage,
@@ -551,7 +545,7 @@ export const instituteBranchDoctorGet = async (req, res, next) => {
     }
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Institute branch doctor retrieved successfully",
@@ -595,7 +589,7 @@ export const instituteBranchWardGet = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Institute branch doctor retrieved successfully",
@@ -639,7 +633,7 @@ export const instituteBranchGet = async (req, res, next) => {
     });
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Operation Success",
@@ -709,7 +703,7 @@ export const instituteOrderedBranchGet = async (req, res, next) => {
     }
 
     handleResponse(
-      response,
+      res,
       200,
       "success",
       "Operation Success",

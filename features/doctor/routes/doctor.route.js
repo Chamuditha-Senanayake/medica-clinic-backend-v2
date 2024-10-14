@@ -6,9 +6,9 @@ const router = express.Router();
 router.post(
   "/DoctorGet",
   [
-    check("Id").not().isEmpty().isInt(),
-    check("DoctorUserId").not().isEmpty().isInt(),
-    check("UserId").not().isEmpty().isInt(),
+    check("Id").optional().isInt(),
+    check("DoctorUserId").optional().isInt(),
+    check("UserId").optional().isInt(),
   ],
   DoctorController.getDoctor
 );

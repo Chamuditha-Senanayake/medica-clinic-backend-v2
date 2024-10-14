@@ -58,6 +58,7 @@ import {
   UPLOADED_FILES_FOLDER_PATH,
 } from "./constants/shared-constants.js";
 import path from "path";
+import opdServices from "./features/opd/routes/opd-service-routes.js";
 
 if (!global.__dirname) {
   global.__dirname = process.cwd();
@@ -165,6 +166,7 @@ app.use(`/api/v1/referral-letters`, referralLetterRoutes);
 app.use(`/api/v1/medical-bill`, medicalBillRoutes);
 app.use(`/api/v1/investigations`, investigationRoutes);
 app.use(`/api/v1/doctor-notes`, doctorNoteRoutes);
+app.use(`/api/v1/opd-services`, opdServices);
 
 // set port, listen for requests
 const APP_PORT = process.env.APP_PORT;

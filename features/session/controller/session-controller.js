@@ -383,7 +383,7 @@ export const saveOrUpdateSession = async (req, res, next) => {
     );
   } catch (error) {
     console.log(error);
-    handleError(res, 500, "error", "Something went wrong", error);
+    handleError(res, 500, "error", error?.message, "Something went wrong");
   }
 };
 

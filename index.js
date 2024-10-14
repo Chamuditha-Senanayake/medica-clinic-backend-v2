@@ -11,6 +11,7 @@ import loggerMiddleware from "./middleware/logger.middleware.js";
 // Import Routes
 import doctorRouter from "./features/doctor/routes/doctor.route.js";
 import nurseRouter from "./features/nurse/routes/nurse.route.js";
+import specializationRouter from "./features/specialization/routes/specialization.routes.js";
 import referralLetterRouter from "./features/referralLetter/routes/referral.letter.route.js";
 import employeeRouter from "./features/employee/routes/employee.route.js";
 import prescriptionRouter from "./features/prescription/routes/prescription.route.js";
@@ -146,6 +147,7 @@ app.use(`/api/v1`, institutesRoutes);
 app.use(`/api/v1`, otpRoutes);
 app.use(`/api/v1`, pharmacyRoutes);
 app.use(`/api/v1`, sessionRouter);
+app.use(`/api/v1`, specializationRouter);
 
 //admin apis
 app.use(`/api/v1/doctor`, doctorRoutes);

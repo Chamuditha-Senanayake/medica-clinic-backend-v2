@@ -1,7 +1,7 @@
 import sql from "mssql";
-import executeSp from "../db/exeSp.js";
-import handleError from "../utils/handleError.js";
-import handleResponse from "../utils/handleResponse.js";
+import executeSp from "../../../db/exeSp.js";
+import handleError from "../../../utils/handleError.js";
+import handleResponse from "../../../utils/handleResponse.js";
 
 export const saveUpdateOpdServiceCategory = async (req, res, next) => {
   try {

@@ -3,15 +3,10 @@ import ResponseMessage from "../../../config/messages.js";
 import executeSp from "../../../utils/exeSp.js";
 import handleError from "../../../utils/handleError.js";
 import handleResponse from "../../../utils/handleResponse.js";
-import {
-  EntityId,
-  DateString,
-  StringValue,
-  SignedInteger,
-} from "../../../utils/type-def.js";
+import { EntityId } from "../../../utils/type-def.js";
 
-const SessionController = {
-  async getSessions(request, response, next) {
+const SpecializationController = {
+  async getSpecializations(request, response, next) {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(422).json({
@@ -30,20 +25,20 @@ const SessionController = {
         EntityId({ fieldName: "Id", value: Id }),
       ];
 
-      let sessionGetResult = await executeSp({
-        spName: `SessionGet`,
+      let specializationGetResult = await executeSp({
+        spName: `SpecializationsGet`,
         params: params,
         connection,
       });
 
-      sessionGetResult = sessionGetResult.recordsets[0][0];
+      specializationGetResult = specializationGetResult.recordsets[0];
 
       handleResponse(
         response,
         200,
         "success",
         "Data retrived successfully",
-        sessionGetResult
+        specializationGetResult
       );
     } catch (error) {
       handleError(
@@ -58,4 +53,4 @@ const SessionController = {
   },
 };
 
-export default SessionController;
+export default SpecializationController;

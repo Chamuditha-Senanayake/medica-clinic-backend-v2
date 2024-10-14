@@ -1,12 +1,12 @@
 import express from "express";
 import { check } from "express-validator";
-import SessionController from "../controller/session.controller.js";
+import SpecializationController from "../controller/specialization.controller.js";
 const router = express.Router();
 
 router.post(
-  "/Session/GetDefault",
+  "/Specialization/Get",
   [check("UserId").isInt().not().isEmpty()],
-  SessionController.getDefaultSession
+  SpecializationController.getSpecializations
 );
 
 export default router;

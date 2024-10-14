@@ -61,8 +61,8 @@ router.post(
 );
 
 router.post(
-  "/InstituteGet",
-  [check("Id").isInt().not().isEmpty(), check("UserId").not().isEmpty()],
+  "/Institute/Get",
+  [check("Id").optional().isInt(), check("UserId").not().isEmpty()],
   InstituteController.getInstitute
 );
 

@@ -225,12 +225,10 @@ const DoctorController = {
         StringValue({ fieldName: "DateOfBirth", value: DateOfBirth }),
         StringValue({ fieldName: "Title", value: Title }),
         StringValue({ fieldName: "ZoomEmail", value: ZoomEmail }),
-        ZoomPassword
-          ? StringValue({
-              fieldName: "ZoomPassword",
-              value: ZoomPassword,
-            })
-          : null,
+        StringValue({
+          fieldName: "ZoomPassword",
+          value: ZoomPassword,
+        }),
         EntityId({ fieldName: "BranchId", value: BranchId }),
         FloatValue({ fieldName: "DoctorFee", value: parseFloat(DoctorFee) }),
         FloatValue({

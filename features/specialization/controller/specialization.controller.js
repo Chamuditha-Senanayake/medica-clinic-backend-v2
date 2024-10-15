@@ -111,10 +111,11 @@ const SpecializationController = {
 
     try {
       let connection = request.app.locals.db;
-      const { Id, SpecializationId, Status, UserId } = request.body;
+      const { Id, DoctorId, SpecializationId, Status, UserId } = request.body;
 
       var params = [
         EntityId({ fieldName: "Id", value: Id }),
+        EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "SpecializationId", value: SpecializationId }),
         EntityId({ fieldName: "UserId", value: UserId }),
         SignedInteger({ fieldName: "Status", value: Status }),

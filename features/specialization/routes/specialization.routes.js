@@ -19,6 +19,7 @@ router.post(
   "/DoctorSpecialization/Post",
   [
     check("Id").optional().isInt(),
+    check("DoctorId").optional().isInt(),
     check("SpecializationId").optional().isInt(),
     check("Status").optional().isInt(),
     check("UserId").isInt().not().isEmpty(),

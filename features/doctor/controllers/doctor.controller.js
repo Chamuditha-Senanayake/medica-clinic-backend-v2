@@ -192,9 +192,9 @@ const DoctorController = {
         ZoomEmail,
         ZoomPassword,
         BranchId,
-        DoctorFee,
-        HospitalFee,
-        OtherFee,
+        DoctorFee = 0,
+        HospitalFee = 0,
+        OtherFee = 0,
       } = request.body;
 
       const ContactNumberList = [];
@@ -228,9 +228,12 @@ const DoctorController = {
             })
           : null,
         EntityId({ fieldName: "BranchId", value: BranchId }),
-        FloatValue({ fieldName: "DoctorFee", value: DoctorFee }),
-        FloatValue({ fieldName: "HospitalFee", value: HospitalFee }),
-        FloatValue({ fieldName: "OtherFee", value: OtherFee }),
+        FloatValue({ fieldName: "DoctorFee", value: parseFloat(DoctorFee) }),
+        FloatValue({
+          fieldName: "HospitalFee",
+          value: parseFloat(HospitalFee),
+        }),
+        FloatValue({ fieldName: "OtherFee", value: parseFloat(OtherFee) }),
 
         TableValueParameters({
           tableName: "ContactNumbers",

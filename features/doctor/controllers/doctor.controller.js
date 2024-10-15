@@ -250,7 +250,7 @@ const DoctorController = {
       });
 
       console.log(doctorSaveResult.recordsets);
-      doctorSaveResult = doctorSaveResult.recordsets;
+      doctorSaveResult = doctorSaveResult.recordsets[0][0];
 
       handleResponse(
         response,

@@ -886,7 +886,7 @@ const UserController = {
       } = request.body;
       // console.log('request.body:', userId, userTypeId);
       const usernameAndPasswordGetResult = await executeSp({
-        spName: "UserUsernameAndPasswordGet",
+        spName: "UserSave",
         params: [
           EntityId({ fieldName: "Id", value: Id }),
           StringValue({ fieldName: "Username", value: Username }),

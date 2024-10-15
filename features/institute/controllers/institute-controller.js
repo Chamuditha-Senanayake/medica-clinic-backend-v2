@@ -646,7 +646,7 @@ export const instituteBranchGet = async (req, res, next) => {
 };
 export const instituteOrderedBranchGet = async (req, res, next) => {
   try {
-    const { Id, DoctorId, InstituteId, UserId } = req.body;
+    const { Id = 0, DoctorId = 0, InstituteId = 0, UserId } = req.body;
 
     let connection = req.app.locals.db;
 

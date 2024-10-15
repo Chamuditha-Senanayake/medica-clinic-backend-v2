@@ -41,9 +41,6 @@ router.post(
       .isString()
       .withMessage("ZoomPassword must be a string if provided")
       .isLength({ max: 150 }),
-    check("DoctorFee").optional().isFloat(),
-    check("HospitalFee").optional().isFloat(),
-    check("OtherFee").optional().isFloat(),
   ],
   DoctorController.saveDoctor
 );

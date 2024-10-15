@@ -921,7 +921,7 @@ const UserController = {
   async assignUserAccountToDoctor(request, response, next) {
     try {
       let connection = request.app.locals.db;
-      const { Id, DoctorId, UserSaved } = request.body;
+      const { Id, DoctorId, UserSaved, UserId } = request.body;
       // console.log('request.body:', userId, userTypeId);
       const usernameAndPasswordGetResult = await executeSp({
         spName: "UserDoctorSave",
@@ -929,6 +929,7 @@ const UserController = {
           EntityId({ fieldName: "Id", value: Id }),
           EntityId({ fieldName: "DoctorId", value: DoctorId }),
           EntityId({ fieldName: "UserSaved", value: UserSaved }),
+          EntityId({ fieldName: "UserId", value: UserId }),
         ],
         connection,
       });

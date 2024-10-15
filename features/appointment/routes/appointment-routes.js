@@ -3,7 +3,8 @@ import {
   appointmentOnGoing,
   appointmentReport,
   appointmentsForSms,
-  getAppointments, savePatientResponse,
+  getAppointments,
+  savePatientResponse,
   saveUpdateAppointment,
 } from "../controllers/appointment-controller.js";
 
@@ -14,14 +15,10 @@ appointmentRoutes.post("/appointment-save-or-update", saveUpdateAppointment);
 
 appointmentRoutes.post(`/appointments-for-sms`, appointmentsForSms);
 
-appointmentRoutes.post(
-    `/appointment/save-patient-response`,
-    savePatientResponse
-);
+appointmentRoutes.post(`/save-patient-response`, savePatientResponse);
 
 appointmentRoutes.post(`/appointment-reports/get`, appointmentReport);
 
 appointmentRoutes.post(`/appointment-ongoing/get/`, appointmentOnGoing);
-
 
 export default appointmentRoutes;

@@ -262,6 +262,7 @@ const DoctorController = {
         doctorSaveResult
       );
     } catch (error) {
+      console.log(error);
       handleError(
         response,
         500,

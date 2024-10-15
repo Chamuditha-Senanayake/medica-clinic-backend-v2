@@ -64,8 +64,16 @@ const DoctorController = {
         params: params,
         connection,
       });
-
-      doctorGetResult = doctorGetResult.recordsets[0][0];
+      if (
+        Array.isArray(
+          doctorGetResult.recordsets[0] &&
+            doctorGetResult.recordsets.length === 1
+        )
+      ) {
+        doctorGetResult = doctorGetResult.recordsets[0][0];
+      } else {
+        doctorGetResult = doctorGetResult.recordsets[0];
+      }
 
       handleResponse(
         response,

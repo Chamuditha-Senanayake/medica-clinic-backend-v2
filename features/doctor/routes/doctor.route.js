@@ -4,7 +4,7 @@ import DoctorController from "../controllers/doctor.controller.js";
 const router = express.Router();
 
 router.post(
-  "/DoctorGet",
+  "/Doctor/Get",
   [
     check("Id").optional().isInt(),
     check("DoctorUserId").optional().isInt(),

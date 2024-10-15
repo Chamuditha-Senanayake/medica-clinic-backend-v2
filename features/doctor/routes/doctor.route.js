@@ -100,7 +100,7 @@ router.post(
     check("ContactNumber").optional({ values: "null" }).isString(),
     check("UserId").not().isEmpty().isInt(),
   ],
-  DoctorController.getDoctorSpecializations
+  DoctorController.DoctorContactNumberGet
 );
 
 router.post(

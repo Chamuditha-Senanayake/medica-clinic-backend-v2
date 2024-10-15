@@ -14,7 +14,7 @@ router.post(
 );
 
 router.post(
-  "/DoctorSave",
+  "/doctor/post",
   [
     check("Id").not().isEmpty().isInt(),
     check("FirstName").not().isEmpty().isString().isLength({ max: 50 }),

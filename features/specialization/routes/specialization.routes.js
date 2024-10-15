@@ -9,4 +9,10 @@ router.post(
   SpecializationController.getSpecializations
 );
 
+router.post(
+  "/Specialization/Get",
+  [check("Id").optional().isInt(), check("DoctorId").optional().isInt()],
+  SpecializationController.getDoctorSpecializations
+);
+
 export default router;

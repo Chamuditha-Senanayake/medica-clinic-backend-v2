@@ -128,9 +128,9 @@ export const saveEmployee = async (req, res, next) => {
     // Add data to the table object
     ContactNumbers.forEach((phoneNumber) => {
       contactNumberTable.rows.add(
-          phoneNumber.Id,
-          phoneNumber.Number,
-          phoneNumber.Status
+        phoneNumber.Id,
+        phoneNumber.Number,
+        phoneNumber.Status
       );
     });
 
@@ -227,11 +227,11 @@ export const saveEmployee = async (req, res, next) => {
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "Employee saved successfully",
-        employeeSaveResult.recordset
+      res,
+      200,
+      "success",
+      "Employee saved successfully",
+      employeeSaveResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -273,11 +273,11 @@ export const getAllEmployee = async (req, res, next) => {
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "Employee list retrived successfully",
-        employeeListGetResult.recordset
+      res,
+      200,
+      "success",
+      "Employee list retrived successfully",
+      employeeListGetResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -304,26 +304,16 @@ export const deleteEmployee = async (req, res, next) => {
           type: sql.TYPES.Int,
           value: ActionUserId,
         },
-        {
-          name: "UserId",
-          type: sql.TYPES.Int,
-          value: UserId,
-        },
-        {
-          name: "UserGroupId",
-          type: sql.TYPES.Int,
-          value: UserGroupId,
-        },
       ],
       connection,
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "Employee deleted successfully",
-        employeeDeleteResult.recordset
+      res,
+      200,
+      "success",
+      "Employee deleted successfully",
+      employeeDeleteResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -355,11 +345,11 @@ export const getEmployee = async (req, res, next) => {
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "Employee retrieved successfully",
-        employeeGetResult.recordset
+      res,
+      200,
+      "success",
+      "Employee retrieved successfully",
+      employeeGetResult.recordset
     );
   } catch (error) {
     console.log(error);
@@ -391,11 +381,11 @@ export const getInstituteBranchEmployee = async (req, res, next) => {
     });
 
     handleResponse(
-        res,
-        200,
-        "success",
-        "Institute branch retrieved successfully",
-        employeeBranchGetResult.recordset
+      res,
+      200,
+      "success",
+      "Institute branch retrieved successfully",
+      employeeBranchGetResult.recordset
     );
   } catch (error) {
     console.log(error);

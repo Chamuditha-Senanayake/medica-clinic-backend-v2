@@ -11,6 +11,7 @@ router.post(
 );
 
 router.post("/User/Post", UserController.saveUpdateUser);
+router.post("/UserDoctor/Save", UserController.assignUserAccountToDoctor);
 
 router.post(
   "/AddressSave",

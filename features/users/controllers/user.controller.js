@@ -917,6 +917,40 @@ const UserController = {
       next(error);
     }
   },
+
+  async assignUserAccountToDoctor(request, response, next) {
+    try {
+      let connection = request.app.locals.db;
+      const { Id, DoctorId, UserSaved } = request.body;
+      // console.log('request.body:', userId, userTypeId);
+      const usernameAndPasswordGetResult = await executeSp({
+        spName: "UserDoctorSave",
+        params: [
+          EntityId({ fieldName: "Id", value: Id }),
+          EntityId({ fieldName: "DoctorId", value: DoctorId }),
+          EntityId({ fieldName: "UserSaved", value: UserSaved }),
+        ],
+        connection,
+      });
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User account assigned successfully",
+        usernameAndPasswordGetResult.recordset[0][0]
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
 };
 
 export default UserController;

@@ -197,9 +197,13 @@ const DoctorController = {
         OtherFee = 0,
       } = request.body;
 
-      const ContactNumberList = [];
-      ContactNumbers.forEach((phoneNumber) => {
-        ContactNumberList.push([null, phoneNumber, 1]);
+      const contactNumberTable = new sql.Table();
+      contactNumberTable.columns.add("Id", sql.Int);
+      contactNumberTable.columns.add("Number", sql.VarChar(15));
+      contactNumberTable.columns.add("Status", sql.TinyInt);
+
+      ContactNumbers.forEach((data) => {
+        contactNumberTable.rows.add(data.Id, data.ContactNumber, data.Status);
       });
 
       var params = [
@@ -234,16 +238,11 @@ const DoctorController = {
           value: parseFloat(HospitalFee),
         }),
         FloatValue({ fieldName: "OtherFee", value: parseFloat(OtherFee) }),
-
-        TableValueParameters({
-          tableName: "ContactNumbers",
-          columns: [
-            { columnName: "Id", type: sql.Int },
-            { columnName: "Number", type: sql.VarChar(15) },
-            { columnName: "Status", type: sql.TinyInt },
-          ],
-          values: ContactNumberList,
-        }),
+        {
+          name: "ContactNumbers",
+          type: sql.TVP("ContactNumbers"),
+          value: contactNumberTable,
+        },
       ];
 
       let doctorSaveResult = await executeSp({

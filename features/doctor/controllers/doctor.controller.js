@@ -218,7 +218,7 @@ const DoctorController = {
           fieldName: "RegistrationNumber",
           value: RegistrationNumber,
         }),
-        DateString({ fieldName: "DateOfBirth", value: DateOfBirth }),
+        StringValue({ fieldName: "DateOfBirth", value: DateOfBirth }),
         StringValue({ fieldName: "Title", value: Title }),
         StringValue({ fieldName: "ZoomEmail", value: ZoomEmail }),
         ZoomPassword

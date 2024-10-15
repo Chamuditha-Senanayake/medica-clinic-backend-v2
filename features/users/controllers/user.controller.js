@@ -885,7 +885,7 @@ const UserController = {
         UserModified,
       } = request.body;
       // console.log('request.body:', userId, userTypeId);
-      const usernameAndPasswordGetResult = await executeSp({
+      let usernameAndPasswordGetResult = await executeSp({
         spName: "UserSave",
         params: [
           EntityId({ fieldName: "Id", value: Id }),
@@ -898,13 +898,15 @@ const UserController = {
         ],
         connection,
       });
+      usernameAndPasswordGetResult =
+        usernameAndPasswordGetResult?.recordsets[0][0];
 
       handleResponse(
         response,
         200,
         "success",
         "User saved successfully",
-        usernameAndPasswordGetResult.recordset[0][0]
+        usernameAndPasswordGetResult
       );
     } catch (error) {
       handleError(

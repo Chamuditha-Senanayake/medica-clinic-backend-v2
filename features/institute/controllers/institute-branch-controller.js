@@ -108,30 +108,70 @@ export const instituteBranchGet = async (req, res, next) => {
         {
           name: "Id",
           type: sql.TYPES.Int,
-          value: branchId ? branchId : null
+          value: branchId ? branchId : null,
         },
         {
           name: "DoctorId",
           type: sql.TYPES.Int,
-          value: doctorId ? doctorId : null
+          value: doctorId ? doctorId : null,
         },
         {
           name: "InstituteId",
           type: sql.TYPES.Int,
-          value: instituteId ? instituteId : null
+          value: instituteId ? instituteId : null,
         },
         {
           name: "UserId",
           type: sql.TYPES.Int,
-          value: userId ? userId : null
-        }
+          value: userId ? userId : null,
+        },
       ],
       connection,
     });
     instituteBranchGetResult = instituteBranchGetResult?.recordset;
-    handleResponse(res, 200, "success", "Operation Success", instituteBranchGetResult);
+    handleResponse(
+      res,
+      200,
+      "success",
+      "Operation Success",
+      instituteBranchGetResult
+    );
   } catch (error) {
     console.log(error);
     handleError(res, 500, "error", "Something went wrong", error);
   }
-}
+};
+
+export const institutAndBranchesGet = async (req, res, next) => {
+  try {
+    const { branchId, doctorId, instituteId, userId } = req.body;
+    let connection = req.app.locals.db;
+    let instituteBranchGetResult = await executeSp({
+      spName: "InstitutesAndBranchGet",
+      params: [
+        {
+          name: "Id",
+          type: sql.TYPES.Int,
+          value: branchId ? branchId : null,
+        },
+        {
+          name: "UserId",
+          type: sql.TYPES.Int,
+          value: userId ? userId : null,
+        },
+      ],
+      connection,
+    });
+    instituteBranchGetResult = instituteBranchGetResult?.recordset;
+    handleResponse(
+      res,
+      200,
+      "success",
+      "Operation Success",
+      instituteBranchGetResult
+    );
+  } catch (error) {
+    console.log(error);
+    handleError(res, 500, "error", "Something went wrong", error);
+  }
+};

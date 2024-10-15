@@ -117,7 +117,7 @@ const SpecializationController = {
         EntityId({ fieldName: "Id", value: Id }),
         EntityId({ fieldName: "DoctorId", value: DoctorId }),
         EntityId({ fieldName: "SpecializationId", value: SpecializationId }),
-        EntityId({ fieldName: "UserId", value: UserId }),
+        EntityId({ fieldName: "UserSaved", value: UserId }),
         SignedInteger({ fieldName: "Status", value: Status }),
       ];
 

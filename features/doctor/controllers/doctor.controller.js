@@ -183,7 +183,7 @@ const DoctorController = {
         LastName,
         Email,
         NIC,
-        Status,
+        Status = 0,
         UserSaved = 0,
         ContactNumbers,
         RegistrationNumber,

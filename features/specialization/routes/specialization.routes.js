@@ -15,4 +15,15 @@ router.post(
   SpecializationController.getDoctorSpecializations
 );
 
+router.post(
+  "/DoctorSpecialization/Post",
+  [
+    check("Id").optional().isInt(),
+    check("SpecializationId").optional().isInt(),
+    check("Status").optional().isInt(),
+    check("UserId").isInt().not().isEmpty(),
+  ],
+  SpecializationController.saveDoctorSpecializations
+);
+
 export default router;

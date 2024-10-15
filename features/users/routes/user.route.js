@@ -10,6 +10,8 @@ router.post(
   UserController.getAddress
 );
 
+router.post("/User/Post", UserController.saveUpdateUser);
+
 router.post(
   "/AddressSave",
   [
@@ -77,9 +79,7 @@ router.post(
 
 router.post(
   "/RefreshToken",
-  [
-    check("Token").optional({ values: "null" }).isString()
-  ],
+  [check("Token").optional({ values: "null" }).isString()],
   UserController.refreshTokenAPI
 );
 
@@ -106,21 +106,36 @@ router.post(
 
 router.post(
   "/PasswordReset",
-  [check("UserId").notEmpty().isInt(),
-  check("Password").notEmpty().isString()],
+  [check("UserId").notEmpty().isInt(), check("Password").notEmpty().isString()],
   UserController.resetPassword
 );
 
-router.post(`/user-group/get-presentation-name`, [], UserController.getPresentation);
+router.post(
+  `/user-group/get-presentation-name`,
+  [],
+  UserController.getPresentation
+);
 
 router.post(`/user-groups/get-details`, [], UserController.getUserGroupDetails);
 
 router.post(`/user-groups/get`, [], UserController.getUserGroups);
 
-router.post(`/user/check-username-availability`, [], UserController.checkUsernameAvailability);
+router.post(
+  `/user/check-username-availability`,
+  [],
+  UserController.checkUsernameAvailability
+);
 
-router.post(`/user/temporary-registration`, [], UserController.temporaryRegistration);
+router.post(
+  `/user/temporary-registration`,
+  [],
+  UserController.temporaryRegistration
+);
 
-router.post(`/user/username-and-password/get/`, [], UserController.getUsernameAndPassword);
+router.post(
+  `/user/username-and-password/get/`,
+  [],
+  UserController.getUsernameAndPassword
+);
 
 export default router;

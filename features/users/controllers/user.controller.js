@@ -556,7 +556,7 @@ const UserController = {
       );
       next(error);
     }
-  }
+  },
   /**
    *
    * Rest Password
@@ -565,8 +565,7 @@ const UserController = {
    * @param {response} response object
    * @param {next} next middleware
    * @returns
-   */,
-  async getPresentation(request, response, next) {
+   */ async getPresentation(request, response, next) {
     try {
       let connection = request.app.locals.db;
       const { UserId } = request.body;
@@ -860,6 +859,52 @@ const UserController = {
         "success",
         "Data retrieved successfully",
         usernameAndPasswordGetResult.recordset
+      );
+    } catch (error) {
+      handleError(
+        response,
+        500,
+        "error",
+        error.message,
+        "Something went wrong"
+      );
+      next(error);
+    }
+  },
+
+  async saveUpdateUser(request, response, next) {
+    try {
+      let connection = request.app.locals.db;
+      const {
+        Id,
+        Username,
+        Password,
+        UserGroupId,
+        Status,
+        UserCreated,
+        UserModified,
+      } = request.body;
+      // console.log('request.body:', userId, userTypeId);
+      const usernameAndPasswordGetResult = await executeSp({
+        spName: "UserUsernameAndPasswordGet",
+        params: [
+          EntityId({ fieldName: "Id", value: Id }),
+          StringValue({ fieldName: "Username", value: Username }),
+          StringValue({ fieldName: "Password", value: Password }),
+          EntityId({ fieldName: "UserGroupId", value: UserGroupId }),
+          SignedInteger({ fieldName: "Status", value: Status }),
+          EntityId({ fieldName: "UserCreated", value: UserCreated }),
+          EntityId({ fieldName: "UserModified", value: UserModified }),
+        ],
+        connection,
+      });
+
+      handleResponse(
+        response,
+        200,
+        "success",
+        "User saved successfully",
+        usernameAndPasswordGetResult.recordset[0][0]
       );
     } catch (error) {
       handleError(

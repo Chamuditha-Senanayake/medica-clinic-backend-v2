@@ -10,7 +10,7 @@ router.post(
 );
 
 router.post(
-  "/Specialization/Get",
+  "/DoctorSpecialization/GetDoctorSpecialization",
   [check("Id").optional().isInt(), check("DoctorId").optional().isInt()],
   SpecializationController.getDoctorSpecializations
 );

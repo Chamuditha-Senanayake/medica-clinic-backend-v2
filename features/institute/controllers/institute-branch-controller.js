@@ -146,7 +146,7 @@ export const institutAndBranchesGet = async (req, res, next) => {
   try {
     const { branchId, doctorId, instituteId, userId } = req.body;
     let connection = req.app.locals.db;
-    let instituteBranchGetResult = await executeSp({
+    let instituteAndBranchesGetResult = await executeSp({
       spName: "InstitutesAndBranchGet",
       params: [
         {
@@ -162,13 +162,24 @@ export const institutAndBranchesGet = async (req, res, next) => {
       ],
       connection,
     });
-    instituteBranchGetResult = instituteBranchGetResult?.recordset;
+
+    instituteAndBranchesGetResult =
+      instituteAndBranchesGetResult?.recordsets[0];
+
+    instituteAndBranchesGetResult.forEach((element) => {
+      if (element?.Branches) {
+        element.Branches = JSON.parse(element.Branches);
+      } else {
+        element.Branches = [];
+      }
+    });
+
     handleResponse(
       res,
       200,
       "success",
       "Operation Success",
-      instituteBranchGetResult
+      instituteAndBranchesGetResult
     );
   } catch (error) {
     console.log(error);

@@ -393,3 +393,39 @@ export const getInstituteBranchEmployee = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserEmployee = async (req, res, next) => {
+  try {
+    let connection = req.app.locals.db;
+    const { id, userId } = req.body;
+    // console.log('req.body:', id, userId);
+    const userEmployeeGetResult = await executeSp({
+      spName: "UserEmployeeGet",
+      params: [
+        {
+          name: "Id",
+          type: sql.TYPES.Int,
+          value: id,
+        },
+        {
+          name: "UserId",
+          type: sql.TYPES.Int,
+          value: userId,
+        },
+      ],
+      connection,
+    });
+
+    handleResponse(
+      res,
+      200,
+      "success",
+      "Institute branch retrieved successfully",
+      userEmployeeGetResult.recordset
+    );
+  } catch (error) {
+    console.log(error);
+    handleError(res, 500, "error", "Something went wrong", error);
+    next(error);
+  }
+};

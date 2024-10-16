@@ -25,10 +25,7 @@ const SessionController = {
       let connection = request.app.locals.db;
       const { UserId, Id } = request.body;
 
-      var params = [
-        EntityId({ fieldName: "UserId", value: UserId }),
-        EntityId({ fieldName: "Id", value: Id }),
-      ];
+      var params = [EntityId({ fieldName: "UserId", value: UserId })];
 
       let sessionGetResult = await executeSp({
         spName: `SessionGetTodayDoctorSession`,

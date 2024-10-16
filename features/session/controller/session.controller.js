@@ -31,7 +31,7 @@ const SessionController = {
       ];
 
       let sessionGetResult = await executeSp({
-        spName: `SessionGet`,
+        spName: `SessionGetTodayDoctorSession`,
         params: params,
         connection,
       });

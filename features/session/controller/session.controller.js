@@ -36,7 +36,7 @@ const SessionController = {
         connection,
       });
 
-      sessionGetResult = sessionGetResult.recordsets[0][0];
+      sessionGetResult = sessionGetResult.recordsets[0];
 
       handleResponse(
         response,

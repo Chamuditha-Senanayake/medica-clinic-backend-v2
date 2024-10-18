@@ -791,10 +791,7 @@ const PatientController = {
         EntityId({ fieldName: "ParentId", value: ParentId }),
         EntityId({ fieldName: "Guid", value: Guid }),
         StringValue({ fieldName: "Address", value: Address }),
-        EntityId({
-          fieldName: "Id",
-          value: deHashPatientId({ patientId: Id }),
-        }),
+        EntityId({ fieldName: "Id", value: Id }),
       ];
 
       if (DateOfBirth) {

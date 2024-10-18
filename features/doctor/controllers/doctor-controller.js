@@ -249,6 +249,7 @@ export const saveOrUpdateDoctor = async (req, res, next) => {
       HospitalFee,
       ServiceFee,
       OtherFee,
+      DoctorType,
     } = req.body;
 
     let connection = req.app.locals.db;
@@ -359,6 +360,11 @@ export const saveOrUpdateDoctor = async (req, res, next) => {
           name: "OtherFee",
           type: sql.TYPES.Float,
           value: OtherFee,
+        },
+        {
+          name: "DoctorType",
+          type: sql.TYPES.NVarChar(50),
+          value: DoctorType,
         },
       ],
       connection,

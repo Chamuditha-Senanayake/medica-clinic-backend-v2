@@ -58,7 +58,7 @@ const AppointmentController = {
             Array.isArray(appointment?.PatientId) &&
             appointment?.PatientId.length === 2
           ) {
-            appointment.PatientId = appointment.PatientId[1];
+            appointment.PatientId = appointment.PatientId[0];
           }
         });
       }

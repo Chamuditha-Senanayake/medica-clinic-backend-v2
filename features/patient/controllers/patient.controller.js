@@ -793,7 +793,7 @@ const PatientController = {
         StringValue({ fieldName: "Address", value: Address }),
         EntityId({
           fieldName: "Id",
-          value: deHashPatientId({ patientId: Id }),
+          value: Id === 0 ? 0 : deHashPatientId({ patientId: Id }),
         }),
       ];
 

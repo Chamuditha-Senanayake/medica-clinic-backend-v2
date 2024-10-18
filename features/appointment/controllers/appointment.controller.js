@@ -52,6 +52,16 @@ const AppointmentController = {
 
       appointmentGetResult = appointmentGetResult.recordsets[0];
 
+      if (Array.isArray(appointmentGetResult)) {
+        appointmentGetResult.forEach((appointment) => {
+          if (
+            Array.isArray(appointment?.PatientId) &&
+            appointment?.PatientId.length === 2
+          ) {
+            appointment.PatientId = appointment.PatientId[0];
+          }
+        });
+      }
       handleResponse(
         response,
         200,

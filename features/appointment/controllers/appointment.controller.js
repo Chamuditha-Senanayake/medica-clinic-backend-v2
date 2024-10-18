@@ -32,14 +32,8 @@ const AppointmentController = {
 
     try {
       let connection = request.app.locals.db;
-      const {
-        UserId,
-        Id = 0,
-        Number = 0,
-        SessionId = 0,
-        PatientId = 0,
-        PatientMobile = "",
-      } = request.body;
+      const { UserId, Id, Number, SessionId, PatientId, PatientMobile } =
+        request.body;
 
       var params = [
         EntityId({ fieldName: "UserId", value: UserId }),
